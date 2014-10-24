@@ -1,0 +1,128 @@
+#!/usr/bin/env node
+
+var promptly = require('promptly')
+var program = require('commander')
+var chalk = require('chalk');
+var backbase = chalk.gray([" ____             _    _                     ", "| __ )  __ _  ___| | _| |__   __ _ ___  ___  ", "|  _ \\ / _` |/ __| |/ / '_ \\ / _` / __|/ _ \\ ", "| |_) | (_| | (__|   <| |_) | (_| \\__ \\  __/ ", "|____/ \\__,_|\\___|_|\\_\\_.__/ \\__,_|___/\\___| "].join('\n') + '\n')
+var path = require('path');
+var gulp = require('gulp');
+var template = require('gulp-template');
+var through = require('through2')
+var templatesDir = path.join(__dirname, '..', 'templates');
+var debug = require('gulp-debug');
+var rename = require('gulp-rename');
+var fs = require('fs');
+var request = require('request');
+var symbols = {
+	ok: '✓',
+	err: '✖',
+	dot: '․'
+}
+
+var spaceNotAllowed = function(value){
+	if(value.split(' ').length > 1) {
+		throw new Error('Spaces not allowed.');
+	}
+
+	return value;
+}
+
+console.log(backbase)
+
+program
+	.version('0.0.1')
+	.option('-p, --port <n>', 'Set portalserver custom port. Default: 7777')
+
+program
+	.command('generate <type>')
+	.description('scaffold widgets and containers')
+	.action(function(type){
+
+		var port = program.port || 7777;
+
+		if('widget' == type) {
+			console.log(chalk.gray('You are about to create a widget in the path: ' + process.cwd()))
+
+			promptly.prompt('Widget title:', {'default': 'hello-world'}, function(err, widget_title){
+			promptly.prompt('Widget name:', {validator: spaceNotAllowed}, function(err, widget_name){
+			promptly.prompt('Bundle name:', {validator: spaceNotAllowed}, function(err, bundle_name){
+
+
+				var data = {
+					widget_name: widget_name,
+					bundle_name: bundle_name,
+					widget_title: widget_title
+				}
+
+				gulp.src([
+						templatesDir + '/widget/index.html',
+						templatesDir + '/widget/config.xml',
+					])
+					.pipe(template(data))
+					.pipe(gulp.dest(widget_name))
+
+
+				gulp.src(templatesDir + '/widget/**/widget.*')
+					.pipe(template(data))
+					.pipe(rename({
+						basename: widget_name
+					}))
+					.pipe(gulp.dest(widget_name))
+
+				//Todo: the created files must be an pipe but apparently there is something wrong with the rename module
+				var created_files = [
+					"index.html",
+					"config.xml",
+					"js/" + widget_name + ".js",
+					"css/" + widget_name + ".css",
+				]
+
+				created_files.forEach(function(file){
+					console.log(chalk.green(symbols.ok + ' ') + chalk.gray(process.cwd() + '/' + widget_name + '/' + file))
+				})
+
+				promptly.confirm('Do you want to add this widget to your Enterprise Catalog?', function(err, value){
+					if(value) {
+						fs.readFile(process.cwd() + '/' + widget_name + '/config.xml', "utf8", function(err, content){
+							var data = '<catalog>\n\t' + content.split('\n').join('\n\t') + '\n</catalog>';
+
+							// console.log(data)
+							request({
+								'auth': {
+									'user': 'admin',
+									'pass': 'admin'
+								},
+								method: 'POST',
+								url: 'http://localhost:'+port+'/portalserver/catalog',
+								body: data,
+								headers: {
+									'Content-Type': 'application/xml'
+								}
+							}, function(err, httpResponse, body){
+								if(!err && httpResponse.statusCode == '204') {
+									console.log(chalk.green(symbols.ok + ' ') + widget_name + ' ' + chalk.gray('successfully added to your portal enterprise cataog.'))
+								} else {
+									console.log(chalk.red(symbols.err + ' ') + chalk.gray('Error trying to add the widget trough REST'))
+									promptly.confirm('Do you want to see more details about the request?', function(err, value){
+										if(value){
+											console.log(httpResponse.statusCode)
+											console.log(body)
+										}
+									})
+								}
+							})
+						})
+					}
+				})
+
+			})
+			})
+			})
+		}
+
+
+	})
+
+
+program.parse(process.argv);
+program.help();

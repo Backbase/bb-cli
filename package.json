@@ -1,0 +1,22 @@
+{
+  "name": "bbscaff",
+  "version": "1.0.0",
+  "description": "Scaffolding",
+  "author": "Guilherme Medeiros",
+  "license": "ISC",
+  "preferGlobal": "true",
+  "bin": {
+    "bbscaff": "bin/bbscaff"
+  },
+  "dependencies": {
+    "chalk": "^0.5.1",
+    "commander": "^2.4.0",
+    "gulp": "^3.8.8",
+    "gulp-debug": "^1.0.1",
+    "gulp-rename": "^1.2.0",
+    "gulp-template": "^1.1.1",
+    "promptly": "^0.2.0",
+    "request": "^2.46.0",
+    "through2": "^0.6.3"
+  }
+}
