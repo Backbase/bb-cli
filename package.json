@@ -1,7 +1,7 @@
 {
   "name": "bbscaff",
-  "version": "1.0.0",
-  "description": "Scaffolding",
+  "version": "0.0.1",
+  "description": "Backbase Scaffolding Tool ",
   "author": "Guilherme Medeiros",
   "license": "ISC",
   "preferGlobal": "true",
