@@ -18,5 +18,15 @@
     "promptly": "^0.2.0",
     "request": "^2.46.0",
     "through2": "^0.6.3"
-  }
+  },
+  "main": "index.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GuilhermeMedeiros/Backbase-CLI.git"
+  },
+  "bugs": {
+    "url": "https://github.com/GuilhermeMedeiros/Backbase-CLI/issues"
+  },
+  "homepage": "https://github.com/GuilhermeMedeiros/Backbase-CLI"
 }
