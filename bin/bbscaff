@@ -43,7 +43,7 @@ program
 		if('widget' == type) {
 			console.log(chalk.gray('You are about to create a widget in the path: ' + process.cwd()))
 
-			promptly.prompt('Widget title:', {'default': 'hello-world'}, function(err, widget_title){
+			promptly.prompt('Widget title:', {}, function(err, widget_title){
 			promptly.prompt('Widget name:', {validator: spaceNotAllowed}, function(err, widget_name){
 			promptly.prompt('Bundle name:', {validator: spaceNotAllowed}, function(err, bundle_name){
 
@@ -103,6 +103,137 @@ program
 									console.log(chalk.green(symbols.ok + ' ') + widget_name + ' ' + chalk.gray('successfully added to your portal enterprise cataog.'))
 								} else {
 									console.log(chalk.red(symbols.err + ' ') + chalk.gray('Error trying to add the widget trough REST'))
+									promptly.confirm('Do you want to see more details about the request?', function(err, value){
+										if(value){
+											console.log(httpResponse.statusCode)
+											console.log(body)
+										}
+									})
+								}
+							})
+						})
+					}
+				})
+
+			})
+			})
+			})
+
+
+		} else if ('container' == type) {
+			console.log(chalk.gray('You are about to create a container in the path: ' + process.cwd()))
+
+			promptly.prompt('Container title:', {}, function(err, container_title){
+			promptly.prompt('Container name:', {validator: spaceNotAllowed}, function(err, container_name){
+			promptly.prompt('Bundle name:', {validator: spaceNotAllowed}, function(err, bundle_name){
+
+				var template_name = container_name + '_template';
+
+				var data = {
+					container_name: container_name,
+					bundle_name: bundle_name,
+					container_title: container_title,
+					template_name: template_name
+				}
+
+				gulp.src([
+						templatesDir + '/container/config.xml',
+						templatesDir + '/container/container_model.xml',
+						templatesDir + '/container/template_model.xml',
+					])
+					.pipe(template(data))
+					.pipe(gulp.dest(container_name))
+
+
+				gulp.src(templatesDir + '/container/**/icon.png')
+					.pipe(gulp.dest(container_name))
+
+				gulp.src([
+						templatesDir + '/container/**/container.*' //css, js
+					])
+					.pipe(template(data))
+					.pipe(rename({
+						basename: container_name
+					}))
+					.pipe(gulp.dest(container_name))
+
+				gulp.src([
+						templatesDir + '/container/**/container_template.soy' //css, js
+					])
+					.pipe(template(data))
+					.pipe(rename({
+						basename: container_name + '_template'
+					}))
+					.pipe(gulp.dest(container_name))
+
+				//Todo: the created files must be an pipe but apparently there is something wrong with the rename module
+				var created_files = [
+					"template_model.xml",
+					"container_model.xml",
+					"config.xml",
+					"js/" + container_name + ".js",
+					"css/" + container_name + ".css",
+					"media/icon.png",
+					"templates/" + container_name + "_template.soy",
+				]
+
+				created_files.forEach(function(file){
+					console.log(chalk.green(symbols.ok + ' ') + chalk.gray(process.cwd() + '/' + container_name + '/' + file))
+				})
+
+				promptly.confirm('Do you want to add this container (with template) to your Enterprise Catalog?', function(err, value){
+					if(value) {
+						fs.readFile(process.cwd() + '/' + container_name + '/template_model.xml', "utf8", function(err, content){
+							var data = content.split('\n').join('\n\t');
+
+							// console.log(data)
+							request({
+								'auth': {
+									'user': 'admin',
+									'pass': 'admin'
+								},
+								method: 'POST',
+								url: 'http://localhost:'+port+'/portalserver/templates',
+								body: data,
+								headers: {
+									'Content-Type': 'application/xml'
+								}
+							}, function(err, httpResponse, body){
+								if(!err && httpResponse.statusCode == '201') {
+									console.log(chalk.green(symbols.ok + ' ') + template_name + ' ' + chalk.gray('successfully added to your portal enterprise cataog.'))
+
+									fs.readFile(process.cwd() + '/' + container_name + '/container_model.xml', "utf8", function(err, content){
+										var data = '<catalog>\n\t' + content.split('\n').join('\n\t') + '\n</catalog>';
+
+										// console.log(data)
+										request({
+											'auth': {
+												'user': 'admin',
+												'pass': 'admin'
+											},
+											method: 'POST',
+											url: 'http://localhost:'+port+'/portalserver/catalog',
+											body: data,
+											headers: {
+												'Content-Type': 'application/xml'
+											}
+										}, function(err, httpResponse, body){
+											if(!err && httpResponse.statusCode == '204') {
+												console.log(chalk.green(symbols.ok + ' ') + container_name + ' ' + chalk.gray('successfully added to your portal enterprise cataog.'))
+											} else {
+												console.log(chalk.red(symbols.err + ' ') + chalk.gray('Error trying to add the container trough REST'))
+												promptly.confirm('Do you want to see more details about the request?', function(err, value){
+													if(value){
+														console.log(httpResponse.statusCode)
+														console.log(body)
+													}
+												})
+											}
+										})
+									})
+
+								} else {
+									console.log(chalk.red(symbols.err + ' ') + chalk.gray('Error trying to add the template trough REST'))
 									promptly.confirm('Do you want to see more details about the request?', function(err, value){
 										if(value){
 											console.log(httpResponse.statusCode)

@@ -1,0 +1,3 @@
+html.bd-designMode-true .bp-<%=container_name%>--area {
+	min-height: 100px;
+}
