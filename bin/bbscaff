@@ -30,7 +30,7 @@ var spaceNotAllowed = function(value){
 console.log(backbase)
 
 program
-	.version('0.0.1')
+	.version('0.0.4')
 	.option('-p, --port <n>', 'Set portalserver custom port. Default: 7777')
 
 program

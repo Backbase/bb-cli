@@ -3,7 +3,7 @@
   "version": "0.0.4",
   "description": "Backbase Scaffolding Tool ",
   "author": "Guilherme Medeiros",
-  "license": "ISC",
+  "license": "Apache-2.0",
   "preferGlobal": "true",
   "bin": {
     "bbscaff": "bin/bbscaff"
