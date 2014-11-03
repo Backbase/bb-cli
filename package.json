@@ -1,6 +1,6 @@
 {
   "name": "bbscaff",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Backbase Scaffolding Tool ",
   "author": "Guilherme Medeiros",
   "license": "Apache-2.0",
@@ -12,15 +12,14 @@
     "chalk": "^0.5.1",
     "commander": "^2.4.0",
     "gulp": "^3.8.8",
-    "gulp-debug": "^1.0.1",
+    "gulp-conflict": "^0.2.0",
     "gulp-rename": "^1.2.0",
     "gulp-template": "^1.1.1",
-    "promptly": "^0.2.0",
-    "request": "^2.46.0",
-    "through2": "^0.6.3"
+    "inquirer": "^0.8.0",
+    "lodash": "^2.4.1",
+    "request": "^2.46.0"
   },
   "main": "index.js",
-  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "https://github.com/GuilhermeMedeiros/Backbase-CLI.git"

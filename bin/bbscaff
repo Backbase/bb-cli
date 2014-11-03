@@ -1,36 +1,33 @@
 #!/usr/bin/env node
 
-var promptly = require('promptly')
+var fs = require('fs');
+var path = require('path');
+var inquirer = require("inquirer");
+var request = require('request');
 var program = require('commander')
 var chalk = require('chalk');
+var _ = require('lodash');
 var backbase = chalk.gray([" ____             _    _                     ", "| __ )  __ _  ___| | _| |__   __ _ ___  ___  ", "|  _ \\ / _` |/ __| |/ / '_ \\ / _` / __|/ _ \\ ", "| |_) | (_| | (__|   <| |_) | (_| \\__ \\  __/ ", "|____/ \\__,_|\\___|_|\\_\\_.__/ \\__,_|___/\\___| "].join('\n') + '\n')
-var path = require('path');
+
+//Gulp Modules
 var gulp = require('gulp');
 var template = require('gulp-template');
-var through = require('through2')
-var templatesDir = path.join(__dirname, '..', 'templates');
-var debug = require('gulp-debug');
 var rename = require('gulp-rename');
-var fs = require('fs');
-var request = require('request');
+var conflict = require('gulp-conflict');
+
+//Config
+var templatesDir = path.join(__dirname, '..', 'templates');
+var PORTAL_PORT = 7777;
 var symbols = {
 	ok: '✓',
 	err: '✖',
 	dot: '․'
 }
 
-var spaceNotAllowed = function(value){
-	if(value.split(' ').length > 1) {
-		throw new Error('Spaces not allowed.');
-	}
-
-	return value;
-}
-
 console.log(backbase)
 
 program
-	.version('0.0.4')
+	.version('0.0.5')
 	.option('-p, --port <n>', 'Set portalserver custom port. Default: 7777')
 
 program
@@ -38,221 +35,140 @@ program
 	.description('scaffold widgets and containers')
 	.action(function(type){
 
-		var port = program.port || 7777;
+		PORTAL_PORT = program.port || PORTAL_PORT;
 
 		if('widget' == type) {
 			console.log(chalk.gray('You are about to create a widget in the path: ' + process.cwd()))
 
-			promptly.prompt('Widget title:', {}, function(err, widget_title){
-			promptly.prompt('Widget name:', {validator: spaceNotAllowed}, function(err, widget_name){
-			promptly.prompt('Bundle name:', {validator: spaceNotAllowed}, function(err, bundle_name){
+			inquirer.prompt([
+				{name: 'widget_title', message: 'Widget title'},
+				{name: 'widget_name', message: 'Widget name'},
+				{name: 'bundle_name', message: 'Bundle name', 'default': getCurrentBundle()},
+			], function(answers){
 
-
-				var data = {
-					widget_name: widget_name,
-					bundle_name: bundle_name,
-					widget_title: widget_title
-				}
-
-				gulp.src([
-						templatesDir + '/widget/index.html',
-						templatesDir + '/widget/config.xml',
-					])
-					.pipe(template(data))
-					.pipe(gulp.dest(widget_name))
-
-
-				gulp.src(templatesDir + '/widget/**/widget.*')
-					.pipe(template(data))
-					.pipe(rename({
-						basename: widget_name
-					}))
-					.pipe(gulp.dest(widget_name))
-
-				//Todo: the created files must be an pipe but apparently there is something wrong with the rename module
-				var created_files = [
-					"index.html",
-					"config.xml",
-					"js/" + widget_name + ".js",
-					"css/" + widget_name + ".css",
-				]
-
-				created_files.forEach(function(file){
-					console.log(chalk.green(symbols.ok + ' ') + chalk.gray(process.cwd() + '/' + widget_name + '/' + file))
-				})
-
-				promptly.confirm('Do you want to add this widget to your Enterprise Catalog?', function(err, value){
-					if(value) {
-						fs.readFile(process.cwd() + '/' + widget_name + '/config.xml', "utf8", function(err, content){
-							var data = '<catalog>\n\t' + content.split('\n').join('\n\t') + '\n</catalog>';
-
-							// console.log(data)
-							request({
-								'auth': {
-									'user': 'admin',
-									'pass': 'admin'
-								},
-								method: 'POST',
-								url: 'http://localhost:'+port+'/portalserver/catalog',
-								body: data,
-								headers: {
-									'Content-Type': 'application/xml'
-								}
-							}, function(err, httpResponse, body){
-								if(!err && httpResponse.statusCode == '204') {
-									console.log(chalk.green(symbols.ok + ' ') + widget_name + ' ' + chalk.gray('successfully added to your portal enterprise cataog.'))
-								} else {
-									console.log(chalk.red(symbols.err + ' ') + chalk.gray('Error trying to add the widget trough REST'))
-									promptly.confirm('Do you want to see more details about the request?', function(err, value){
-										if(value){
-											console.log(httpResponse.statusCode)
-											console.log(body)
-										}
-									})
-								}
-							})
+				gulp.src(templatesDir + '/widget/**/*')
+					.pipe(template(answers))
+					.pipe(rename(function(path){
+						_.each(answers, function(answer, key){
+							path.basename = path.basename.split('{' + key + '}').join(answer)
 						})
-					}
-				})
-
+					}))
+					.pipe(conflict('./'))
+					.pipe(gulp.dest(answers.widget_name))
+					.on('end', function(){
+						inquirer.prompt({
+							name: 'add_widget',
+							type: 'confirm',
+							message: 'Do you want to add this widget to your Enterprise Catalog?'
+						}, function(answer){
+							if(answer.add_widget){
+								postWidget(path.join(process.cwd(), answers.widget_name), function(err){
+									if(err) {
+										console.log(chalk.red(symbols.err + ' ') + chalk.gray(err))
+									} else {
+										console.log(chalk.green(symbols.ok + ' ') + answers.widget_name + ' ' + chalk.gray('successfully added to your portal enterprise catalog.'))
+									}
+								})
+							}
+						})
+					})
 			})
-			})
-			})
-
 
 		} else if ('container' == type) {
 			console.log(chalk.gray('You are about to create a container in the path: ' + process.cwd()))
 
-			promptly.prompt('Container title:', {}, function(err, container_title){
-			promptly.prompt('Container name:', {validator: spaceNotAllowed}, function(err, container_name){
-			promptly.prompt('Bundle name:', {validator: spaceNotAllowed}, function(err, bundle_name){
+			inquirer.prompt([
+				{name: 'container_title', message: 'Container title'},
+				{name: 'container_name', message: 'Container name'},
+				{name: 'template_name', message: 'Template name', 'default': function(answers){return answers.container_name + '_template'}},
+				{name: 'bundle_name', message: 'Bundle name', 'default': getCurrentBundle()},
+			], function(answers){
 
-				var template_name = container_name + '_template';
-
-				var data = {
-					container_name: container_name,
-					bundle_name: bundle_name,
-					container_title: container_title,
-					template_name: template_name
-				}
-
-				gulp.src([
-						templatesDir + '/container/config.xml',
-						templatesDir + '/container/container_model.xml',
-						templatesDir + '/container/template_model.xml',
-					])
-					.pipe(template(data))
-					.pipe(gulp.dest(container_name))
-
-
-				gulp.src(templatesDir + '/container/**/icon.png')
-					.pipe(gulp.dest(container_name))
-
-				gulp.src([
-						templatesDir + '/container/**/container.*' //css, js
-					])
-					.pipe(template(data))
-					.pipe(rename({
-						basename: container_name
-					}))
-					.pipe(gulp.dest(container_name))
-
-				gulp.src([
-						templatesDir + '/container/**/container_template.soy' //css, js
-					])
-					.pipe(template(data))
-					.pipe(rename({
-						basename: container_name + '_template'
-					}))
-					.pipe(gulp.dest(container_name))
-
-				//Todo: the created files must be an pipe but apparently there is something wrong with the rename module
-				var created_files = [
-					"template_model.xml",
-					"container_model.xml",
-					"config.xml",
-					"js/" + container_name + ".js",
-					"css/" + container_name + ".css",
-					"media/icon.png",
-					"templates/" + container_name + "_template.soy",
-				]
-
-				created_files.forEach(function(file){
-					console.log(chalk.green(symbols.ok + ' ') + chalk.gray(process.cwd() + '/' + container_name + '/' + file))
-				})
-
-				promptly.confirm('Do you want to add this container (with template) to your Enterprise Catalog?', function(err, value){
-					if(value) {
-						fs.readFile(process.cwd() + '/' + container_name + '/template_model.xml', "utf8", function(err, content){
-							var data = content.split('\n').join('\n\t');
-
-							// console.log(data)
-							request({
-								'auth': {
-									'user': 'admin',
-									'pass': 'admin'
-								},
-								method: 'POST',
-								url: 'http://localhost:'+port+'/portalserver/templates',
-								body: data,
-								headers: {
-									'Content-Type': 'application/xml'
-								}
-							}, function(err, httpResponse, body){
-								if(!err && httpResponse.statusCode == '201') {
-									console.log(chalk.green(symbols.ok + ' ') + template_name + ' ' + chalk.gray('successfully added to your portal enterprise cataog.'))
-
-									fs.readFile(process.cwd() + '/' + container_name + '/container_model.xml', "utf8", function(err, content){
-										var data = '<catalog>\n\t' + content.split('\n').join('\n\t') + '\n</catalog>';
-
-										// console.log(data)
-										request({
-											'auth': {
-												'user': 'admin',
-												'pass': 'admin'
-											},
-											method: 'POST',
-											url: 'http://localhost:'+port+'/portalserver/catalog',
-											body: data,
-											headers: {
-												'Content-Type': 'application/xml'
-											}
-										}, function(err, httpResponse, body){
-											if(!err && httpResponse.statusCode == '204') {
-												console.log(chalk.green(symbols.ok + ' ') + container_name + ' ' + chalk.gray('successfully added to your portal enterprise cataog.'))
-											} else {
-												console.log(chalk.red(symbols.err + ' ') + chalk.gray('Error trying to add the container trough REST'))
-												promptly.confirm('Do you want to see more details about the request?', function(err, value){
-													if(value){
-														console.log(httpResponse.statusCode)
-														console.log(body)
-													}
-												})
-											}
-										})
-									})
-
-								} else {
-									console.log(chalk.red(symbols.err + ' ') + chalk.gray('Error trying to add the template trough REST'))
-									promptly.confirm('Do you want to see more details about the request?', function(err, value){
-										if(value){
-											console.log(httpResponse.statusCode)
-											console.log(body)
-										}
-									})
-								}
-							})
+				gulp.src(templatesDir + '/container/**/*')
+					.pipe(template(answers))
+					.pipe(rename(function(path){
+						_.each(answers, function(answer, key){
+							path.basename = path.basename.split('{' + key + '}').join(answer)
 						})
-					}
-				})
+					}))
+					.pipe(conflict('./'))
+					.pipe(gulp.dest(answers.container_name))
+					.on('end', function(){
+						inquirer.prompt({
+							name: 'add_container',
+							type: 'confirm',
+							message: 'Do you want to add this container (with template) to your Enterprise Catalog?'
+						}, function(answer){
+							if(answer.add_container){
+								postContainer(path.join(process.cwd(), answers.container_name), function(err){
+									if(err) {
+										console.log(chalk.red(symbols.err + ' ') + chalk.gray(err))
+									} else {
+										console.log(chalk.green(symbols.ok + ' ') + answers.template_name + ' ' + chalk.gray('successfully added to your portal enterprise catalog.'))
+										console.log(chalk.green(symbols.ok + ' ') + answers.container_name + ' ' + chalk.gray('successfully added to your portal enterprise catalog.'))
+									}
+								})
+							}
+						})
+					})
 
-			})
-			})
 			})
 		}
-
-
 	})
+
+
+function getCurrentBundle(){
+	return process.cwd().split(path.sep).slice(-2)[0];
+}
+
+function postItem(url, content, request_callback){
+	request({
+		'auth': {
+			'user': 'admin',
+			'pass': 'admin'
+		},
+		method: 'POST',
+		url: url,
+		body: content,
+		headers: {
+			'Content-Type': 'application/xml'
+		}
+	}, request_callback)
+}
+
+function postWidget(widget_path, callback){
+	fs.readFile(path.join(widget_path, 'widget_model.xml'), "utf8", function(err, content){
+		postItem('http://localhost:'+PORTAL_PORT+'/portalserver/catalog', content, function(err, httpResponse, body){
+			if(!err && httpResponse.statusCode == '204') {
+				callback()
+			} else {
+				callback(err || 'Error trying to add the widget trough REST: ' + httpResponse.statusCode)
+			}
+		})
+	})
+}
+
+function postContainer(container_path, callback){
+	fs.readFile(path.join(container_path, 'template_model.xml'), "utf8", function(err, content){
+		postItem('http://localhost:'+PORTAL_PORT+'/portalserver/templates', content, function(err, httpResponse, body){
+			if(!err && httpResponse.statusCode == '201') {
+
+				fs.readFile(path.join(container_path, 'container_model.xml'), "utf8", function(err, content){
+					postItem('http://localhost:'+PORTAL_PORT+'/portalserver/catalog', content, function(err, httpResponse, body){
+						if(!err && httpResponse.statusCode == '204') {
+							callback()
+						} else {
+							callback(err || 'Error trying to add the container trough REST: ' + httpResponse.statusCode)
+						}
+					})
+				})
+
+			} else {
+				callback(err || 'Error trying to add the template trough REST: ' + httpResponse.statusCode)
+			}
+		})
+	})
+}
 
 
 program.parse(process.argv);

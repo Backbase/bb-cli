@@ -1,4 +1,27 @@
-# bbscaff 0.0.4
+bbscaff 0.0.5
+===================
 
-Creating widgets: `bbscaff generate widget`
-Creating containers: `bbscaff generate container`
+> Scaffold tool for Backbase CXP **5.5.x**
+
+## Install
+
+``` shell
+npm install -g bbscaff
+```
+
+## Usage
+
+### Generating Widgets
+Inside `/yourBundleName/widgets` type:
+
+``` shell
+bbscaff generate widget
+```
+
+### Generating Containers
+Inside `/yourBundleName/containers` type:
+
+``` shell
+bbscaff generate container
+```
+
