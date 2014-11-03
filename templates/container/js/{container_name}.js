@@ -18,6 +18,10 @@
             var data = {item: json.model.originalItem};
             var sTemplate = <%=bundle_name%>.<%=template_name%>(data);
             return sTemplate;
+        },
+
+        DOMReady: function(){
+            console.log('dom ready container')
         }
     });
 })();

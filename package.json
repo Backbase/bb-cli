@@ -22,10 +22,10 @@
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/GuilhermeMedeiros/Backbase-CLI.git"
+    "url": "https://github.com/Backbase/Backbase-CLI.git"
   },
   "bugs": {
-    "url": "https://github.com/GuilhermeMedeiros/Backbase-CLI/issues"
+    "url": "https://github.com/Backbase/Backbase-CLI/issues"
   },
-  "homepage": "https://github.com/GuilhermeMedeiros/Backbase-CLI"
+  "homepage": "https://github.com/Backbase/Backbase-CLI"
 }
