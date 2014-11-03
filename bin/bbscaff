@@ -17,7 +17,8 @@ var conflict = require('gulp-conflict');
 
 //Config
 var templatesDir = path.join(__dirname, '..', 'templates');
-var PORTAL_PORT = 7777;
+var homeDir = process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE;
+// var PORTAL_PORT = 7777;
 var symbols = {
 	ok: '✓',
 	err: '✖',
@@ -26,102 +27,16 @@ var symbols = {
 
 console.log(backbase)
 
-program
-	.version('0.0.5')
-	.option('-p, --port <n>', 'Set portalserver custom port. Default: 7777')
+//API
+var bbscaff = module.exports = function(template_dir){
+	this.template_dir = template_dir
+};
 
-program
-	.command('generate <type>')
-	.description('scaffold widgets and containers')
-	.action(function(type){
-
-		PORTAL_PORT = program.port || PORTAL_PORT;
-
-		if('widget' == type) {
-			console.log(chalk.gray('You are about to create a widget in the path: ' + process.cwd()))
-
-			inquirer.prompt([
-				{name: 'widget_title', message: 'Widget title'},
-				{name: 'widget_name', message: 'Widget name'},
-				{name: 'bundle_name', message: 'Bundle name', 'default': getCurrentBundle()},
-			], function(answers){
-
-				gulp.src(templatesDir + '/widget/**/*')
-					.pipe(template(answers))
-					.pipe(rename(function(path){
-						_.each(answers, function(answer, key){
-							path.basename = path.basename.split('{' + key + '}').join(answer)
-						})
-					}))
-					.pipe(conflict('./'))
-					.pipe(gulp.dest(answers.widget_name))
-					.on('end', function(){
-						inquirer.prompt({
-							name: 'add_widget',
-							type: 'confirm',
-							message: 'Do you want to add this widget to your Enterprise Catalog?'
-						}, function(answer){
-							if(answer.add_widget){
-								postWidget(path.join(process.cwd(), answers.widget_name), function(err){
-									if(err) {
-										console.log(chalk.red(symbols.err + ' ') + chalk.gray(err))
-									} else {
-										console.log(chalk.green(symbols.ok + ' ') + answers.widget_name + ' ' + chalk.gray('successfully added to your portal enterprise catalog.'))
-									}
-								})
-							}
-						})
-					})
-			})
-
-		} else if ('container' == type) {
-			console.log(chalk.gray('You are about to create a container in the path: ' + process.cwd()))
-
-			inquirer.prompt([
-				{name: 'container_title', message: 'Container title'},
-				{name: 'container_name', message: 'Container name'},
-				{name: 'template_name', message: 'Template name', 'default': function(answers){return answers.container_name + '_template'}},
-				{name: 'bundle_name', message: 'Bundle name', 'default': getCurrentBundle()},
-			], function(answers){
-
-				gulp.src(templatesDir + '/container/**/*')
-					.pipe(template(answers))
-					.pipe(rename(function(path){
-						_.each(answers, function(answer, key){
-							path.basename = path.basename.split('{' + key + '}').join(answer)
-						})
-					}))
-					.pipe(conflict('./'))
-					.pipe(gulp.dest(answers.container_name))
-					.on('end', function(){
-						inquirer.prompt({
-							name: 'add_container',
-							type: 'confirm',
-							message: 'Do you want to add this container (with template) to your Enterprise Catalog?'
-						}, function(answer){
-							if(answer.add_container){
-								postContainer(path.join(process.cwd(), answers.container_name), function(err){
-									if(err) {
-										console.log(chalk.red(symbols.err + ' ') + chalk.gray(err))
-									} else {
-										console.log(chalk.green(symbols.ok + ' ') + answers.template_name + ' ' + chalk.gray('successfully added to your portal enterprise catalog.'))
-										console.log(chalk.green(symbols.ok + ' ') + answers.container_name + ' ' + chalk.gray('successfully added to your portal enterprise catalog.'))
-									}
-								})
-							}
-						})
-					})
-
-			})
-		}
-	})
-
-
-function getCurrentBundle(){
+bbscaff.prototype.getCurrentBundle = function(){
 	return process.cwd().split(path.sep).slice(-2)[0];
 }
 
-function postItem(url, content, request_callback){
+bbscaff.prototype.request = function(url, content, request_callback){
 	request({
 		'auth': {
 			'user': 'admin',
@@ -136,39 +51,62 @@ function postItem(url, content, request_callback){
 	}, request_callback)
 }
 
-function postWidget(widget_path, callback){
-	fs.readFile(path.join(widget_path, 'widget_model.xml'), "utf8", function(err, content){
-		postItem('http://localhost:'+PORTAL_PORT+'/portalserver/catalog', content, function(err, httpResponse, body){
-			if(!err && httpResponse.statusCode == '204') {
-				callback()
-			} else {
-				callback(err || 'Error trying to add the widget trough REST: ' + httpResponse.statusCode)
-			}
+bbscaff.prototype.render = function(answers, destination_path, callback){
+	gulp.src(this.template_dir + '/**/*')
+		.pipe(template(answers))
+		.pipe(rename(function(path){
+			_.each(answers, function(answer, key){
+				path.basename = path.basename.split('{' + key + '}').join(answer)
+			})
+		}))
+		.pipe(conflict('./'))
+		.pipe(gulp.dest(destination_path))
+		.on('end', function(){
+			callback()
 		})
+}
+
+
+bbscaff.prototype.prompt = function(questions, callback){
+	inquirer.prompt(questions, function(answers){
+		callback(answers)
 	})
 }
 
-function postContainer(container_path, callback){
-	fs.readFile(path.join(container_path, 'template_model.xml'), "utf8", function(err, content){
-		postItem('http://localhost:'+PORTAL_PORT+'/portalserver/templates', content, function(err, httpResponse, body){
-			if(!err && httpResponse.statusCode == '201') {
+bbscaff.prototype.logError = function(msg){
+	console.log(chalk.red(symbols.err + ' ') + chalk.gray(msg))
+}
 
-				fs.readFile(path.join(container_path, 'container_model.xml'), "utf8", function(err, content){
-					postItem('http://localhost:'+PORTAL_PORT+'/portalserver/catalog', content, function(err, httpResponse, body){
-						if(!err && httpResponse.statusCode == '204') {
-							callback()
-						} else {
-							callback(err || 'Error trying to add the container trough REST: ' + httpResponse.statusCode)
-						}
-					})
+bbscaff.prototype.logSuccess = function(msg_white, msg_gray) {
+	console.log(chalk.green(symbols.ok + ' ') + msg_white + ' ' + chalk.gray(msg_gray))
+}
+
+
+program
+	.version('0.0.5')
+	// .option('-p, --port <n>', 'Set portalserver custom port. Default: 7777')
+
+program
+	.command('generate <template>')
+	.description('scaffold widgets and containers')
+	.action(function(template){
+		// PORTAL_PORT = program.port || PORTAL_PORT;
+
+		fs.exists(path.join(homeDir, '.bbscaff', template), function(exists){
+			if(exists) {
+				console.log(chalk.gray('Generating ' + template + ' on path: ' + process.cwd()))
+				require(path.join(homeDir, '.bbscaff', template, 'bbscaff'))(new bbscaff(path.join(homeDir, '.bbscaff', template, 'template')))
+			} else {
+				fs.exists(path.join(templatesDir, template), function(exists){
+					if(exists) {
+						console.log(chalk.gray('Generating ' + template + ' on path: ' + process.cwd()))
+						require(path.join(templatesDir, template, 'bbscaff'))(new bbscaff(path.join(templatesDir, template, 'template')))
+					} else {
+						console.log(chalk.red(symbols.err + ' ') + chalk.gray('Template not found'))
+					}
 				})
-
-			} else {
-				callback(err || 'Error trying to add the template trough REST: ' + httpResponse.statusCode)
 			}
 		})
 	})
-}
-
 
 program.parse(process.argv);

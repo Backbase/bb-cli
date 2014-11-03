@@ -20,8 +20,18 @@
             return sTemplate;
         },
 
-        DOMReady: function(){
-            console.log('dom ready container')
+        handlers: {
+            DOMReady: function(){
+
+            },
+
+            preferencesSaved: function(event){
+                if(event.targeet === this) {
+                    this.refreshHTML(function(item){
+                        // console.log(item)
+                    })
+                }
+            }
         }
     });
 })();
