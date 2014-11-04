@@ -11,7 +11,7 @@ module.exports = function(bbscaff){
 			name: 'widget_name',
 			message: 'Widget name',
 			'default': function(answers){
-				return answers.widget_title.replace(/ /gi, '-')
+				return answers.widget_title.replace(/ /gi, '-').toLowerCase()
 			}
 		},
 		{
@@ -43,6 +43,7 @@ module.exports = function(bbscaff){
 		fs.readFile(path.join(process.cwd(), widget_name, 'catalog-'+widget_name+'.xml'), "utf8", function(err, content){
 			bbscaff.request('http://localhost:7777/portalserver/catalog', content, function(err, httpResponse, body){
 				if(!err && httpResponse.statusCode == '204') {
+					bbscaff.logSuccess(answers.widget_name, 'successfully added to your portal enterprise catalog.')
 				} else {
 					console.log(body)
 					callback(err || 'Error trying to add the widget trough REST: ' + httpResponse.statusCode)

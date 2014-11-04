@@ -11,7 +11,7 @@ module.exports = function(bbscaff){
 			name: 'container_name',
 			message: 'Container name',
 			'default': function(answers){
-				return answers.container_title.replace(/ /gi, '-')
+				return answers.container_title.replace(/ /gi, '-').toLowerCase()
 			}
 		},
 		{
