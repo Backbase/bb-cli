@@ -51,7 +51,7 @@ bbscaff.prototype.request = function(url, content, request_callback){
 	}, request_callback)
 }
 
-bbscaff.prototype.render = function(answers, destination_path, callback){
+bbscaff.prototype.generate = function(answers, destination_path, callback){
 	gulp.src(this.template_dir + '/**/*')
 		.pipe(template(answers))
 		.pipe(rename(function(path){
@@ -62,14 +62,13 @@ bbscaff.prototype.render = function(answers, destination_path, callback){
 		.pipe(conflict('./'))
 		.pipe(gulp.dest(destination_path))
 		.on('end', function(){
-			callback()
+			if(typeof callback == 'function') callback()
 		})
 }
 
-
 bbscaff.prototype.prompt = function(questions, callback){
 	inquirer.prompt(questions, function(answers){
-		callback(answers)
+		if(typeof callback == 'function') callback(answers)
 	})
 }
 
@@ -80,7 +79,6 @@ bbscaff.prototype.logError = function(msg){
 bbscaff.prototype.logSuccess = function(msg_white, msg_gray) {
 	console.log(chalk.green(symbols.ok + ' ') + msg_white + ' ' + chalk.gray(msg_gray))
 }
-
 
 program
 	.version('0.0.5')

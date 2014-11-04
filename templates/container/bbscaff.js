@@ -27,7 +27,7 @@ module.exports = function(bbscaff){
 		},
 	], function(answers){
 
-		bbscaff.render(answers, answers.container_name, function(){
+		bbscaff.generate(answers, answers.container_name, function(){
 			bbscaff.prompt({
 				name: 'add_container',
 				type: 'confirm',

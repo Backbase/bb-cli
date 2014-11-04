@@ -20,7 +20,7 @@ module.exports = function(bbscaff){
 			'default': bbscaff.getCurrentBundle()
 		}
 	], function(answers){
-		bbscaff.render(answers, answers.widget_name, function(){
+		bbscaff.generate(answers, answers.widget_name, function(){
 			bbscaff.prompt({
 				name: 'add_widget',
 				type: 'confirm',
@@ -43,7 +43,6 @@ module.exports = function(bbscaff){
 		fs.readFile(path.join(process.cwd(), widget_name, 'catalog-'+widget_name+'.xml'), "utf8", function(err, content){
 			bbscaff.request('http://localhost:7777/portalserver/catalog', content, function(err, httpResponse, body){
 				if(!err && httpResponse.statusCode == '204') {
-					callback()
 				} else {
 					console.log(body)
 					callback(err || 'Error trying to add the widget trough REST: ' + httpResponse.statusCode)
