@@ -1,4 +1,4 @@
-bbscaff 0.0.5
+bbscaff 0.0.6
 ===================
 
 > Scaffold tool for Backbase CXP **5.5.x**
@@ -90,7 +90,7 @@ fs.readFile('file.xml'), "utf8", function(err, content){
 })
 ```
 
-### Example of a basica `bbscaff.js`
+### Example of a basic `bbscaff.js`
 
 ``` js
 module.exports = function(bbscaff){
