@@ -88,7 +88,7 @@ bbscaff.prototype.logSuccess = function(msg_white, msg_gray) {
 }
 
 program
-	.version('0.0.6')
+	.version('0.0.7')
 	// .option('-p, --port <n>', 'Set portalserver custom port. Default: 7777')
 
 program

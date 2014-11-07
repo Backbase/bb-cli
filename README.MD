@@ -1,4 +1,4 @@
-bbscaff 0.0.6
+bbscaff 0.0.7
 ===================
 
 > Scaffold tool for Backbase CXP **5.5.x**
