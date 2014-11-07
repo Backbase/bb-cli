@@ -11,7 +11,7 @@ module.exports = function(bbscaff){
 			name: 'container_name',
 			message: 'Container name',
 			'default': function(answers){
-				return answers.container_title.replace(/ /gi, '-').toLowerCase()
+				return answers.container_title.replace(/ /gi, '_').toLowerCase()
 			}
 		},
 		{
@@ -34,7 +34,6 @@ module.exports = function(bbscaff){
 				message: 'Do you want to add this container (with template) to your Enterprise Catalog?'
 			}, function(answer){
 				if(answer.add_container){
-
 					postContainer(answers.container_name, answers.template_name, function(err){
 						if(err) {
 							bbscaff.logError(err)
@@ -54,7 +53,6 @@ module.exports = function(bbscaff){
 		fs.readFile(path.join(process.cwd(), container_name, 'template-'+template_name+'.xml'), "utf8", function(err, content){
 			bbscaff.request('http://localhost:7777/portalserver/templates', content, function(err, httpResponse, body){
 				if(!err && httpResponse.statusCode == '201') {
-
 					fs.readFile(path.join(process.cwd(), container_name, 'catalog-'+container_name+'.xml'), "utf8", function(err, content){
 						bbscaff.request('http://localhost:7777/portalserver/catalog', content, function(err, httpResponse, body){
 							if(!err && httpResponse.statusCode == '204') {

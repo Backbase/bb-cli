@@ -7,6 +7,8 @@ var request = require('request');
 var program = require('commander')
 var chalk = require('chalk');
 var _ = require('lodash');
+var map = require('map-stream');
+var Table = require('cli-table');
 var backbase = chalk.gray([" ____             _    _                     ", "| __ )  __ _  ___| | _| |__   __ _ ___  ___  ", "|  _ \\ / _` |/ __| |/ / '_ \\ / _` / __|/ _ \\ ", "| |_) | (_| | (__|   <| |_) | (_| \\__ \\  __/ ", "|____/ \\__,_|\\___|_|\\_\\_.__/ \\__,_|___/\\___| "].join('\n') + '\n')
 
 //Gulp Modules
@@ -14,6 +16,7 @@ var gulp = require('gulp');
 var template = require('gulp-template');
 var rename = require('gulp-rename');
 var conflict = require('gulp-conflict');
+var gulpFilter = require('gulp-filter');
 
 //Config
 var templatesDir = path.join(__dirname, '..', 'templates');
@@ -52,8 +55,12 @@ bbscaff.prototype.request = function(url, content, request_callback){
 }
 
 bbscaff.prototype.generate = function(answers, destination_path, callback){
+	var excludeImages = gulpFilter(['**/*', '!**/*.jpg', '!**/*.png', '!**/*.gif']);
+
 	gulp.src(this.template_dir + '/**/*')
+		.pipe(excludeImages)
 		.pipe(template(answers))
+		.pipe(excludeImages.restore())
 		.pipe(rename(function(path){
 			_.each(answers, function(answer, key){
 				path.basename = path.basename.split('{' + key + '}').join(answer)
@@ -105,6 +112,45 @@ program
 				})
 			}
 		})
+	});
+
+program
+	.command('list')
+	.description('show available templates')
+	.action(function(){
+
+		console.log(chalk.green('Available templates:'))
+		console.log(chalk.gray('Note: templates defined in your home folder overrides default templates.'))
+
+		var foundTemplates = [];
+
+		var table = new Table({
+			head: ['Template name', 'Path']
+		});
+
+		gulp.src([path.join(homeDir, '.bbscaff', '**/bbscaff.js'), path.join(templatesDir, '**/bbscaff.js')])
+			.pipe(map(function(file, cb){
+				var templatePath = path.dirname(file.path);
+				var templateName = _.last(templatePath.split(path.sep));
+
+				if(_.indexOf(foundTemplates, templateName) == -1) {
+					table.push([templateName, chalk.gray(templatePath)])
+					// console.log(chalk.bgGreen(templateName) + ' ' + chalk.gray(templatePath))
+				} else {
+					// console.log(chalk.gray(templateName) + ' ' + chalk.gray(templatePath))
+				}
+
+				foundTemplates.push(templateName)
+				cb();
+			}))
+			.on('end', function(){
+				console.log(table.toString());
+			})
+
 	})
 
-program.parse(process.argv);
+var args = process.argv;
+if(args.length < 3) {
+	args.push('list')
+}
+program.parse(args);
