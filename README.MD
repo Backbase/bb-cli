@@ -1,4 +1,4 @@
-bbscaff 0.0.7
+bbscaff 0.0.8
 ===================
 
 > Scaffold tool for Backbase CXP **5.5.x**
@@ -80,13 +80,23 @@ Returns the current bundle name.
 
 --------------------
 
-##### bbscaff.request(url, content, request_callback)
-Used to make requests to the portalserver REST Api. It handles authentication and sets proper headers.
+##### bbscaff.getPrefix(string)
+Returns string as prefix. Ex: `my-bundle` => `mb`
+
+--------------------
+
+##### bbscaff.toCamelCase(string)
+Returns string in CamelCase. Ex: `my-bundle` => `MyBundle`
+
+--------------------
+
+##### bbscaff.request(request_object, callback)
+Used to make requests to the portalserver REST Api. It handles authentication and sets proper headers. Please see [request](https://github.com/request/request) for more details.
 
 ``` js
 fs.readFile('file.xml'), "utf8", function(err, content){
 	if(err) return;
-	bbscaff.request('http://localhost:7777/portalserver/catalog', content, function(err, httpResponse, body){})
+	bbscaff.request({url: 'http://localhost:7777/portalserver/catalog', body: content}, function(err, httpResponse, body){})
 })
 ```
 

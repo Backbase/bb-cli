@@ -79,7 +79,11 @@ bbscaff.prototype.prompt = function(questions, callback){
 }
 
 bbscaff.prototype.toCamelCase = function(string) {
-	return string.split(/[-_ \.]/).map(function(word){var wordArr = word.split(''); wordArr[0] = wordArr[0].toUpperCase(); return wordArr.join('')}).join('')
+	return string.split(/[-_ \.]/).map(function(word){
+		var wordArr = word.split('');
+			wordArr[0] = wordArr[0].toUpperCase();
+			return wordArr.join('')
+		}).join('')
 }
 
 bbscaff.prototype.getPrefix = function(string){
@@ -95,7 +99,7 @@ bbscaff.prototype.logSuccess = function(msg_white, msg_gray) {
 }
 
 program
-	.version('0.0.7')
+	.version('0.0.8')
 	// .option('-p, --port <n>', 'Set portalserver custom port. Default: 7777')
 
 program
