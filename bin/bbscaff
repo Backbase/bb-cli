@@ -39,19 +39,18 @@ bbscaff.prototype.getCurrentBundle = function(){
 	return process.cwd().split(path.sep).slice(-2)[0];
 }
 
-bbscaff.prototype.request = function(url, content, request_callback){
-	request({
+bbscaff.prototype.request = function(config, request_callback){
+	request(_.extend({
 		'auth': {
 			'user': 'admin',
 			'pass': 'admin'
 		},
 		method: 'POST',
-		url: url,
-		body: content,
+		url: 'http://localhost:7777/portalserver/catalog',
 		headers: {
 			'Content-Type': 'application/xml'
 		}
-	}, request_callback)
+	}, config), request_callback)
 }
 
 bbscaff.prototype.generate = function(answers, destination_path, callback){
@@ -77,6 +76,14 @@ bbscaff.prototype.prompt = function(questions, callback){
 	inquirer.prompt(questions, function(answers){
 		if(typeof callback == 'function') callback(answers)
 	})
+}
+
+bbscaff.prototype.toCamelCase = function(string) {
+	return string.split(/[-_ \.]/).map(function(word){var wordArr = word.split(''); wordArr[0] = wordArr[0].toUpperCase(); return wordArr.join('')}).join('')
+}
+
+bbscaff.prototype.getPrefix = function(string){
+	return string.split(/[-_ \.]/).map(function(word){return word.split('')[0]}).join('')
 }
 
 bbscaff.prototype.logError = function(msg){
