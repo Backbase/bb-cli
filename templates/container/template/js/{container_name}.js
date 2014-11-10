@@ -16,7 +16,7 @@
     }, {
         template: function(json) {
             var data = {item: json.model.originalItem};
-            var sTemplate = <%=bundle_name%>.<%=template_name%>(data);
+            var sTemplate = <%=bundle_name.replace(/[\.-]/gi, '_')%>.<%=template_name%>(data);
             return sTemplate;
         },
 

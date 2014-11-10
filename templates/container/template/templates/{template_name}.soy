@@ -1,11 +1,11 @@
-{namespace <%=bundle_name.replace('.', '_')%>}
+{namespace <%=bundle_name.replace(/[\.-]/gi, '_')%>}
 /**
  * Page Layout
  * @param item Item in context
  */
 {template .<%=template_name%>}
-    <div class="bp-container bp-<%=container_name%>" data-pid="{$item.name}">
-        <div class="bp-area bp-<%=container_name%>--area">
+    <div class="bp-container <%=bundle_prefix%>-<%=container_name%>" data-pid="{$item.name}">
+        <div class="bp-area <%=bundle_prefix%>-<%=container_name%>--area">
             {foreach $child in $item.children}
                 // {if parseInt($child.preferences.area.value) == 0}
                     {include($child) |noAutoescape}

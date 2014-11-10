@@ -18,6 +18,12 @@ module.exports = function(bbscaff){
 			name: 'bundle_name',
 			message: 'Bundle name',
 			'default': bbscaff.getCurrentBundle()
+		},
+
+		{
+			name: 'bundle_prefix',
+			message: 'Bundle prefix',
+			'default': bbscaff.getPrefix(bbscaff.getCurrentBundle())
 		}
 	], function(answers){
 		bbscaff.generate(answers, answers.widget_name, function(){
@@ -41,7 +47,7 @@ module.exports = function(bbscaff){
 
 	function addWidget(widget_name, callback){
 		fs.readFile(path.join(process.cwd(), widget_name, 'catalog-'+widget_name+'.xml'), "utf8", function(err, content){
-			bbscaff.request('http://localhost:7777/portalserver/catalog', content, function(err, httpResponse, body){
+			bbscaff.request({body: content}, function(err, httpResponse, body){
 				if(!err && httpResponse.statusCode == '204') {
 					bbscaff.logSuccess(widget_name, 'successfully added to your portal enterprise catalog.')
 				} else {
