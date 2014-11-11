@@ -1,12 +1,15 @@
 bbscaff 0.0.8
 ===================
 
-> Scaffold tool for Backbase CXP **5.5.x**
+> bbscaff is a command line tool that helps you generating and importing components to Backbase CXP **5.5.x**.
+> You can easily create widgets, containers and automatically add to your portal catalog with just one command.
+
+## Requirements
+- [Node.js](http://nodejs.org/)
 
 ## Install
-
 ``` shell
-npm install -g bbscaff
+$ npm install -g bbscaff
 ```
 
 ## Usage
@@ -15,14 +18,14 @@ npm install -g bbscaff
 Inside `/yourBundleName/widgets` type:
 
 ``` shell
-bbscaff generate widget
+$ bbscaff generate widget
 ```
 
 ### Generating Containers
 Inside `/yourBundleName/containers` type:
 
 ``` shell
-bbscaff generate container
+$ bbscaff generate container
 ```
 
 
