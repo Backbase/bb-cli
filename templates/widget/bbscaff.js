@@ -51,7 +51,6 @@ module.exports = function(bbscaff){
 				if(!err && httpResponse.statusCode == '204') {
 					bbscaff.logSuccess(widget_name, 'successfully added to your portal enterprise catalog.')
 				} else {
-					console.log(body)
 					callback(err || 'Error trying to add the widget trough REST: ' + httpResponse.statusCode)
 				}
 			})

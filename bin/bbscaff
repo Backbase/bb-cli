@@ -3,20 +3,15 @@
 var fs = require('fs');
 var path = require('path');
 var inquirer = require("inquirer");
-var request = require('request');
+
 var program = require('commander')
 var chalk = require('chalk');
 var _ = require('lodash');
-var map = require('map-stream');
-var Table = require('cli-table');
-var backbase = chalk.gray([" ____             _    _                     ", "| __ )  __ _  ___| | _| |__   __ _ ___  ___  ", "|  _ \\ / _` |/ __| |/ / '_ \\ / _` / __|/ _ \\ ", "| |_) | (_| | (__|   <| |_) | (_| \\__ \\  __/ ", "|____/ \\__,_|\\___|_|\\_\\_.__/ \\__,_|___/\\___| "].join('\n') + '\n')
 
 //Gulp Modules
 var gulp = require('gulp');
-var template = require('gulp-template');
-var rename = require('gulp-rename');
-var conflict = require('gulp-conflict');
-var gulpFilter = require('gulp-filter');
+
+var backbase = chalk.gray([" ____             _    _                     ", "| __ )  __ _  ___| | _| |__   __ _ ___  ___  ", "|  _ \\ / _` |/ __| |/ / '_ \\ / _` / __|/ _ \\ ", "| |_) | (_| | (__|   <| |_) | (_| \\__ \\  __/ ", "|____/ \\__,_|\\___|_|\\_\\_.__/ \\__,_|___/\\___| "].join('\n') + '\n')
 
 //Config
 var templatesDir = path.join(__dirname, '..', 'templates');
@@ -30,83 +25,15 @@ var symbols = {
 
 console.log(backbase)
 
-//API
-var bbscaff = module.exports = function(template_dir){
-	this.template_dir = template_dir
-};
-
-bbscaff.prototype.getCurrentBundle = function(){
-	return process.cwd().split(path.sep).slice(-2)[0];
-}
-
-bbscaff.prototype.request = function(config, request_callback){
-	request(_.extend({
-		'auth': {
-			'user': 'admin',
-			'pass': 'admin'
-		},
-		method: 'POST',
-		url: 'http://localhost:7777/portalserver/catalog',
-		headers: {
-			'Content-Type': 'application/xml'
-		}
-	}, config), request_callback)
-}
-
-bbscaff.prototype.generate = function(answers, destination_path, callback){
-	var excludeImages = gulpFilter(['**/*', '!**/*.jpg', '!**/*.png', '!**/*.gif']);
-
-	gulp.src(this.template_dir + '/**/*')
-		.pipe(excludeImages)
-		.pipe(template(answers))
-		.pipe(excludeImages.restore())
-		.pipe(rename(function(path){
-			_.each(answers, function(answer, key){
-				path.basename = path.basename.split('{' + key + '}').join(answer)
-			})
-		}))
-		.pipe(conflict('./'))
-		.pipe(gulp.dest(destination_path))
-		.on('end', function(){
-			if(typeof callback == 'function') callback()
-		})
-}
-
-bbscaff.prototype.prompt = function(questions, callback){
-	inquirer.prompt(questions, function(answers){
-		if(typeof callback == 'function') callback(answers)
-	})
-}
-
-bbscaff.prototype.toCamelCase = function(string) {
-	return string.split(/[-_ \.]/).map(function(word){
-		var wordArr = word.split('');
-			wordArr[0] = wordArr[0].toUpperCase();
-			return wordArr.join('')
-		}).join('')
-}
-
-bbscaff.prototype.getPrefix = function(string){
-	return string.split(/[-_ \.]/).map(function(word){return word.split('')[0]}).join('')
-}
-
-bbscaff.prototype.logError = function(msg){
-	console.log(chalk.red(symbols.err + ' ') + chalk.gray(msg))
-}
-
-bbscaff.prototype.logSuccess = function(msg_white, msg_gray) {
-	console.log(chalk.green(symbols.ok + ' ') + msg_white + ' ' + chalk.gray(msg_gray))
-}
 
 program
 	.version('0.0.8')
-	// .option('-p, --port <n>', 'Set portalserver custom port. Default: 7777')
 
 program
 	.command('generate <template>')
 	.description('scaffold widgets and containers')
 	.action(function(template){
-		// PORTAL_PORT = program.port || PORTAL_PORT;
+		var bbscaff = require('../lib/bbscaff');
 
 		fs.exists(path.join(homeDir, '.bbscaff', template), function(exists){
 			if(exists) {
@@ -146,9 +73,6 @@ program
 
 				if(_.indexOf(foundTemplates, templateName) == -1) {
 					table.push([templateName, chalk.gray(templatePath)])
-					// console.log(chalk.bgGreen(templateName) + ' ' + chalk.gray(templatePath))
-				} else {
-					// console.log(chalk.gray(templateName) + ' ' + chalk.gray(templatePath))
 				}
 
 				foundTemplates.push(templateName)
@@ -159,6 +83,55 @@ program
 			})
 
 	})
+
+
+program
+	.command('export [portalName]')
+	.description('export portal model into xml files. This files can be imported trough Yapi.')
+	.action(function(portalName){
+		var bbmodel = require('../lib/bbmodel');
+
+		if(!portalName) {
+			bbmodel.listPortals(function(portals){
+				inquirer.prompt([{message: 'Choose the portal you want to export', name: 'portal_name', type: 'list', choices: portals}], function(answers){
+					bbmodel.getPortalModel(answers.portal_name, function(xml){
+						if(xml) {
+							areYouSure(function(){
+								bbmodel.exportPortal(xml, answers.portal_name, process.cwd(), function(file){
+									console.log(chalk.green(symbols.ok + ' ') + chalk.gray(file))
+								})
+							})
+
+						} else {
+							console.log(chalk.red(symbols.err + ' ') + chalk.gray("Portal doesn't exist or cannot be exported."))
+						}
+					})
+
+				})
+			})
+		} else {
+			bbmodel.getPortalModel(portalName, function(xml){
+				if(xml) {
+					areYouSure(function(){
+						bbmodel.exportPortal(xml, portalName, process.cwd(), function(file){
+							console.log(chalk.green(symbols.ok + ' ') + chalk.gray(file))
+						})
+					})
+
+				} else {
+					console.log(chalk.red(symbols.err + ' ') + chalk.gray("Portal doesn't exist or cannot be exported."))
+				}
+			})
+		}
+
+		function areYouSure(cb){
+			inquirer.prompt([{message: 'You are about to export your portal model into ' + chalk.inverse(process.cwd()) + '. ' + chalk.red('This may override your files. Are you sure?'), name: 'confirm', type: 'confirm'}], function(answers){
+				if(answers.confirm) cb()
+			})
+		}
+
+	})
+
 
 var args = process.argv;
 if(args.length < 3) {
