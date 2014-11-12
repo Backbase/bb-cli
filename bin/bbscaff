@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
-var program = require('commander')
+global.program = require('commander')
+
 var chalk = require('chalk');
 
 var pkg = require('../package.json')
@@ -13,6 +14,8 @@ program.version(pkg.version)
 // Available programs
 require('../program/generate')(program)
 require('../program/export')(program)
+
+program.option('-u, --portal_url [portal_url]', 'set a different portal server url. Default: http://localhost:7777', 'http://localhost:7777')
 
 program
 	.command('*')
