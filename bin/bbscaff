@@ -1,152 +1,30 @@
 #!/usr/bin/env node
 
-var fs = require('fs');
-var path = require('path');
-var inquirer = require("inquirer");
-
 var program = require('commander')
 var chalk = require('chalk');
-var _ = require('lodash');
-var Table = require('cli-table');
-var map = require('map-stream')
 
-//Gulp Modules
-var gulp = require('gulp');
+var pkg = require('../package.json')
+var util = require('../lib/util')
 
-var backbase = chalk.gray([" ____             _    _                     ", "| __ )  __ _  ___| | _| |__   __ _ ___  ___  ", "|  _ \\ / _` |/ __| |/ / '_ \\ / _` / __|/ _ \\ ", "| |_) | (_| | (__|   <| |_) | (_| \\__ \\  __/ ", "|____/ \\__,_|\\___|_|\\_\\_.__/ \\__,_|___/\\___| "].join('\n') + '\n')
+util.backbase();
 
-//Config
-var templatesDir = path.join(__dirname, '..', 'templates');
-var homeDir = process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE;
-// var PORTAL_PORT = 7777;
-var symbols = {
-	ok: '✓',
-	err: '✖',
-	dot: '․'
-}
+program.version(pkg.version)
 
-console.log(backbase)
-
-
-program
-	.version('0.0.8')
-
-program
-	.command('generate <template>')
-	.description('scaffold widgets and containers')
-	.action(function(template){
-		var bbscaff = require('../lib/bbscaff');
-
-		fs.exists(path.join(homeDir, '.bbscaff', template), function(exists){
-			if(exists) {
-				console.log(chalk.gray('Generating ' + template + ' on path: ' + process.cwd()))
-				require(path.join(homeDir, '.bbscaff', template, 'bbscaff'))(new bbscaff(path.join(homeDir, '.bbscaff', template, 'template')))
-			} else {
-				fs.exists(path.join(templatesDir, template), function(exists){
-					if(exists) {
-						console.log(chalk.gray('Generating ' + template + ' on path: ' + process.cwd()))
-						require(path.join(templatesDir, template, 'bbscaff'))(new bbscaff(path.join(templatesDir, template, 'template')))
-					} else {
-						console.log(chalk.red(symbols.err + ' ') + chalk.gray('Template not found'))
-					}
-				})
-			}
-		})
-	});
-
-program
-	.command('list')
-	.description('show available templates')
-	.action(function(){
-
-		console.log(chalk.green('Available templates:'))
-		console.log(chalk.gray('Note: templates defined in your home folder overrides default templates.'))
-
-		var foundTemplates = [];
-
-		var table = new Table({
-			head: ['Template name', 'Path']
-		});
-
-		gulp.src([path.join(homeDir, '.bbscaff', '**/bbscaff.js'), path.join(templatesDir, '**/bbscaff.js')])
-			.pipe(map(function(file, cb){
-				var templatePath = path.dirname(file.path);
-				var templateName = _.last(templatePath.split(path.sep));
-
-				if(_.indexOf(foundTemplates, templateName) == -1) {
-					table.push([templateName, chalk.gray(templatePath)])
-				}
-
-				foundTemplates.push(templateName)
-				cb();
-			}))
-			.on('end', function(){
-				console.log(table.toString());
-			})
-
-	})
-
-
-program
-	.command('export [portalName]')
-	.description('export portal model into xml files. This files can be imported trough Yapi.')
-	.action(function(portalName){
-		var bbmodel = require('../lib/bbmodel');
-
-		if(!portalName) {
-			bbmodel.listPortals(function(portals){
-				inquirer.prompt([{message: 'Choose the portal you want to export', name: 'portal_name', type: 'list', choices: portals}], function(answers){
-					bbmodel.getPortalModel(answers.portal_name, function(xml){
-						if(xml) {
-							areYouSure(function(){
-								bbmodel.exportPortal(xml, answers.portal_name, process.cwd(), function(file){
-									console.log(chalk.green(symbols.ok + ' ') + chalk.gray(file))
-								})
-							})
-
-						} else {
-							console.log(chalk.red(symbols.err + ' ') + chalk.gray("Portal doesn't exist or cannot be exported."))
-						}
-					})
-
-				})
-			})
-		} else {
-			bbmodel.getPortalModel(portalName, function(xml){
-				if(xml) {
-					areYouSure(function(){
-						bbmodel.exportPortal(xml, portalName, process.cwd(), function(file){
-							console.log(chalk.green(symbols.ok + ' ') + chalk.gray(file))
-						})
-					})
-
-				} else {
-					console.log(chalk.red(symbols.err + ' ') + chalk.gray("Portal doesn't exist or cannot be exported."))
-				}
-			})
-		}
-
-		function areYouSure(cb){
-			inquirer.prompt([{message: 'You are about to export your portal model into ' + chalk.inverse(process.cwd()) + '. ' + chalk.red('This may override your files. Are you sure?'), name: 'confirm', type: 'confirm'}], function(answers){
-				if(answers.confirm) cb()
-			})
-		}
-
-	})
-
-
+// Available programs
+require('../program/generate')(program)
+require('../program/export')(program)
 
 program
 	.command('*')
+	.description('help')
 	.action(function(){
 		console.log(chalk.red('  Command not found'))
-		program.commands.pop() //doesn't show the * command in the help
 		program.help()
 	})
 
 
 var args = process.argv;
 if(args.length < 3) {
-	args.push('list')
+	args.push('--help')
 }
 program.parse(args);

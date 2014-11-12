@@ -11,6 +11,7 @@
   "dependencies": {
     "chalk": "^0.5.1",
     "cli-table": "^0.3.1",
+    "clui": "^0.3.1",
     "commander": "^2.4.0",
     "gulp": "^3.8.8",
     "gulp-conflict": "^0.2.0",
