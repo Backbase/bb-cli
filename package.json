@@ -5,6 +5,9 @@
   "author": "Guilherme Medeiros",
   "license": "Apache-2.0",
   "preferGlobal": "true",
+  "scripts": {
+    "test": "node_modules/.bin/mocha --reporter spec"
+  },
   "bin": {
     "bbscaff": "bin/bbscaff"
   },
@@ -32,5 +35,9 @@
   "bugs": {
     "url": "https://github.com/Backbase/Backbase-CLI/issues"
   },
-  "homepage": "https://github.com/Backbase/Backbase-CLI"
+  "homepage": "https://github.com/Backbase/Backbase-CLI",
+  "devDependencies": {
+    "mocha": "^2.0.1",
+    "should": "^4.3.0"
+  }
 }
