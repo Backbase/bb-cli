@@ -7,6 +7,8 @@ var inquirer = require("inquirer");
 var program = require('commander')
 var chalk = require('chalk');
 var _ = require('lodash');
+var Table = require('cli-table');
+var map = require('map-stream')
 
 //Gulp Modules
 var gulp = require('gulp');
@@ -130,6 +132,16 @@ program
 			})
 		}
 
+	})
+
+
+
+program
+	.command('*')
+	.action(function(){
+		console.log(chalk.red('  Command not found'))
+		program.commands.pop() //doesn't show the * command in the help
+		program.help()
 	})
 
 
