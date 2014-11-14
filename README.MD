@@ -14,6 +14,8 @@ $ npm install -g bbscaff
 
 ## Usage
 
+![](https://raw.githubusercontent.com/Backbase/Backbase-CLI/master/demo/widget.gif)
+
 ### Generating Widgets
 Inside `/yourBundleName/widgets` type:
 
