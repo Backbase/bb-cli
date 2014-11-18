@@ -16,6 +16,7 @@ require('../program/generate')(program)
 require('../program/export')(program)
 
 program.option('-u, --portal_url [portal_url]', 'set a different portal server url. Default: http://localhost:7777', 'http://localhost:7777')
+program.option('-a, --authentication [authentication]', 'set a different portal server authentication. Default: admin:admin', 'admin:admin')
 
 program
 	.command('*')
