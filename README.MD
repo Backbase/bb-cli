@@ -1,4 +1,4 @@
-bbscaff 0.0.9 [![Build Status](https://travis-ci.org/Backbase/Backbase-CLI.svg?branch=master)](https://travis-ci.org/Backbase/Backbase-CLI)
+bbscaff 0.0.10 [![Build Status](https://travis-ci.org/Backbase/Backbase-CLI.svg?branch=master)](https://travis-ci.org/Backbase/Backbase-CLI)
 ===================
 
 > bbscaff is a command line tool that helps you generating and importing components to Backbase CXP **5.5.x**.
