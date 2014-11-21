@@ -7,7 +7,7 @@
                 <value type="string">$(contextRoot)/static/<%=bundle_name%>/widgets/<%=widget_name%>/index.html</value>
             </property>
             <property name="thumbnailUrl">
-                <value type="string">/portalserver/static/dashboard/media/icons/icons-widgets_01-default.png</value>
+                <value type="string">$(contextRoot)/static/dashboard/media/icons/icons-widgets_01-default.png</value>
             </property>
             <property label="Title" name="title">
                 <value type="string"><%=widget_title%></value>
