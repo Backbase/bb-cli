@@ -9,7 +9,7 @@
             <property name="viewNamespace">
                 <value type="string"><%=bundle_name%></value>
             </property>
-            <property name="title">
+            <property name="title" label="Title" viewHint="admin,designModeOnly">
                 <value type="string"><%=container_title%></value>
             </property>
             <property name="config">

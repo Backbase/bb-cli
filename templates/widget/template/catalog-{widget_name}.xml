@@ -16,7 +16,7 @@
                 <value type="string">Standard_Widget</value>
             </property>
             <property label="Widget Chrome" name="widgetChrome">
-                <value type="string">$(contextRoot)/static/backbase.com.2012.aurora/html/chromes/widget_default.html</value>
+                <value type="string">$(contextRoot)/static/backbase.com.2012.aurora/html/chromes/widget_none.html</value>
             </property>
         </properties>
     </widget>

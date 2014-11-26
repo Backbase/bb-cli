@@ -26,7 +26,7 @@
             },
 
             preferencesSaved: function(event){
-                if(event.targeet === this) {
+                if(event.target === this) {
                     this.refreshHTML(function(item){
                         // console.log(item)
                     })
