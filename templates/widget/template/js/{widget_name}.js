@@ -1,9 +1,14 @@
 define(['angular'], function(angular){
 	"use strict";
 
-	var app = angular.module('<%=widget_name%>')
+	angular.module('<%=widget_name%>', [])
+		.controller('main', function($scope, widget){
+			$scope.data = 'Hello from Angular';
+			console.log(widget);
+		})
 
 	return function(widget){
-		console.log(widget);
+		angular.module('<%=widget_name%>').value('widget', widget);
+		angular.bootstrap(widget.body, ['<%=widget_name%>'])
 	}
 })
