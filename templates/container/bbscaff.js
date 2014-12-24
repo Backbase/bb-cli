@@ -61,7 +61,6 @@ module.exports = function(bbscaff){
 		})
 	})
 
-
 	function postContainer(container_name, template_name, callback){
 		fs.readFile(path.join(process.cwd(), container_name, 'template-'+template_name+'.xml'), "utf8", function(err, content){
 			bbscaff.request({url: 'http://localhost:7777/portalserver/templates', body: content}, function(err, httpResponse, body){

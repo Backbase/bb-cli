@@ -15,26 +15,26 @@ var templatesDir = [
 	path.join(__dirname, '..', 'templates')
 ];
 
-module.exports = function(program){
-	program
-		.command('generate [template]')
-		.description('scaffold widgets and containers')
-		.action(function(template_name){
+var Command = require('ronin').Command;
 
-			if(!template_name) return listTemplates();
+module.exports = Command.extend({
+	desc: 'scaffold widgets and containers',
 
-			var tmpl_path = _.find(templatesDir, function(tmpl_path){
-				return fs.existsSync(path.join(tmpl_path, template_name, 'bbscaff.js'))
-			})
+	run: function (portal_url, authentication, template_name) {
+		if(!template_name) return listTemplates();
 
-			if(tmpl_path){
-				console.log(chalk.gray('Generating ' + template_name + ' on path: ' + process.cwd()))
-				require(path.join(tmpl_path, template_name, 'bbscaff'))(new bbscaff(path.join(tmpl_path, template_name, 'template')))
-			} else {
-				listTemplates()
-			}
-		});
-}
+		var tmpl_path = _.find(templatesDir, function(tmpl_path){
+			return fs.existsSync(path.join(tmpl_path, template_name, 'bbscaff.js'))
+		})
+
+		if(tmpl_path){
+			console.log(chalk.gray('Generating ' + template_name + ' on path: ' + process.cwd()))
+			require(path.join(tmpl_path, template_name, 'bbscaff'))(new bbscaff(path.join(tmpl_path, template_name, 'template')))
+		} else {
+			listTemplates()
+		}
+	}
+});
 
 
 function listTemplates(){
