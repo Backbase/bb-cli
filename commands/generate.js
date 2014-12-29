@@ -20,7 +20,7 @@ var Command = require('ronin').Command;
 module.exports = Command.extend({
 	desc: 'scaffold widgets and containers',
 
-	run: function (portal_url, authentication, template_name) {
+	run: function (template_name) {
 		if(!template_name) return listTemplates();
 
 		var tmpl_path = _.find(templatesDir, function(tmpl_path){
