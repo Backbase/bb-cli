@@ -26,7 +26,11 @@
     "map-stream": "0.0.5",
     "request": "^2.46.0",
     "ronin": "^0.1.8",
-    "xml2js": "^0.4.4"
+    "xml2js": "^0.4.4",
+    "asking": "^0.1.2",
+    "jxon": "^1.2.0",
+    "mosaic-rest-js": "Backbase/mosaic-rest-js",
+    "q": "^1.1.2"
   },
   "main": "index.js",
   "repository": {
