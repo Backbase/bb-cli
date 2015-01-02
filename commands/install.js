@@ -36,7 +36,7 @@ var readBowerConfs = function(){
 
     fs.readJSON('./bower.json', function (err, bowerJSONdata) {
         if (err) {
-            throw new Error('Could not find bower.json, please init your project first: ', err);
+            throw new Error(chalk.red('Could not find bower.json, please init your project first: '), err);
         }
         var bowerJSON = bowerJSONdata;
 
@@ -53,28 +53,38 @@ var readBowerConfs = function(){
     return deferred.promise;
 };
 
-var install = function(){
+var install = function(componentName){
     readBowerConfs().then(function(confs){
         var options = prepareOptions(confs);
+        var generate = new GenerateRequireConf(options);
 
-        console.log(chalk.gray('Running Bower install...'));
+        if (componentName) {
+            console.log(chalk.gray('Installing ' + componentName + ' through Bower'));
 
-        // First, we install all bower deps
-        spawn('bower', ['install'], {stdio: 'inherit'}).on('close', function () {
-            console.log(chalk.gray('Bower install done, proceed to RequireJS conf generation...'));
+            spawn('bower', ['install', componentName], {stdio: 'inherit'}).on('close', function () {
+                console.log(chalk.gray('Component install done, proceed to RequireJS conf generation...'));
 
-            var generate = new GenerateRequireConf(options);
+                // Then we generate RequireJS conf
+                generate.getAndWrite();
+            });
+        } else {
+            console.log(chalk.gray('Running Bower install...'));
 
-            // Then we generate RequireJS conf
-            generate.getAndWrite();
-        });
+            // First, we install all bower deps
+            spawn('bower', ['install'], {stdio: 'inherit'}).on('close', function () {
+                console.log(chalk.gray('Bower install done, proceed to RequireJS conf generation...'));
+
+                // Then we generate RequireJS conf
+                generate.getAndWrite();
+            });
+        }
     }).fail(function(err){
-        console.log('Something went wrong, during Bower configuration read: ', err);
+        console.log(chalk.red('Something went wrong, during Bower configuration read: '), err);
     });
 };
 
 var Install = Command.extend({
-    desc: 'Insert your description',
+    desc: 'Installs all or specified bower dependency, generates RequireJS configuration and uploads component model to portal',
 
     run: install
 });
