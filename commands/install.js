@@ -70,8 +70,9 @@ var install = function(componentName){
         } else {
             console.log(chalk.gray('Running Bower install...'));
 
+            // TODO: pass bower flags
             // First, we install all bower deps
-            spawn('bower', ['install'], {stdio: 'inherit'}).on('close', function () {
+            spawn('bower', ['install', '--save'], {stdio: 'inherit'}).on('close', function () {
                 console.log(chalk.gray('Bower install done, proceed to RequireJS conf generation...'));
 
                 // Then we generate RequireJS conf

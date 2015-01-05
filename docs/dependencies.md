@@ -1,27 +1,34 @@
 # Backbase dependency management tools
 
-To use Backbase CLI tools for managing component and client-side dependencies first read about dependencies and prepare you Backbase portal configuration.
+To use Backbase CLI tools for managing components and client-side dependencies in you project, you need to:
 
-## Dependencies
+1. Install tools
+2. Configure your Backbase project
 
-To use the tools, you must have git, node.js and globally installed `backbase-cli` with `bower`.
+## Install
+
+First be sure that you have Git and Node.js installed on your system. Then install `backbase-cli` tools with `bower`:
 
 ```
 $ npm i bower -g
 $ git clone https://github.com/sourcejs/backbase-cli && cd backbase-cli && npm link
 ```
 
+Note that current backbase-cli tools are stored in temporary repository.
+
 ## Backbase Project configuration
+
+First versions were tested only for compatibility with launchpad 11 archetype.
 
 ### Init bower
 
-To prepare your Backbase portal for new component dependencies structure, you need to initialize bower in project root:
+To prepare your Backbase portal for new component dependencies structure, you need to initialize bower in project root (where you have `portalserver` folder):
 
 ```
-$ bower init
+$ bb init
 ```
 
-(later this sep will be replaced with `bb bower init`)
+You will be prompted with few questions, you can keep everything in default values.
 
 ### Conf paths
 
@@ -33,17 +40,23 @@ Add arrays with paths to your existing `requirejs-conf.js`:
 ]
 ```
 
-### Static route configuration
+If you're using launchpad 11 archetype, this will be already filled during init.
 
-Configure your web server to serve static files from `bower_components`.
+### Add link to generated conf
 
-### Add path to generated conf
+Configure your templates, or build script to include `portalserver/src/main/webapp/static/bower_components/require-bower-config.js` in your web application.
 
-Configure your templates, or build script to include `portalserver/src/main/webapp/static/launchpad/conf/require-bower-config.js` in your web application.
+If launchpad 11, link to `require-config` should be placed in `lp11/portalserver/src/main/webapp/WEB-INF/launchpad/pages/launchpad-lib.jsp`:
+
+```html
+<script src="/portalserver/static/bower_components/require-bower-config.js"></script>
+```
 
 ## Commands
 
-### Bower Init (TODO)
+### Bower Init
+
+Initializes Bower in current directory with Backbase specific defaults.
 
 ```
 bb bower init
@@ -57,17 +70,23 @@ Install all Bower dependencies and generate RequireJS configuration. Run this co
 bb install
 ```
 
-By default, RequireJS conf will be saved to `portalserver/src/main/webapp/static/launchpad/conf/require-bower-config.js`.
+By default, RequireJS conf will be saved to `portalserver/src/main/webapp/static/bower_components/require-bower-config.js`.
 
-Find more information about process behind `bb install` in [proposal doc](https://github.com/operatino/backbase-widget-dependencies-proposal).
+Find more information about process behind `bb install` in [proposal doc](https://github.com/operatino/backbase-widget-dependencies-proposal) (could be slightly unsynced).
 
-#### Instal <name> (TODO)
+#### Instal <name>
+
+Install any bower dependencies and generate `require-config` after.
 
 ```
 bb install <name>
 ```
 
-### Uninstall <name> (TODO)
+TODO: make `bb install` a full mirror to `bower install`, now it doesn't support flags.
+
+### Uninstall <name>
+
+TODO (not done yet)
 
 ```
 bb uninstall <name>
