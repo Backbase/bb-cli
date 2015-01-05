@@ -91,3 +91,17 @@ TODO (not done yet)
 ```
 bb uninstall <name>
 ```
+
+## Examples
+
+Init (only once) your project, and install some demo widgets:
+
+```
+bb init
+bb install https://github.com/operatino/backbase-robert.git#sep-feed
+bb install https://github.com/operatino/backbase-robert.git#sep-bundle
+```
+
+Widgets will be downloaded to `lp11/portalserver/src/main/webapp/static/bower_components` folder, to get them in portal, you will need to import their XML's through YAPI.
+
+ Automatic components import will be added in next releases.
