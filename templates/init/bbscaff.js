@@ -22,7 +22,7 @@ module.exports = function(bbscaff){
 		{
 			name: 'requireConfPaths',
 			message: 'Paths to existing require.js configurations (comma separated)',
-			default: "portalserver/src/main/webapp/static/launchpad/conf/require-conf.js",
+			default: 'portalserver/target/launchpad.war/conf/require-conf.js',
 			filter: function(answer){
 				return answer.split(',');
 			}

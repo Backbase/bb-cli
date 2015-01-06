@@ -36,7 +36,7 @@ Add arrays with paths to your existing `requirejs-conf.js`:
 
 ```
 "requirejsConfigs": [
-    "portalserver/src/main/webapp/static/launchpad/conf/require-conf.js"
+    "portalserver/target/launchpad.war/conf/require-conf.js"
 ]
 ```
 
