@@ -59,7 +59,7 @@ If launchpad 11, link to `require-config` should be placed in `lp11/portalserver
 Initializes Bower in current directory with Backbase specific defaults.
 
 ```
-bb bower init
+bb init
 ```
 
 ### Install
