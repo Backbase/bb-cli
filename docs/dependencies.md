@@ -74,7 +74,7 @@ By default, RequireJS conf will be saved to `portalserver/src/main/webapp/static
 
 Find more information about process behind `bb install` in [proposal doc](https://github.com/operatino/backbase-widget-dependencies-proposal) (could be slightly unsynced).
 
-#### Instal <name>
+#### Install <name>
 
 Install any bower dependencies and generate `require-config` after.
 
