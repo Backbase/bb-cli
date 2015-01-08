@@ -11,7 +11,7 @@ First be sure that you have Git and Node.js installed on your system. Then insta
 
 ```
 $ npm i bower -g
-$ git clone https://github.com/sourcejs/backbase-cli && cd backbase-cli && npm link
+$ git clone https://github.com/Backbase/bb-cli && cd bb-cli && npm link
 ```
 
 Note that current backbase-cli tools are stored in temporary repository.
