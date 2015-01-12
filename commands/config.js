@@ -1,15 +1,15 @@
-var Command = require('ronin').Command,
-    Q = require('q'),
-    fs = require('fs'),
-    readFile = Q.denodeify(fs.readFile),
-    writeFile = Q.denodeify(fs.writeFile),
-    ask = Q.denodeify(require('asking').ask),
-    HOME = process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'],
-    seq = [searchConfig, askName, askEmail, writeConfig];
+var Command = require('ronin').Command;
+var Q = require('q');
+var fs = require('fs-extra');
+var readFile = Q.denodeify(fs.readFile);
+var outputFile = Q.denodeify(fs.outputFile);
+var ask = Q.denodeify(require('asking').ask);
+var HOME = process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'];
+var seq = [searchConfig, askName, askEmail, writeConfig];
 
 module.exports = Command.extend({
   desc: 'Backbase CLI configuration',
-  
+
   run: function () {
     seq.reduce(Q.when, Q({}))
     .fail(function(p) {
@@ -30,6 +30,7 @@ function askName(r) {
         return r;
     });
 }
+
 function askEmail(r) {
     return ask('Your email:', r.email || undefined)
     .then(function(email) {
@@ -43,12 +44,12 @@ function askEmail(r) {
 }
 
 function writeConfig(o) {
-    return writeFile(HOME + '/.backbase/config.json', JSON.stringify(o))
+    return outputFile(HOME + '/.backbase/config.json', JSON.stringify(o))
     .then(function() {
         console.log(o);
         console.log('Configuration saved.');
     });
-} 
+}
 
 function searchConfig() {
     // read data from git
@@ -64,6 +65,7 @@ function searchConfig() {
     });
 
 }
+
 function searchGitConfig(r) {
     return readFile(HOME + '/.gitconfig')
     .then(function(d) {
