@@ -4,6 +4,7 @@ var ronin = require('ronin')
 var path = require('path')
 var program = ronin(path.join(__dirname, '..'))
 
-require('../lib/util').backbase()
+// prints backbase ascii logo
+// require('../lib/util').backbase()
 
 program.run();
