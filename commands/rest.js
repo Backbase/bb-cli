@@ -2,39 +2,79 @@ var Command = require('ronin').Command,
     BBRest = require('mosaic-rest-js'),
     Q = require('q'),
     jxon = require('jxon'),
-    rest = require('../lib/rest'),
     fs = require('fs'),
+    url = require('url'),
     path = require('path'),
     chalk = require('chalk'),
+    _ = require('lodash'),
+    formattor = require('formattor'),
     readFile = Q.denodeify(fs.readFile),
     readDir = Q.denodeify(fs.readdir),
     writeFile = Q.denodeify(fs.writeFile),
     ask = Q.denodeify(require('asking').ask),
-    config = require('./config');
+    config = require('./config'),
+    bbrest, cfg;
+
+jxon.config({
+  valueKey: '_',        // default: 'keyValue'
+  attrKey: '$',         // default: 'keyAttributes'
+  attrPrefix: '$',      // default: '@'
+  lowerCaseTags: false, // default: true
+  trueIsEmpty: false,   // default: true
+  autoDate: false       // default: true
+});
 
 module.exports = Command.extend({
   desc: 'Backbase REST API CLI',
-
-  options: {
-    host: 'string',
-    port: 'string',
-    context: 'string',
-    username: 'string',
-    password: 'string',
-    portal: 'string',
-    command: 'string',
-    "command-arg": 'string',
-    method: {
-        type: 'string',
-        default: 'get'
-    },
-    "method-arg": 'string',
-    dir: 'string',
-    file: 'string'
+  help: function () {
+    var title = chalk.bold;
+    var d = chalk.gray;
+    var r = '\n  ' + title('Usage') + ': bb ' + this.name + ' [OPTIONS]';
+    r += '\n\t Command line version of Backbase Rest API library. https://github.com/Backbase/mosaic-rest-js';
+    r += '\n\n  ' + title('Options') + ': -short, --name <type> ' + d('default') + ' description\n\n';
+    r += '      -H,  --host <string>\t\t' + d('localhost') + '\tThe host name of the server running portal foundation.\n';
+    r += '      -P,  --port <number>\t\t' + d('7777') + '\t\tThe port of the server running portal foundation.\n';
+    r += '      -c,  --context <string>\t\t' + d('portalserver') + '\tThe application context of the portal foundation.\n';
+    r += '      -u,  --username <string>\t\t' + d('admin') + '\t\tUsername.\n';
+    r += '      -w,  --password <string>\t\t' + d('admin') + '\t\tPassword.\n';
+    r += '      -p,  --portal <string>\t\t\t\tName of the portal on the server to target.\n';
+    r += '      -t,  --target <string>\t\t' + d('server') + '\t\tContext target: server, portal, catalog, page, container, widget, link, template, user, group, audit or cache.\n';
+    r += '      -T,  --target-arg <string/json>\t\t\tTarget arguments. When there are more arguments, pass JSON array.\n';
+    r += '      -m,  --method <string>\t\t' + d('get') + '\t\tHTTP method to use: get, post, put or delete.\n';
+    r += '      -f,  --file <string/json>\t\t\t\tPath of the file to send. Or JSON string when using mosaic-xml-js.\n';
+    r += '      -r,  --rights\t\t\t\t\tTargets context rights.\n';
+    r += '      -g,  --tags\t\t\t\t\tTargets context tags.\n';
+    r += '      -q,  --query <json>\t\t\t\tSets query string.\n';
+    r += '      -v,  --verbose\t\t\t\t\tPrints detailed output.\n';
+    r += '      -s,  --save <string>\t\t\t\tSaves response into file.\n';
+    r += '\n  ' + title('Examples') + ':\n\n';
+    r += '      bb rest\t\t\t\t\t\tReturns portals defined on the server.\n';
+    r += '      bb rest -t cache -T all -m delete\t\tDeletes all cache.\n';
+    r += '\n';
+    return r;
   },
 
-  run: function (host, port, context, username, password, portal, command, commandArg, method, methodArg, dir, file) {
-    var bbrest = new BBRest();
+  options: {
+    host: {type: 'string', alias: 'H'},
+    port: {type: 'string', alias: 'P'},
+    context: {type: 'string', alias: 'c'},
+    username: {type: 'string', alias: 'u'},
+    password: {type: 'string', alias: 'w'},
+    portal: {type: 'string', alias: 'p'},
+    target: {type: 'string', alias: 't', default: 'server'},
+    "target-arg": {type: 'string', alias: 'T'},
+    method: {type: 'string', alias: 'm', default: 'get'},
+    file: {type: 'string', alias: 'f'},
+    rights: {type: 'boolean', alias: 'r'},
+    tag: {type: 'boolean', alias: 'g'},
+    query: {type: 'string', alias: 'q'},
+    verbose: {type: 'boolean', alias: 'v'},
+    json: {type: 'boolean', alias: 'j'},
+    save: {type: 'string', alias: 's'}
+  },
+  
+  run: function (host, port, context, username, password, portal, target, targetArg, method, file, rights, tag, query, verbose, json, save) {
+    bbrest = new BBRest();
     // TODO: find portal name from config.json
     bbrest.config = {
         host: host || bbrest.config.host,
@@ -43,31 +83,108 @@ module.exports = Command.extend({
         username: username || bbrest.config.username,
         password: password || bbrest.config.password,
         portal: portal || bbrest.config.portal
-    };
-    if (dir) {
-        rest.submitDir(dir, bbrest, method);
-    } else if (file) {
-        rest.submitFile(file, bbrest, method);
-    } else if (command) {
-        var ca = command.split('-'),
-            carg = (commandArg.charAt(0) === '[')? JSON.parse(commandArg) : [commandArg],
-            p;
-        console.log(carg);
-        try {
-            if (ca.lenght > 1) {
-                p = bbrest[ca[0]]();
-                p = bbrest[ca[1]].apply(bbrest, carg);
-            } else {
-                p = bbrest[ca[0]].apply(bbrest, carg);
-            }
-            p[method](methodArg)
-            .then(rest.onResponse);
-        } catch(e) {
-            throw new Error(e);
-        }
-    } else {
-        rest.submitDir('./', bbrest, method);
-        // throw new Error('--command is not defined');
     }
+    cfg = {
+        target: target,
+        targetArg: tryParseJSON(targetArg) || [targetArg],
+        method: method,
+        file: tryParseJSON(file) || file,
+        rights: rights,
+        tag: tag,
+        query: tryParseJSON(query),
+        verbose: verbose,
+        json: json,
+        save: save
+    }
+
+    sendRequest().then(function() {
+    }).fail(function(e) {
+        logError(e);
+    }).done();
   }
 });
+function tryParseJSON (jsonString){
+    try {
+        var o = JSON.parse(jsonString);
+
+        // Handle non-exception-throwing cases:
+        // Neither JSON.parse(false) or JSON.parse(1234) throw errors, hence the type-checking,
+        // but... JSON.parse(null) returns 'null', and typeof null === "object", 
+        // so we must check for that, too.
+        if (o && typeof o === "object" && o !== null) {
+            return o;
+        }
+    }
+    catch (e) { }
+
+    return false;
+};
+function logError(e) {
+    console.log(chalk.red('right error'), e);
+}
+function sendRequest(creq) {
+    cfg = creq || cfg;
+    if (cfg.portal) bbrest.config.portal = cfg.portal;
+    if (['server', 'user', 'group', 'audit', 'cache', 'catalog'].indexOf(cfg.target) === -1 && !bbrest.config.portal) 
+        throw new Error('portal is not defined');
+    var r = bbrest[cfg.target];
+    
+    if (cfg.rights) {
+        r = r.apply(bbrest, cfg.targetArg).rights();
+    } else if (cfg.tag) {
+        r = r.call(bbrest).tag;
+        if (cfg.targetArg) r = r.apply(r, cfg.targetArg);
+    } else if (cfg.targetArg) {
+        r = r.apply(bbrest, cfg.targetArg);
+    } else {
+        r = r.call(bbrest);
+    }
+    if (cfg.query) r = r.query(cfg.query);
+    return r[cfg.method](cfg.file)
+    .then(onResponse);
+}
+function onResponse(r) {
+    var out = [chalk.green(r.method) + ' ' + chalk.gray(url.parse(r.href).pathname.substr(bbrest.config.context.length + 1))];
+    var x;
+    if (r.error) {
+        out[0] += ' ' + chalk.red(r.statusCode) + ' ' + r.statusInfo;
+        if (r.statusCode >= 400) {
+            // method not allowed
+            if (r.statusCode === 405) x = jxon.stringToJs(r.body).html.head.title;
+            else x = jxon.stringToJs(r.body).errorMessage.message;
+            out.push(chalk.bgRed(x));
+        } else {
+            out.push(chalk.bgRed(r.error));
+        }
+    } else {
+        out[0] += ' ' + chalk.yellow(r.statusCode) + ' ' + r.statusInfo;
+    }
+    if (cfg.verbose) {
+        out.push(chalk.bgWhite.black('REQUEST'));
+        if (r.reqBody) {
+            if (cfg.json) r.body = JSON.stringify(jxon.stringToJs(r.body));
+            x = formattor(r.reqBody, {method: cfg.json? 'json' : 'xml', step: '   '});
+            out.push(chalk.gray(x.trim()));
+        }
+
+        out.push(chalk.bgWhite.black('HEADERS'));
+        x = formattor(JSON.stringify(r.headers), {method: 'json', step: '    '});
+        out.push(chalk.gray(x));
+
+        out.push(chalk.bgWhite.black('RESPONSE'));
+        if (r.body) {
+            if (cfg.json) r.body = JSON.stringify(jxon.stringToJs(r.body));
+            x = formattor(r.body, {method: cfg.json? 'json' : 'xml', step: '   '});
+            out.push(chalk.gray(x.trim()));
+        }
+    }
+    //if (r.statusCode !== 302) 
+    console.log(out.join('\n'));
+    if (!r.error && cfg.save) {
+        x = formattor(r.body, {method: cfg.json? 'json' : 'xml', step: '   '});
+        writeFile(cfg.save, x)
+        .then(function() {
+            console.log('Saved to ' + cfg.save);
+        });
+    }
+}
