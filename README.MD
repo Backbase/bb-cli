@@ -1,121 +1,123 @@
-bbscaff 0.0.11 [![Build Status](https://travis-ci.org/Backbase/Backbase-CLI.svg?branch=master)](https://travis-ci.org/Backbase/Backbase-CLI)
+New Backbase CLI
 ===================
 
-> bbscaff is a command line tool that helps you generating and importing components to Backbase CXP **5.5.x**.
-> You can easily create widgets, containers and automatically add to your portal catalog with just one command.
+Backbase CLI is a set of tools for automating components development, dependency management and testing.
+
+[Read more](https://backbase.atlassian.net/wiki/display/ES/Backbase+Command+Line+Tools%2C+Proposal) about new development workflow.
 
 ## Requirements
 - [Node.js](http://nodejs.org/)
 
 ## Install
 ``` shell
-$ npm install -g bbscaff
+$ git clone https://github.com/Backbase/bb-cli.git && cd bb-cli && npm link
 ```
 
-## Usage
+## Commands
 
-![](https://raw.githubusercontent.com/Backbase/Backbase-CLI/master/demo/widget.gif)
+### Generate
 
-### Generating Widgets
-Inside `/yourBundleName/widgets` type:
+You can easily create widgets, containers and automatically add to your portal catalog with just one command.
+
+In directory where you run the command, tool will generate starting template for chosen item:
+
+#### Generating Widgets
 
 ``` shell
-$ bbscaff generate widget
+$ bb generate widget
 ```
 
-### Generating Containers
-Inside `/yourBundleName/containers` type:
+#### Generating Containers
 
 ``` shell
-$ bbscaff generate container
+$ bb generate container
 ```
 
+Read more about generate API [here](https://github.com/Backbase/bb-cli/blob/master/docs/generate.md).
 
-## Creating your own templates
+### Init
 
-Create your own template might be useful either to replace an existing bbscaff template or to create your custom template.
-When you type `bbscaff generate <template>` the CLI will first try to find the template in your `~/.bbscaff/` folder and after on the built-in templates.
+Run init command to set-up your project root for working with dependencies.
 
-### Folder structure
-2
-The name of your folder insite ~/.bbscaff/ is your template name. This is how a template folder should look like:
-
-    .
-    ├── template                # All files that need to be copied
-    └── bbscaff.js              # Configuartion file
-
-
-### API
-
-`bbscaff.js` is basically a node.js module. You need to export a function that receives a new instance off bbscaff as the first argument.
-
-``` js
-module.exports = function(bbscaff){}
+``` shell
+$ bb init
 ```
 
---------------------
+You will be prompted with few questions, you can keep everything in default values.
 
-##### bbscaff.prompt(questions, callback)
-Prompt necessary questions to inject data in your templates. Please see [Inquirer](https://github.com/SBoudrias/Inquirer.js) for more details.
+### Install
 
-``` js
-bbscaff.prompt([{
-		name: 'name',
-		message: 'Name'
-	}], function(answers){
+Installs all client-side dependencies and independent Backbase components to your project and generates `require-bower-config.js`. To install only specified component pass Bower package name, git repo, zip file or local path as a `<component-name>`.
 
-	})
-})
+``` shell
+$ bb install [<component-name>]
 ```
 
---------------------
+Install tools uses [Bower](http://bower.io) as first step, so it supports all Bower flags like `--save` and other.
 
-##### bbscaff.generate(data, destination_path, callback)
-Copy files from template to the current folder. bbscaff will parse all your files as [Lo-Dash](https://lodash.com/docs#template) templates. You can print variables `<%=myVariable%>`, make loops and so on.
-If you want to rename files, just put the variable in the name of your file between mustaches. `{myVariable}.js`
+Note: this will work only in directories with initialized `bower.js` with Backbase specific configs. Read this [doc](https://github.com/Backbase/bb-cli/blob/master/docs/dependencies-setup.md) about setting up your CXP Project for modern dependencies management.
 
-``` js
-bbscaff.generate(answers, answers.widget_name, function(){})
+Find more information about process behind `bb install` in [proposal doc](https://github.com/operatino/backbase-widget-dependencies-proposal) (could be slightly unsynced).
+
+### Deploy
+
+Deploys current component to your project folder, following the same process what `bb install` does, but taking your local version as an source.
+
+``` shell
+$ bb deploy
 ```
 
---------------------
+This should be used during development of new independent components and for modified forks of already existing ones.
 
-##### bbscaff.getCurrentBundle()
-Returns the current bundle name.
+#### Flags
 
---------------------
+Install component to your project after deploy:
 
-##### bbscaff.getPrefix(string)
-Returns string as prefix. Ex: `my-bundle` => `mb`
-
---------------------
-
-##### bbscaff.toCamelCase(string)
-Returns string in CamelCase. Ex: `my-bundle` => `MyBundle`
-
---------------------
-
-##### bbscaff.request(request_object, callback)
-Used to make requests to the portalserver REST Api. It handles authentication and sets proper headers. Please see [request](https://github.com/request/request) for more details.
-
-``` js
-fs.readFile('file.xml'), "utf8", function(err, content){
-	if(err) return;
-	bbscaff.request({url: 'http://localhost:7777/portalserver/catalog', body: content}, function(err, httpResponse, body){})
-})
+```
+--install, -I
 ```
 
-### Example of a basic `bbscaff.js`
+Define path to your project, to let tool know where to deploy. By default, tool tries to guess it or read from docs.
 
-``` js
-module.exports = function(bbscaff){
-	bbscaff.prompt([
-		{
-			name: 'name',
-			message: 'Name'
-		}
-	], function(answers){
-		bbscaff.generate(answers, answers.name)
-	})
-}
 ```
+--path, -P
+```
+
+## Use cases
+
+### Installing existing component
+
+You're developing Backbase project, and want to reuse `transactions-widget` from common library.
+
+#### Instructions
+
+Once you've [set-up your project](https://github.com/Backbase/bb-cli/blob/master/docs/dependencies-setup.md), you just run install command in its root:
+
+``` shell
+$ bb install transactions-widget
+```
+
+### Forking existing component
+
+You're developing Backbase project, and want to reuse `transactions-widget` from common library but you want to add some changes.
+
+#### Instructions
+
+Clone `transactions-widget` anywhere you want in your file system (preferable somewhere in nested project folder). Make changes you need.
+
+Once you've [set-up your project](https://github.com/Backbase/bb-cli/blob/master/docs/dependencies-setup.md), you can deploy any local components into it. Run this command from cloned component folder:
+
+```
+bb deploy
+```
+
+Test changes on your development server.
+
+### Developing new independent component
+
+You want to create new independent component, which anyone could install to their own projects
+
+#### Instructions
+
+Scaffold new component using `bb generate` anywhere you want. Write components code, and when you're ready to test it on development server, run `bb deploy` command from components folder.
+

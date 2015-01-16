@@ -1,13 +1,12 @@
+var restUtils = require('../lib/restUtils');
 var Command = require('ronin').Command,
     BBRest = require('mosaic-rest-js'),
     Q = require('q'),
     jxon = require('jxon'),
     fs = require('fs'),
-    url = require('url'),
     path = require('path'),
     chalk = require('chalk'),
     _ = require('lodash'),
-    formattor = require('formattor'),
     readFile = Q.denodeify(fs.readFile),
     readDir = Q.denodeify(fs.readdir),
     writeFile = Q.denodeify(fs.writeFile),
@@ -72,7 +71,7 @@ module.exports = Command.extend({
     json: {type: 'boolean', alias: 'j'},
     save: {type: 'string', alias: 's'}
   },
-  
+
   run: function (host, port, context, username, password, portal, target, targetArg, method, file, rights, tag, query, verbose, json, save) {
     bbrest = new BBRest();
     // TODO: find portal name from config.json
@@ -109,7 +108,7 @@ function tryParseJSON (jsonString){
 
         // Handle non-exception-throwing cases:
         // Neither JSON.parse(false) or JSON.parse(1234) throw errors, hence the type-checking,
-        // but... JSON.parse(null) returns 'null', and typeof null === "object", 
+        // but... JSON.parse(null) returns 'null', and typeof null === "object",
         // so we must check for that, too.
         if (o && typeof o === "object" && o !== null) {
             return o;
@@ -124,11 +123,12 @@ function logError(e) {
 }
 function sendRequest(creq) {
     cfg = creq || cfg;
+
     if (cfg.portal) bbrest.config.portal = cfg.portal;
-    if (['server', 'user', 'group', 'audit', 'cache', 'catalog'].indexOf(cfg.target) === -1 && !bbrest.config.portal) 
+    if (['server', 'user', 'group', 'audit', 'cache', 'catalog'].indexOf(cfg.target) === -1 && !bbrest.config.portal)
         throw new Error('portal is not defined');
     var r = bbrest[cfg.target];
-    
+
     if (cfg.rights) {
         r = r.apply(bbrest, cfg.targetArg).rights();
     } else if (cfg.tag) {
@@ -141,50 +141,7 @@ function sendRequest(creq) {
     }
     if (cfg.query) r = r.query(cfg.query);
     return r[cfg.method](cfg.file)
-    .then(onResponse);
-}
-function onResponse(r) {
-    var out = [chalk.green(r.method) + ' ' + chalk.gray(url.parse(r.href).pathname.substr(bbrest.config.context.length + 1))];
-    var x;
-    if (r.error) {
-        out[0] += ' ' + chalk.red(r.statusCode) + ' ' + r.statusInfo;
-        if (r.statusCode >= 400) {
-            // method not allowed
-            if (r.statusCode === 405) x = jxon.stringToJs(r.body).html.head.title;
-            else x = jxon.stringToJs(r.body).errorMessage.message;
-            out.push(chalk.bgRed(x));
-        } else {
-            out.push(chalk.bgRed(r.error));
-        }
-    } else {
-        out[0] += ' ' + chalk.yellow(r.statusCode) + ' ' + r.statusInfo;
-    }
-    if (cfg.verbose) {
-        out.push(chalk.bgWhite.black('REQUEST'));
-        if (r.reqBody) {
-            if (cfg.json) r.body = JSON.stringify(jxon.stringToJs(r.body));
-            x = formattor(r.reqBody, {method: cfg.json? 'json' : 'xml', step: '   '});
-            out.push(chalk.gray(x.trim()));
-        }
-
-        out.push(chalk.bgWhite.black('HEADERS'));
-        x = formattor(JSON.stringify(r.headers), {method: 'json', step: '    '});
-        out.push(chalk.gray(x));
-
-        out.push(chalk.bgWhite.black('RESPONSE'));
-        if (r.body) {
-            if (cfg.json) r.body = JSON.stringify(jxon.stringToJs(r.body));
-            x = formattor(r.body, {method: cfg.json? 'json' : 'xml', step: '   '});
-            out.push(chalk.gray(x.trim()));
-        }
-    }
-    //if (r.statusCode !== 302) 
-    console.log(out.join('\n'));
-    if (!r.error && cfg.save) {
-        x = formattor(r.body, {method: cfg.json? 'json' : 'xml', step: '   '});
-        writeFile(cfg.save, x)
-        .then(function() {
-            console.log('Saved to ' + cfg.save);
-        });
-    }
+    .then(function(r){
+        restUtils.onResponse(r, bbrest, cfg);
+    });
 }
