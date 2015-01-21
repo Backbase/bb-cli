@@ -83,6 +83,30 @@ Define path to your project, to let tool know where to deploy. By default, tool 
 --path, -P
 ```
 
+### Rest
+```
+  Usage: bb rest [OPTIONS]
+	 Command line version of Backbase Rest API library. https://github.com/Backbase/mosaic-rest-js
+
+  Options: -short, --name <type> default description
+
+      -H,  --host <string>		localhost	The host name of the server running portal foundation.
+      -P,  --port <number>		7777		The port of the server running portal foundation.
+      -c,  --context <string>		portalserver	The application context of the portal foundation.
+      -u,  --username <string>		admin		Username.
+      -w,  --password <string>		admin		Password.
+      -p,  --portal <string>				Name of the portal on the server to target.
+      -t,  --target <string>		server		Context target: server, portal, catalog, page, container, widget, link, template, user, group, audit or cache.
+      -T,  --target-arg <string/json>			Target arguments. When there are more arguments, pass JSON array.
+      -m,  --method <string>		get		HTTP method to use: get, post, put or delete.
+      -f,  --file <string/json>				Path of the file to send. Or JSON string when using mosaic-xml-js.
+      -r,  --rights					Targets context rights.
+      -g,  --tags					Targets context tags.
+      -q,  --query <json>				Sets query string.
+      -v,  --verbose					Prints detailed output.
+      -s,  --save <string>				Saves response into file.
+```
+
 ## Use cases
 
 ### Installing existing component
