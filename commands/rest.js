@@ -11,7 +11,7 @@ var Command = require('ronin').Command,
     readDir = Q.denodeify(fs.readdir),
     writeFile = Q.denodeify(fs.writeFile),
     ask = Q.denodeify(require('asking').ask),
-    config = require('./config'),
+    config = require('../lib/config'),
     bbrest, cfg;
 
 jxon.config({
@@ -74,32 +74,36 @@ module.exports = Command.extend({
 
   run: function (host, port, context, username, password, portal, target, targetArg, method, file, rights, tag, query, verbose, json, save) {
     bbrest = new BBRest();
-    // TODO: find portal name from config.json
-    bbrest.config = {
-        host: host || bbrest.config.host,
-        port: port || bbrest.config.port,
-        context: context || bbrest.config.context,
-        username: username || bbrest.config.username,
-        password: password || bbrest.config.password,
-        portal: portal || bbrest.config.portal
-    }
-    cfg = {
-        target: target,
-        targetArg: tryParseJSON(targetArg) || [targetArg],
-        method: method,
-        file: tryParseJSON(file) || file,
-        rights: rights,
-        tag: tag,
-        query: tryParseJSON(query),
-        verbose: verbose,
-        json: json,
-        save: save
-    }
 
-    sendRequest().then(function() {
-    }).fail(function(e) {
-        logError(e);
-    }).done();
+    config.get()
+    .then(function(r) {
+        bbrest.config = {
+            host: host || r._local.host || bbrest.config.host,
+            port: port || r._local.port || bbrest.config.port,
+            context: context || r._local.context || bbrest.config.context,
+            username: username || r._local.username || bbrest.config.username,
+            password: password || r._local.password || bbrest.config.password,
+            portal: portal || r._local.portal || bbrest.config.portal
+        }
+        cfg = {
+            target: target,
+            targetArg: tryParseJSON(targetArg) || [targetArg],
+            method: method,
+            file: tryParseJSON(file) || file,
+            rights: rights,
+            tag: tag,
+            query: tryParseJSON(query),
+            verbose: verbose,
+            json: json,
+            save: save
+        }
+
+        sendRequest().then(function() {
+        }).fail(function(e) {
+            logError(e);
+        }).done();
+        });
+    
   }
 });
 function tryParseJSON (jsonString){
