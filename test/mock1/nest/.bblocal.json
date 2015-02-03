@@ -1,0 +1,11 @@
+{
+    "path": "/path/to/the/portalserver",
+    "portal": "myportal",
+    "properties": {
+      "myPref": {
+        "type": "text",
+        "default": "5",
+        "viewHint": "user"
+      }
+    }
+}

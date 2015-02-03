@@ -1,0 +1,23 @@
+{
+  "name": "OhmyWidget",
+  "version": "0.2.0",
+  "description": "If provided by bb scaff tool",
+  "main": "main.js",
+  "authors": [{
+    "name": "True Name Set By bb config",
+    "email": "email.set@by.config.bb"
+  }],
+  "repository": {
+    "type": "git",
+    "url": "git://path.to.users.stash.repository/provided.by.bb.config.git"
+  },
+  "license": "Backbase Standard",
+  "dependencies": {
+    "requirejs": "~1.2.3",
+    "bb-connector": "^1.0.3",
+    "portal.css": "path/to/portal.css"
+  },
+  "backbase": {
+  }
+}
+
