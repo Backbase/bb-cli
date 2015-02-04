@@ -48,7 +48,7 @@ module.exports = Command.extend({
     r += '      -s,  --save <string>\t\t\t\tSaves response into file.\n';
     r += '\n  ' + title('Examples') + ':\n\n';
     r += '      bb rest\t\t\t\t\t\tReturns portals defined on the server.\n';
-    r += '      bb rest -t cache -T all -m delete\t\tDeletes all cache.\n';
+    r += '      bb rest -t cache -T all -m delete\t\t\tDeletes all cache.\n';
     r += '\n';
     return r;
   },
@@ -75,15 +75,15 @@ module.exports = Command.extend({
   run: function (host, port, context, username, password, portal, target, targetArg, method, file, rights, tag, query, verbose, json, save) {
     bbrest = new BBRest();
 
-    config.get()
+    config.getLocal()
     .then(function(r) {
         bbrest.config = {
-            host: host || r._local.host || bbrest.config.host,
-            port: port || r._local.port || bbrest.config.port,
-            context: context || r._local.context || bbrest.config.context,
-            username: username || r._local.username || bbrest.config.username,
-            password: password || r._local.password || bbrest.config.password,
-            portal: portal || r._local.portal || bbrest.config.portal
+            host: host || r.host || bbrest.config.host,
+            port: port || r.port || bbrest.config.port,
+            context: context || r.context || bbrest.config.context,
+            username: username || r.username || bbrest.config.username,
+            password: password || r.password || bbrest.config.password,
+            portal: portal || r.portal || bbrest.config.portal
         }
         cfg = {
             target: target,
