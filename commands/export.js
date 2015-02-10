@@ -5,7 +5,7 @@ var util = require('../lib/util');
 var bbmodel = require('../lib/bbmodel');
 
 var clui = require('clui');
-var loading = new clui.Spinner('Please wait...')
+var loading = new clui.Spinner('Please wait...');
 
 var Command = require('ronin').Command;
 
