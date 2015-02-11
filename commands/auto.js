@@ -1,22 +1,11 @@
 var Command = require('ronin').Command,
-    BBRest = require('mosaic-rest-js'),
     Q = require('q'),
-    jxon = require('jxon'),
     fs = require('fs'),
     readDir = Q.denodeify(fs.readdir),
     config = require('../lib/config'),
     props = require('../lib/auto/props'),
     chalk = require('chalk'),
-    bbrest, cfg;
-
-jxon.config({
-  valueKey: '_',        // default: 'keyValue'
-  attrKey: '$',         // default: 'keyAttributes'
-  attrPrefix: '$',      // default: '@'
-  lowerCaseTags: false, // default: true
-  trueIsEmpty: false,   // default: true
-  autoDate: false       // default: true
-});
+    bbrest, jxon, cfg;
 
 module.exports = Command.extend({
   desc: 'Backbase CLI task automation.',
@@ -53,28 +42,13 @@ module.exports = Command.extend({
         watch: watch,
         verbose: verbose
     }
-    bbrest = new BBRest();
-
-    config.get()
+    config.getCommon()
     .then(function(r) {
-        bbConfig = r;
-        bbrest.config = {
-            host: r._local.host || bbrest.config.host,
-            port: r._local.port || bbrest.config.port,
-            context: r._local.context || bbrest.config.context,
-            username: r._local.username || bbrest.config.username,
-            password: r._local.password || bbrest.config.password,
-            portal: r._local.portal || bbrest.config.portal,
-            plugin: restJsToXml
-        }
         readDir(process.cwd())
         .then(function(files) {
-            if (prop) props.init(bbrest, jxon, cfg, files);
+            if (prop) props.init(r.bbrest, r.jxon, cfg, files);
         });
     });
   }
 });
-function restJsToXml(o) {
-    return jxon.jsToString(o);
-}
 

@@ -1,8 +1,6 @@
 var restUtils = require('../lib/restUtils');
 var Command = require('ronin').Command,
-    BBRest = require('mosaic-rest-js'),
     Q = require('q'),
-    jxon = require('jxon'),
     fs = require('fs'),
     path = require('path'),
     chalk = require('chalk'),
@@ -13,15 +11,6 @@ var Command = require('ronin').Command,
     ask = Q.denodeify(require('asking').ask),
     config = require('../lib/config'),
     bbrest, cfg;
-
-jxon.config({
-  valueKey: '_',        // default: 'keyValue'
-  attrKey: '$',         // default: 'keyAttributes'
-  attrPrefix: '$',      // default: '@'
-  lowerCaseTags: false, // default: true
-  trueIsEmpty: false,   // default: true
-  autoDate: false       // default: true
-});
 
 module.exports = Command.extend({
   desc: 'Backbase REST API CLI',
@@ -73,17 +62,17 @@ module.exports = Command.extend({
   },
 
   run: function (host, port, context, username, password, portal, target, targetArg, method, file, rights, tag, query, verbose, json, save) {
-    bbrest = new BBRest();
 
-    config.getLocal()
+    config.getCommon()
     .then(function(r) {
+        bbrest = r.bbrest;
         bbrest.config = {
-            host: host || r.host || bbrest.config.host,
-            port: port || r.port || bbrest.config.port,
-            context: context || r.context || bbrest.config.context,
-            username: username || r.username || bbrest.config.username,
-            password: password || r.password || bbrest.config.password,
-            portal: portal || r.portal || bbrest.config.portal
+            host: host || bbrest.config.host,
+            port: port || bbrest.config.port,
+            context: context || bbrest.config.context,
+            username: username || bbrest.config.username,
+            password: password || bbrest.config.password,
+            portal: portal || bbrest.config.portal
         }
         cfg = {
             target: target,
