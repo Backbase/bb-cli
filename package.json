@@ -21,6 +21,7 @@
     "clui": "^0.3.1",
     "cross-spawn": "^0.2.3",
     "escodegen": "^1.4.3",
+    "estraverse": "^1.9.1",
     "formattor": "0.0.2",
     "fs-extra": "^0.14.0",
     "fs-finder": "^1.8.0",
