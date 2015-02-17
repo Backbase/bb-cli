@@ -1,14 +1,15 @@
 lib/config module
 ===================
 
-Use this module for auto parsing of configuration files as discussed at [issue #7](https://github.com/Backbase/bb-cli/issues/7).
+Use this module for recursive auto parsing of configuration files as discussed at [issue #7](https://github.com/Backbase/bb-cli/issues/7).
 
 It also contains getCommon method for retreiving instances of preconfigured commonly used libraries (bbrest and jxon).
 
-### .get
+### .get(depth)
 - returns all configuration values
+* depth - recursion depth. When not defined, config files are merged from the root dir, set to 0 if only cwd config should be parsed
 ``` js
-config.get
+config.get()
 .then(function(config) {
     // config is value of merged ./backbase.json files with _global and _local keys that store other 2 configs
 });
@@ -21,26 +22,29 @@ config.getGlobal
     // globalConfig is value of the ~/.backbase/config.json
 });
 ```
-### .getConfig
+### .getConfig(depth)
 - returns main component configuration by traversing and merging values found in parent dirs
+* depth - recursion depth. When not defined, config files are merged from the root dir, set to 0 if only cwd config should be parsed
 ``` js
-config.getConfig
+config.getConfig()
 .then(function(config) {
     // config is value of merged ./backbase.json files
 });
 ```
-### .getLocal
+### .getLocal(depth)
 - returns local component configuration by traversing and merging values found in parent dirs
+* depth - recursion depth. When not defined, config files are merged from the root dir, set to 0 if only cwd config should be parsed
 ``` js
-config.getLocal
+config.getLocal()
 .then(function(localConfig) {
     // localConfig is value of merged ./.bblocal.json files
 });
 ```
-### .getCommon
+### .getCommon(depth)
 - returns combined configuration returned by .get but also preconfigured instances of bbrest and jxon
+* depth - recursion depth. When not defined, config files are merged from the root dir, set to 0 if only cwd config should be parsed
 ``` js
-config.getCommon
+config.getCommon()
 .then(function(obj) {
     // obj contains config, bbrest and jxon keys
 });
