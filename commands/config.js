@@ -44,17 +44,17 @@ function askEmail(r) {
 }
 
 function writeConfig(o) {
-    return outputFile(HOME + '/.backbase/config.json', JSON.stringify(o))
+    return outputFile(HOME + '/.backbase/bb-cli.json', JSON.stringify(o))
     .then(function() {
         console.log(o);
-        console.log('Configuration saved.');
+        console.log('bb-cli global configuration saved at ~/.backbase/bb-cli.json');
     });
 }
 
 function searchConfig() {
     // read data from git
     var r = {};
-    return readFile(HOME + '/.backbase/config.json')
+    return readFile(HOME + '/.backbase/bb-cli.json')
     .then(function(d) {
         var s = JSON.parse(d.toString());
         for (var k in s) s[k] = {default: s[k]};

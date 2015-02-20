@@ -5,13 +5,12 @@ Use this module for recursive auto parsing of configuration files as discussed a
 
 It also contains getCommon method for retreiving instances of preconfigured commonly used libraries (bbrest and jxon).
 
-### .get(depth)
+### .get()
 - returns all configuration values
-* depth - recursion depth. When not defined, config files are merged from the root dir, set to 0 if only cwd config should be parsed
 ``` js
 config.get()
 .then(function(config) {
-    // config is value of merged ./backbase.json files with _global and _local keys that store other 2 configs
+    // config is value of the ./bb.json file with _global and _local keys that store other 2 configs
 });
 ```
 ### .getGlobal
@@ -19,40 +18,45 @@ config.get()
 ``` js
 config.getGlobal
 .then(function(globalConfig) {
-    // globalConfig is value of the ~/.backbase/config.json
+    // globalConfig is value of the ~/.backbase/bb-cli.json
 });
 ```
-### .getConfig(depth)
-- returns main component configuration by traversing and merging values found in parent dirs
-* depth - recursion depth. When not defined, config files are merged from the root dir, set to 0 if only cwd config should be parsed
+### .getConfig()
+- returns main component configuration bb.json file
 ``` js
 config.getConfig()
 .then(function(config) {
-    // config is value of merged ./backbase.json files
+    // config is value of merged ./bb.json files
 });
 ```
-### .getLocal(depth)
+### .getLocal()
 - returns local component configuration by traversing and merging values found in parent dirs
-* depth - recursion depth. When not defined, config files are merged from the root dir, set to 0 if only cwd config should be parsed
 ``` js
 config.getLocal()
 .then(function(localConfig) {
-    // localConfig is value of merged ./.bblocal.json files
+    // localConfig is value of merged .bbrc files
 });
 ```
-### .getCommon(depth)
+### .getCommon()
 - returns combined configuration returned by .get but also preconfigured instances of bbrest and jxon
-* depth - recursion depth. When not defined, config files are merged from the root dir, set to 0 if only cwd config should be parsed
 ``` js
 config.getCommon()
 .then(function(obj) {
     // obj contains config, bbrest and jxon keys
 });
 ```
+### .absolutizePath(path)
+- returns abolute path given the relative path or home dir path staring with ~
+``` js
+config.absolutizePath()
+.then(function(aPath) {
+    // aPath is absolute path
+});
+```
 
 ## Configuration file examples
 
-#### ~/.backbase/conf.js
+#### ~/.backbase/bb-cli.json
 ``` json
 {
     "name": "John Smith",
@@ -60,17 +64,20 @@ config.getCommon()
 }
 ```
 
-#### .bblocal.json
+#### .bbrc
 ``` json
 {
   "path": "/path/to/the/portalserver",
   "username": "john",
   "password": "HU&69wev*!$8",
   "portal": "myportal",
+  "bower": {
+    "directory": "lib"
+  }
 }
 ```
 
-#### backbase.json
+#### bb.json
 ``` json
 {
   "name": "myWidget",
@@ -89,9 +96,6 @@ config.getCommon()
     "requirejs": "~1.2.3",
     "bb-connector": "^1.0.3",
     "portal.css": "path/to/portal.css"
-  },
-  "bower": {
-    "directory": "lib",
   },
   "properties": {
     "myPref": {
