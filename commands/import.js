@@ -3,7 +3,7 @@ var chalk = require('chalk');
 var _ = require('lodash');
 var util = require('../lib/util');
 var bbmodel = require('../lib/bbmodel');
-var importCXP = require('../lib/importCXP');
+var importCXP = require('../lib/yapi/importCXP');
 
 var clui = require('clui');
 var loading = new clui.Spinner('Please wait...');
@@ -13,21 +13,23 @@ module.exports = Command.extend({
 	desc: 'Imports portal model from xml files. Yapi CLI.',
 
 	run: function () {
-        loading.start();
+        //loading.start();
 
-        inquirer.prompt([{
-                message: 'Please add different destination for you portal server if needed (url from config)',
-                default: 'localhost:7777',
-                name: 'url',
-                type: 'input'
-            }
+        //inquirer.prompt([{
+        //        message: 'Please add different destination for you portal server if needed (url from config)',
+        //        default: 'localhost:7777',
+        //        name: 'url',
+        //        type: 'input'
+        //    }
             //,{
                 //message: 'You are about to import your portal model',
                 //name: 'confirm',
                 //type: 'confirm'
             //}
-            ],
-            function (answers) {
+            //],
+            //function (answers) {
+            //    console.log('asas');
+
                 importCXP.startImport();
 
                 //if (answers.confirm) {
@@ -40,6 +42,6 @@ module.exports = Command.extend({
                 //} else {
                 //    util.err("you didn't say yes");
                 //}
-            });
+            //});
     }
 });

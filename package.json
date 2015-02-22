@@ -33,7 +33,7 @@
     "inquirer": "^0.8.0",
     "jszip": "^2.4.0",
     "jxon": "^1.2.0",
-    "lodash": "^2.4.1",
+    "lodash": "^3.2.0",
     "lodash-contrib": "^241.4.14",
     "map-stream": "0.0.5",
     "mosaic-rest-js": "Backbase/mosaic-rest-js",
@@ -41,7 +41,8 @@
     "q": "^1.1.2",
     "request": "^2.46.0",
     "ronin": "^0.1.8",
-    "xml2js": "^0.4.4"
+    "xml2js": "^0.4.4",
+    "glob": "~4.3.5"
   },
   "main": "index.js",
   "repository": {
