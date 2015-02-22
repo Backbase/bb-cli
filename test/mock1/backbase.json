@@ -1,5 +1,5 @@
 {
-  "name": "myWidget",
+  "name": "parentMyWidget",
   "version": "0.1.0",
   "description": "If provided by bb scaff tool",
   "main": "main.js",
@@ -16,5 +16,8 @@
     "requirejs": "~1.2.3",
     "bb-connector": "^1.0.3",
     "portal.css": "path/to/portal.css"
+  },
+  "backbase": {
+    "parent": "config.here"
   }
 }
