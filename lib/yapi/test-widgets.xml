@@ -1,9 +1,9 @@
 <widgets>
     <widget>
-        <name>Reuse-StockTrendSummary-Widget-art1</name>
-        <contextItemName>abn</contextItemName>
-        <extendedItemName>Reuse-StockTrendSummary-Widget</extendedItemName>
-        <parentItemName>page_nl_prive_beleggen_beurstrends_MA_leanBackwards</parentItemName>
+        <name>test-widget-1-inst-487</name>
+        <contextItemName>testa</contextItemName>
+        <extendedItemName>test-widget-1</extendedItemName>
+        <parentItemName>default_page</parentItemName>
         <properties>
             <property name="area">
                 <value type="string">0</value>

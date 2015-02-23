@@ -1,6 +1,6 @@
 <catalog>
     <widget>
-        <name>mosaic-theme-switch-1</name>
+        <name>test2-widget-sc</name>
         <contextItemName>[BBHOST]</contextItemName>
         <properties>
             <property name="TemplateName">
@@ -16,7 +16,7 @@
                 <value type="string">$(contextRoot)/static/launchpad/chromes/blank/chrome-blank.html</value>
             </property>
             <property name="src">
-                <value type="string">$(contextRoot)/static/mosaic-tools/widgets/theme-switch/index.html</value>
+                <value type="string">$(contextRoot)/static/backbase.com.2012.aurora/widgets/standardExample/index.html</value>
             </property>
         </properties>
         <tags>

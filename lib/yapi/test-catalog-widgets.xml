@@ -1,7 +1,7 @@
 <catalog>
     <widget>
-        <name>mosaic-theme-example</name>
-        <extendedItemName>mosaic-theme-example-1</extendedItemName>
+        <name>test-widget-1</name>
+        <extendedItemName>test-widget-0</extendedItemName>
         <contextItemName>[BBHOST]</contextItemName>
         <tags>
             <tag manageable="true" type="section">mosaic</tag>
@@ -11,7 +11,7 @@
     </widget>
 
     <widget>
-        <name>mosaic-theme-switch</name>
+        <name>test-widget-2</name>
         <contextItemName>[BBHOST]</contextItemName>
         <properties>
             <property name="TemplateName">
@@ -27,7 +27,7 @@
                 <value type="string">$(contextRoot)/static/launchpad/chromes/blank/chrome-blank.html</value>
             </property>
             <property name="src">
-                <value type="string">$(contextRoot)/static/mosaic-tools/widgets/theme-switch/index.html</value>
+                <value type="string">$(contextRoot)/static/backbase.com.2012.aurora/widgets/standardExample/index.html</value>
             </property>
         </properties>
         <tags>
@@ -38,7 +38,7 @@
     </widget>
 
     <widget>
-        <name>mosaic-theme-example-1</name>
+        <name>test-widget-0</name>
         <contextItemName>[BBHOST]</contextItemName>
         <properties>
             <property name="TemplateName">
@@ -54,7 +54,7 @@
                 <value type="string">$(contextRoot)/static/launchpad/chromes/blank/chrome-blank.html</value>
             </property>
             <property name="src">
-                <value type="string">$(contextRoot)/static/mosaic-tools/widgets/bootstrap-showcase/index.html</value>
+                <value type="string">$(contextRoot)/static/backbase.com.2012.aurora/widgets/standardExample/index.html</value>
             </property>
         </properties>
         <tags>
