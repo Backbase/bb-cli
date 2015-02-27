@@ -26,18 +26,20 @@ module.exports = Command.extend({
     r += '      -u,  --username <string>\t\t' + d('admin') + '\t\tUsername.\n';
     r += '      -w,  --password <string>\t\t' + d('admin') + '\t\tPassword.\n';
     r += '      -p,  --portal <string>\t\t\t\tName of the portal on the server to target.\n';
-    r += '      -t,  --target <string>\t\t' + d('server') + '\t\tContext target: server, portal, catalog, page, container, widget, link, template, user, group, audit or cache.\n';
+    r += '      -t,  --target <string>\t\t' + d('server') + '\t\tContext target: server, portal, catalog, portalCatalog, page, container, widget, link, template, user, group, audit or cache.\n';
     r += '      -T,  --target-arg <string/json>\t\t\tTarget arguments. When there are more arguments, pass JSON array.\n';
     r += '      -m,  --method <string>\t\t' + d('get') + '\t\tHTTP method to use: get, post, put or delete.\n';
     r += '      -f,  --file <string/json>\t\t\t\tPath of the file to send. Or JSON string when using mosaic-xml-js.\n';
     r += '      -r,  --rights\t\t\t\t\tTargets context rights.\n';
     r += '      -g,  --tags\t\t\t\t\tTargets context tags.\n';
     r += '      -q,  --query <json>\t\t\t\tSets query string.\n';
+    r += '      -x,  --empty-cache\t\t\t\tShortcut to empty all server caches.\n';
     r += '      -v,  --verbose\t\t\t\t\tPrints detailed output.\n';
     r += '      -s,  --save <string>\t\t\t\tSaves response into file.\n';
     r += '\n  ' + title('Examples') + ':\n\n';
     r += '      bb rest\t\t\t\t\t\tReturns portals defined on the server.\n';
-    r += '      bb rest -t cache -T all -m delete\t\t\tDeletes all cache.\n';
+    r += '      bb rest -t catalog -T zak -m delete\t\tDeletes item zak from the server.\n';
+    r += '      bb rest -x\t\t\t\t\tDeletes all cache. Same as: bb rest -t cache -T all -m delete\n';
     r += '\n';
     return r;
   },
@@ -56,42 +58,36 @@ module.exports = Command.extend({
     rights: {type: 'boolean', alias: 'r'},
     tag: {type: 'boolean', alias: 'g'},
     query: {type: 'string', alias: 'q'},
+    'empty-cache': {type: 'boolean', alias: 'x'},
     verbose: {type: 'boolean', alias: 'v'},
     json: {type: 'boolean', alias: 'j'},
     save: {type: 'string', alias: 's'}
   },
 
-  run: function (host, port, context, username, password, portal, target, targetArg, method, file, rights, tag, query, verbose, json, save) {
+  run: function () {
 
-    config.getCommon()
+    return config.getCommon(this.options)
     .then(function(r) {
         bbrest = r.bbrest;
-        bbrest.config = {
-            host: host || bbrest.config.host,
-            port: port || bbrest.config.port,
-            context: context || bbrest.config.context,
-            username: username || bbrest.config.username,
-            password: password || bbrest.config.password,
-            portal: portal || bbrest.config.portal
-        }
-        cfg = {
-            target: target,
-            targetArg: tryParseJSON(targetArg) || [targetArg],
-            method: method,
-            file: tryParseJSON(file) || file,
-            rights: rights,
-            tag: tag,
-            query: tryParseJSON(query),
-            verbose: verbose,
-            json: json,
-            save: save
+        _.merge(bbrest.config, _.pick(r.config.cli, ['host', 'port', 'context', 'username', 'password', 'portal']));
+        cfg = r.config.cli;
+        cfg.targetArg = tryParseJSON(cfg.targetArg) || [cfg.targetArg];
+        cfg.file = tryParseJSON(cfg.file) || cfg.file;
+        cfg.query = tryParseJSON(cfg.query);
+
+        if (cfg.x) {
+            _.extend(cfg, {
+                target: 'cache',
+                targetArg: ['all'],
+                method: 'delete'
+            })
         }
 
-        sendRequest().then(function() {
+        return sendRequest().then(function() {
         }).fail(function(e) {
-            logError(e);
+            console.log(chalk.red('bb rest'), e);
         }).done();
-        });
+    });
     
   }
 });
@@ -111,30 +107,36 @@ function tryParseJSON (jsonString){
 
     return false;
 };
-function logError(e) {
-    console.log(chalk.red('right error'), e);
-}
 function sendRequest(creq) {
-    cfg = creq || cfg;
+    var d = Q.defer();
+    try {
+        cfg = creq || cfg;
 
-    if (cfg.portal) bbrest.config.portal = cfg.portal;
-    if (['server', 'user', 'group', 'audit', 'cache', 'catalog'].indexOf(cfg.target) === -1 && !bbrest.config.portal)
-        throw new Error('portal is not defined');
-    var r = bbrest[cfg.target];
+        if (cfg.portal) bbrest.config.portal = cfg.portal;
+        if (['server', 'user', 'group', 'audit', 'cache', 'catalog'].indexOf(cfg.target) === -1 && !bbrest.config.portal)
+            throw new Error('portal is not defined');
+        var r = bbrest[cfg.target];
 
-    if (cfg.rights) {
-        r = r.apply(bbrest, cfg.targetArg).rights();
-    } else if (cfg.tag) {
-        r = r.call(bbrest).tag;
-        if (cfg.targetArg) r = r.apply(r, cfg.targetArg);
-    } else if (cfg.targetArg) {
-        r = r.apply(bbrest, cfg.targetArg);
-    } else {
-        r = r.call(bbrest);
+        if (cfg.rights) {
+            r = r.apply(bbrest, cfg.targetArg).rights();
+        } else if (cfg.tag) {
+            r = r.call(bbrest).tag;
+            if (cfg.targetArg) r = r.apply(r, cfg.targetArg);
+        } else if (cfg.targetArg) {
+            r = r.apply(bbrest, cfg.targetArg);
+        } else {
+            r = r.call(bbrest);
+        }
+        if (cfg.query) r = r.query(cfg.query);
+        d.resolve(true);
+    } catch(e) {
+        d.reject(e);
+    } finally {
+        return d.promise.then(function(ok) {
+            return r[cfg.method](cfg.file)
+            .then(function(r){
+                restUtils.onResponse(r, bbrest, cfg);
+            });
+        });
     }
-    if (cfg.query) r = r.query(cfg.query);
-    return r[cfg.method](cfg.file)
-    .then(function(r){
-        restUtils.onResponse(r, bbrest, cfg);
-    });
 }
