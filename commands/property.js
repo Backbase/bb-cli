@@ -1,9 +1,12 @@
+var restUtils = require('../lib/restUtils');
 var Command = require('ronin').Command,
     Q = require('q'),
     fs = require('fs'),
+    readFile = Q.denodeify(fs.readFile),
     readDir = Q.denodeify(fs.readdir),
+    _ = require('lodash'),
+    ask = Q.denodeify(require('asking').ask),
     config = require('../lib/config'),
-    props = require('../lib/auto/props'),
     chalk = require('chalk'),
     bbrest, jxon, cfg;
 
@@ -35,20 +38,130 @@ module.exports = Command.extend({
     verbose: {type: 'boolean', alias: 'v'}
   },
 
-  run: function (prop, file, watch, verbose) {
-    cfg = {
-        prop: prop,
-        file: file,
-        watch: watch,
-        verbose: verbose
-    }
-    config.getCommon()
+  run: function () {
+    return config.getCommon(this.options)
     .then(function(r) {
-        readDir(process.cwd())
-        .then(function(files) {
-            if (prop) props.init(r.bbrest, r.jxon, cfg, files);
-        });
+        config = r.config;
+        if (config.cli.prop) {
+            return readDir(process.cwd())
+            .then(function(files) {
+                return init(r, files);
+            });
+        }
+    })
+    .fail(function(e) {
+        console.log(chalk.red('bb property'), e.toString());
     });
   }
 });
 
+function init(r, files) {
+    bbrest = r.bbrest;
+    jxon = r.jxon;
+    cfg = r.config;
+    var xmlFileName = cfg.cli.file || findXmlFile(files);
+    var cType, cName, lps, ops;
+
+    return getLocal(xmlFileName)
+    .then(function(local) {
+        var keys = _.keys(local.catalog);
+        if (keys.length !== 1) console.log(chalk.orange('Warning'), 'Only one component per catalog is allowed. Found:', keys);
+        cType = keys[0];
+        cName = local.catalog[keys[0]].name;
+        lps = local.catalog[keys[0]].properties.property;
+
+        lps.sort(sortByName);
+
+        return getOrigin(cName, local)
+        .then(function(origin) {
+            // if item is not defined, r is false
+            if (origin === false) return true;
+            ops = origin.catalog[keys[0]].properties.property;
+
+            ops = _.filter(ops, removeEmpty);
+            ops.sort(sortByName);
+
+            compare(lps, ops);
+            
+            return bbrest.catalog().put(local)
+            .then(function(r) {
+                restUtils.onResponse(r, bbrest, cfg.cli);
+            });
+            
+        });
+    });
+}
+
+function findXmlFile(files) {
+    var f;
+    for (i = 0; i < files.length; i++) {
+        if (files[i].substr(files[i].lastIndexOf('.')) === '.xml') {
+            f = files[i];
+            break;
+        }
+    }
+    if (!f) {
+        doError('xml file is not found in the current directory');
+    }
+    return f;
+}
+function getLocal(fName) {
+    return readFile(fName)
+    .then(function(s) {
+        try {
+            return jxon.stringToJs(s.toString());
+        } catch(e) {
+            doError('problem parsing', fName);
+        }
+    });
+}
+function getOrigin(cName, local) {
+    return bbrest.catalog(cName).get()
+    .then(function(r) {
+        if (r.statusCode === 404 || r.error) {
+            return ask("'" + cName + "' is not defined on the server. Submit model?", {default: 'Y'})
+            .then(function(r) {
+                if (r === 'Y') {
+                    return bbrest.catalog().post(local)
+                    .then(function(r) {
+                        if (r.statusCode === 204) {
+                            console.log(chalk.green('Done.'));
+                            return false;
+                        } else restUtils.onResponse(r, bbrest, cfg);
+                    });
+                } else {
+                    return false;
+                }
+            });
+        } else {
+            return jxon.stringToJs(_.unescape(r.body));
+        }
+    });
+
+}
+function compare(lps, ops) {
+    var lKeys = _.pluck(lps, '$name');
+    var oKeys = _.pluck(ops, '$name');
+    var toDelete = _.difference(oKeys, lKeys);
+
+    for (var ov, i = 0; i < toDelete.length; i++) {
+        ov = _.find(ops, {$name: toDelete[i]});
+        ov.$markedForDeletion = true;
+        lps.push(ov);
+    }
+}
+function addPropDefaults(v) {
+    var o = _.assign({
+        $readonly: false,
+        $manageable: true
+    }, v);
+    _.assign(v, o);
+}
+function sortByName(a, b) {
+    if (a.$name > b.$name) return 1;
+    else if (a.$name < b.$name) return -1;
+    else return 0;
+}
+function removeEmpty(v) {
+    return v.value._ !== undefined;
+}
