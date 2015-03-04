@@ -27,7 +27,7 @@
                 <value type="string">$(contextRoot)/static/launchpad/chromes/blank/chrome-blank.html</value>
             </property>
             <property name="src">
-                <value type="string">$(contextRoot)/static/backbase.com.2012.aurora/widgets/standardExample/index.html</value>
+                <value type="string">$(contextRoot)/static/backbase.com.2011.ice/widgets/content/index.html</value>
             </property>
         </properties>
         <tags>
@@ -54,7 +54,7 @@
                 <value type="string">$(contextRoot)/static/launchpad/chromes/blank/chrome-blank.html</value>
             </property>
             <property name="src">
-                <value type="string">$(contextRoot)/static/backbase.com.2012.aurora/widgets/standardExample/index.html</value>
+                <value type="string">$(contextRoot)/static/backbase.com.2011.ice/widgets/content/index.html</value>
             </property>
         </properties>
         <tags>

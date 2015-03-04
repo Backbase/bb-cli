@@ -3,7 +3,7 @@
         <name>test-widget-1-inst-487</name>
         <contextItemName>testa</contextItemName>
         <extendedItemName>test-widget-1</extendedItemName>
-        <parentItemName>default_page</parentItemName>
+        <parentItemName>container_73746b6d-c6fc-4852-ada9-7d27e307d802</parentItemName>
         <properties>
             <property name="area">
                 <value type="string">0</value>
