@@ -1,0 +1,74 @@
+{
+    "disallowEmptyBlocks": true,
+    "disallowKeywordsOnNewLine": ["else"],
+    "disallowMixedSpacesAndTabs": "smart",
+    "disallowMultipleVarDecl": true,
+    "disallowNewlineBeforeBlockStatements": true,
+    "disallowQuotedKeysInObjects": "allButReserved",
+    "disallowSpaceAfterKeywords": [
+        "if",
+        "else",
+        "for",
+        "while",
+        "do",
+        "switch",
+        "try",
+        "catch"
+    ],
+
+    "disallowSpaceAfterObjectKeys": true,
+    "disallowSpaceAfterPrefixUnaryOperators": ["++", "--", "+", "-", "~", "!"],
+    "disallowSpacesInAnonymousFunctionExpression": {
+        "beforeOpeningRoundBrace": true,
+        "beforeOpeningCurlyBrace": true
+    },
+    "disallowSpacesInFunctionDeclaration": {
+        "beforeOpeningRoundBrace": true,
+        "beforeOpeningCurlyBrace": true
+    },
+
+    "disallowSpacesInFunctionExpression": {
+        "beforeOpeningRoundBrace": true,
+        "beforeOpeningCurlyBrace": true
+    },
+
+    "disallowSpacesInNamedFunctionExpression": {
+        "beforeOpeningRoundBrace": true,
+        "beforeOpeningCurlyBrace": true
+    },
+
+    "disallowSpacesInCallExpression": true,
+    "disallowSpacesInsideArrayBrackets": "all",
+    "disallowSpacesInsideBrackets": true,
+    "disallowSpacesInsideObjectBrackets": true,
+    "disallowSpacesInsideParentheses": true,
+    "disallowTrailingComma": true,
+    "disallowTrailingWhitespace": true,
+    "disallowYodaConditions": true,
+    "requireBlocksOnNewline": 1,
+    "requireCapitalizedConstructors": true,
+    "requireCommaBeforeLineBreak": true,
+    "requireDotNotation": true,
+    "requireLineBreakAfterVariableAssignment": true,
+
+    "requireSpaceBeforeKeywords": [
+        "else",
+        "while",
+        "catch"
+    ],
+
+    "requireSpaceBeforeObjectValues": true,
+    "requireSpaceBetweenArguments": true,
+
+    "requireSpacesInConditionalExpression": {
+        "afterTest": true,
+        "beforeConsequent": true,
+        "afterConsequent": true,
+        "beforeAlternate": true
+    },
+
+    "requireSpacesInForStatement": true,
+    "safeContextKeyword": ["that"],
+    "validateIndentation": 4,
+    "validateParameterSeparator": ", "
+}
