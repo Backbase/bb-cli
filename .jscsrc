@@ -7,7 +7,6 @@
     "disallowQuotedKeysInObjects": "allButReserved",
     "disallowSpaceAfterKeywords": [
         "if",
-        "else",
         "for",
         "while",
         "do",
@@ -18,25 +17,6 @@
 
     "disallowSpaceAfterObjectKeys": true,
     "disallowSpaceAfterPrefixUnaryOperators": ["++", "--", "+", "-", "~", "!"],
-    "disallowSpacesInAnonymousFunctionExpression": {
-        "beforeOpeningRoundBrace": true,
-        "beforeOpeningCurlyBrace": true
-    },
-    "disallowSpacesInFunctionDeclaration": {
-        "beforeOpeningRoundBrace": true,
-        "beforeOpeningCurlyBrace": true
-    },
-
-    "disallowSpacesInFunctionExpression": {
-        "beforeOpeningRoundBrace": true,
-        "beforeOpeningCurlyBrace": true
-    },
-
-    "disallowSpacesInNamedFunctionExpression": {
-        "beforeOpeningRoundBrace": true,
-        "beforeOpeningCurlyBrace": true
-    },
-
     "disallowSpacesInCallExpression": true,
     "disallowSpacesInsideArrayBrackets": "all",
     "disallowSpacesInsideBrackets": true,
