@@ -54,6 +54,9 @@
   },
   "homepage": "https://github.com/Backbase/Backbase-CLI",
   "devDependencies": {
+    "gulp-jscs": "^1.4.0",
+    "gulp-jshint": "^1.9.2",
+    "jshint-stylish": "^1.0.1",
     "mocha": "^2.0.1",
     "should": "^4.3.0"
   }
