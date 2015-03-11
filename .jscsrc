@@ -6,12 +6,10 @@
     "disallowNewlineBeforeBlockStatements": true,
     "disallowQuotedKeysInObjects": "allButReserved",
     "disallowSpaceAfterKeywords": [
-        "if",
         "for",
         "while",
         "do",
         "switch",
-        "try",
         "catch"
     ],
 
@@ -35,6 +33,10 @@
         "else",
         "while",
         "catch"
+    ],
+
+    "requireSpaceAfterKeywords": [
+        "if"
     ],
 
     "requireSpaceBeforeObjectValues": true,
