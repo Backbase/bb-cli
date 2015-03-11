@@ -19,7 +19,7 @@ module.exports = Command.extend({
     desc: 'scaffold widgets and containers',
 
     run: function(template_name){
-        if(!template_name) {
+        if (!template_name) {
             return listTemplates();
         }
 
@@ -27,7 +27,7 @@ module.exports = Command.extend({
             return fs.existsSync(path.join(tmpl_path, template_name, 'bbscaff.js'));
         });
 
-        if(tmpl_path){
+        if (tmpl_path){
             console.log(chalk.gray('Generating ' + template_name + ' on path: ' + process.cwd()));
             var templateModule = require(path.join(tmpl_path, template_name, 'bbscaff'));
             templateModule(_.extend({}, bbscaff, {
@@ -55,7 +55,7 @@ function listTemplates(){
         var templatePath = path.dirname(file.path);
         var templateName = _.last(templatePath.split(path.sep));
 
-        if(_.indexOf(foundTemplates, templateName) === -1) {
+        if (_.indexOf(foundTemplates, templateName) === -1) {
             table.push([templateName, chalk.gray(templatePath)]);
         }
 
