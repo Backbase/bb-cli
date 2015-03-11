@@ -10,5 +10,6 @@
     "undef": true,
     "unused": true,
     "noyield": true,
-    "node": true
+    "node": true,
+    "mocha": true
 }
