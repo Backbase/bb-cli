@@ -8,22 +8,22 @@ module.exports = function(bbscaff){
             name: 'container_name',
             message: 'Container name',
             'default': function(answers){
-                return answers.container_title.replace(/ /gi, '-').toLowerCase()
+                return answers.container_title.replace(/ /gi, '-').toLowerCase();
             },
 
             validate: function(string){
-                return string.split(/ /).length == 1
+                return string.split(/ /).length === 1
             }
         },
         {
             name: 'template_name',
             message: 'Template name',
             'default': function(answers){
-                return bbscaff.toCamelCase(answers.container_name)
+                return bbscaff.toCamelCase(answers.container_name);
             },
 
             validate: function(string){
-                return string.split(/[- \.]/).length == 1
+                return string.split(/[- \.]/).length === 1
             }
         },
         {
@@ -38,4 +38,4 @@ module.exports = function(bbscaff){
     ], function(answers){
         bbscaff.generate(answers, answers.container_name);
     });
-}
+};
