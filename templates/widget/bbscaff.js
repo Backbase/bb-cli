@@ -1,6 +1,3 @@
-var path = require('path');
-var config = require(__dirname + '../../../lib/config');
-
 module.exports = function(bbscaff){
     bbscaff.prompt([
         {
@@ -25,23 +22,6 @@ module.exports = function(bbscaff){
             'default': bbscaff.getPrefix(bbscaff.getCurrentBundle())
         }
     ], function(answers){
-        bbscaff.generate(answers, answers.widget_name, function(){
-            bbscaff.prompt({
-                name: 'add_widget',
-                type: 'confirm',
-                message: 'Do you want to add this widget to your Enterprise Catalog?'
-            }, function(answer){
-                if(answer.add_widget){
-                    config.getCommon().then(function(obj){
-                        obj.bbrest.catalog().post(path.join(process.cwd(), answers.widget_name, 'catalog-'+answers.widget_name+'.xml').then(function(){
-                            bbscaff.logSuccess(answers.widget_name, 'successfully added to your portal enterprise catalog.');
-                        }, function(err){
-                            bbscaff.logError(err);
-                        }));
-                    });
-
-                }
-            });
-        });
+        bbscaff.generate(answers, answers.widget_name);
     });
 };
