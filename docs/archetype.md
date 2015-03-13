@@ -6,7 +6,9 @@ Providing a simple way to install Backbase Archetypes.
 
 By typing a simple command you can now check out a new `mvn archetype` simply by executing the command:
 
-    bb archetype
+```
+bb archetype
+```
 
 ## Introduction
 

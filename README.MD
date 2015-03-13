@@ -15,6 +15,16 @@ $ git clone https://github.com/Backbase/bb-cli.git && cd bb-cli && npm link
 
 ## Commands
 
+### Archetype
+
+By typing a simple command you can now check out a new `mvn archetype` by executing the command:
+
+```
+bb archetype
+```
+
+Read more about Archetype API [here](https://github.com/Backbase/bb-cli/blob/master/docs/archetype.md).
+
 ### Generate
 
 You can easily create widgets, containers and automatically add to your portal catalog with just one command.
@@ -144,4 +154,3 @@ You want to create new independent component, which anyone could install to thei
 #### Instructions
 
 Scaffold new component using `bb generate` anywhere you want. Write components code, and when you're ready to test it on development server, run `bb deploy` command from components folder.
-

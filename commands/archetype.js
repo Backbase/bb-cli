@@ -1,12 +1,10 @@
-var Command = require('ronin').Command,
-    spawn = require('cross-spawn').spawn,
-    inquirer = require('inquirer'),
-    archetypes = require('../lib/archetypes'),
-    asciify = require('asciify');
-
+var Command = require('ronin').Command;
+var spawn = require('cross-spawn').spawn;
+var inquirer = require('inquirer');
+var util = require('../lib/util');
+var archetypes = require('../lib/archetypes');
 
 var answerCollection = {};
-var fontCollection = [];
 
 var chooseArchetypeName = function(callback) {
   archetypes.get(function(esArchetypesNames) {
@@ -19,7 +17,7 @@ var chooseArchetypeName = function(callback) {
 
     inquirer.prompt(options, function(answer) {
       // Get version numbers of chosen archetype
-      if(callback) callback(answer.archetypeName);
+      if(callback && typeof(callback) === "function") callback(answer.archetypeName);
     });
   });
 };
@@ -33,7 +31,7 @@ var chooseArchetypeVersion = function(arrayVersions, callback) {
       choices: archetypeVersions
     };
     inquirer.prompt(optionsVersions, function(answerVersion) {
-      if(callback) callback(answerVersion.archetypeVersion);
+        if(callback && typeof(callback) === "function") callback(answerVersion.archetypeVersion);
     });
   });
 };
@@ -43,25 +41,13 @@ var runCmd = function(cmd, args, callback) {
   var child = spawn(cmd, args, {stdio: 'inherit'});
 
   child.on('close', function() {
-    // console.log('close');
-    if(callback) callback();
+      if(callback && typeof(callback) === "function") callback();
   });
 
-  child.on('error', function() {
-    // console.log('error');
-    asciify('Game over', {color: 'red', font: 'standard'}, function(err, res) {
-      console.log(res);
-      // console.info("> Please restart the process and select the desired options.\n"); // Add info icon in front
-    });
+  child.on('error', function(err) {
+      if(err) util.err(err);
   });
 
-};
-
-var gameOver = function() {
-  asciify('Game over', {color: 'red', font: 'standard'}, function(err, res) {
-    console.log(res);
-    console.info("> Please restart the process and select the desired options.\n"); // Add info icon in front
-  });
 };
 
 var confirmAnswers = function() {
@@ -80,24 +66,18 @@ var confirmAnswers = function() {
         "-DarchetypeGroupId=com.backbase.expert.tools",
         "-DarchetypeVersion=" + answerCollection.version
       ];
-      runCmd("mvn", cmdOptions, function(text) {
-        asciify('You win!', {color: 'green', font: 'standard'}, function(err, res) {
-          console.log(res);
-        });
+      runCmd("mvn", cmdOptions, function() {
+        console.info("> Process successfully executed.\n");
       });
 
     } else {
-      asciify('Game over', {color: 'red', font: 'standard'}, function(err, res) {
-        console.log(res);
-        console.info("> Please restart the process and select the desired options.\n"); // Add info icon in front
-      });
+        console.info("> Please restart the process and select the desired options.\n");
     }
-
 
   });
 };
 
-var init = function(creds){
+var init = function(){
 
   chooseArchetypeName(function(resName) {
     answerCollection.name = resName;
