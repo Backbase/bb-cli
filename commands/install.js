@@ -1,14 +1,12 @@
-var Command = require('ronin').Command;
+'use strict';
 
+var Command = require('ronin').Command;
 var chalk = require('chalk');
 var spawn = require('cross-spawn');
-var bower = require('bower');
 var path = require('path');
 var GenerateRequireConf = require('../lib/generateRequireConf');
 var restUtils = require('../lib/restUtils');
 var depUtils = require('../lib/depUtils');
-var Q = require('q');
-var fs = require('node-fs-extra');
 
 var baseUrl = process.cwd();
 var options;
@@ -20,18 +18,18 @@ var install = function(component){
         var bowerCommand = ['install'];
         var msg = 'Bower install done, proceed to RequireJS conf generation...';
 
-        if (component) {
-            if (component.substring(0,2) === './' || component[0] === '/') {
+        if (component){
+            if (component.substring(0, 2) === './' || component[0] === '/') {
                 depUtils.cleanLocalComponent(path.join(baseUrl, options.bowerOpts.directory), component);
             }
 
             msg = 'Component "'+ component +'" install done, proceed to RequireJS conf generation...';
         }
 
-        if (process.argv) {
+        if (process.argv){
             process.argv.forEach(function(arg){
                 bowerCommand.push(arg);
-            })
+            });
         }
 
         console.log(chalk.gray('Running Bower install...'));
@@ -47,7 +45,7 @@ var install = function(component){
                 // And submit
                 restUtils.submitToPortal(baseUrl, confs);
             });
-        })
+        });
     }).fail(function(err){
         console.log(chalk.red('Something went wrong, during Bower configuration read: '), err);
     });

@@ -1,34 +1,71 @@
-var restUtils = require('../restUtils');
-var Q = require('q'),
+var restUtils = require('../lib/restUtils');
+var Command = require('ronin').Command,
+    Q = require('q'),
     fs = require('fs'),
-    chalk = require('chalk'),
-    _ = require('lodash'),
     readFile = Q.denodeify(fs.readFile),
     readDir = Q.denodeify(fs.readdir),
-    writeFile = Q.denodeify(fs.writeFile),
+    _ = require('lodash'),
     ask = Q.denodeify(require('asking').ask),
-    util = require('../util'),
+    config = require('../lib/config'),
+    chalk = require('chalk'),
     bbrest, jxon, cfg;
 
-var reqProps = [];
+module.exports = Command.extend({
+  desc: 'Backbase CLI task automation.',
+  help: function () {
+    var title = chalk.bold;
+    var d = chalk.gray;
+    var r = '\n  ' + title('Usage') + ': bb ' + this.name + ' [OPTIONS]';
+    r += '\n\t Automates tasks during development of the components.';
+    r += '\n\n  ' + title('Options') + ': -short, --name <type> ' + d('default') + ' description\n\n';
+    r += '      -p,  --prop\t\t\t\t\tSubmits changes of the widget propertie to the portal.\n';
+    r += '      -f,  --file\t\t\t\t\tA file to target.\n';
+    //r += '      -w,  --watch\t\t\t\t\tEnables watching for file change.\n';
+    r += '      -v,  --verbose\t\t\t\t\tPrints detailed output.\n';
+    /*
+    r += '\n  ' + title('Examples') + ':\n\n';
+    r += '      bb rest\t\t\t\t\t\tReturns portals defined on the server.\n';
+    r += '      bb rest -t cache -T all -m delete\t\tDeletes all cache.\n';
+    */
+    r += '\n';
+    return r;
+  },
 
-function doError(txt) {
-    //console.log(chalk.red('ERROR'), txt);
-    util.err.apply(this, arguments);
-    throw Error();
-}
+  options: {
+    prop: {type: 'boolean', alias: 'p'},
+    file: {type: 'string', alias: 'f'},
+    watch: {type: 'boolean', alias: 'w'},
+    verbose: {type: 'boolean', alias: 'v'}
+  },
 
-exports.init = function (bbr, jx, cfga, files) {
-    bbrest = bbr;
-    jxon = jx;
-    cfg = cfga;
-    var xmlFileName = cfg.file || findXmlFile(files);
+  run: function () {
+    return config.getCommon(this.options)
+    .then(function(r) {
+        config = r.config;
+        if (config.cli.prop) {
+            return readDir(process.cwd())
+            .then(function(files) {
+                return init(r, files);
+            });
+        }
+    })
+    .fail(function(e) {
+        console.log(chalk.red('bb property'), e.toString());
+    });
+  }
+});
+
+function init(r, files) {
+    bbrest = r.bbrest;
+    jxon = r.jxon;
+    cfg = r.config;
+    var xmlFileName = cfg.cli.file || findXmlFile(files);
     var cType, cName, lps, ops;
 
-    getLocal(xmlFileName)
+    return getLocal(xmlFileName)
     .then(function(local) {
         var keys = _.keys(local.catalog);
-        if (keys.length !== 1) doError('Only one component per catalog is allowed. Found:', keys);
+        if (keys.length !== 1) console.log(chalk.orange('Warning'), 'Only one component per catalog is allowed. Found:', keys);
         cType = keys[0];
         cName = local.catalog[keys[0]].name;
         lps = local.catalog[keys[0]].properties.property;
@@ -37,6 +74,8 @@ exports.init = function (bbr, jx, cfga, files) {
 
         return getOrigin(cName, local)
         .then(function(origin) {
+            // if item is not defined, r is false
+            if (origin === false) return true;
             ops = origin.catalog[keys[0]].properties.property;
 
             ops = _.filter(ops, removeEmpty);
@@ -46,15 +85,11 @@ exports.init = function (bbr, jx, cfga, files) {
             
             return bbrest.catalog().put(local)
             .then(function(r) {
-                restUtils.onResponse(r, bbrest, cfg);
+                restUtils.onResponse(r, bbrest, cfg.cli);
             });
             
         });
-    })
-    .fail(function(e) {
-        doError(e);
     });
-
 }
 
 function findXmlFile(files) {
@@ -83,25 +118,19 @@ function getLocal(fName) {
 function getOrigin(cName, local) {
     return bbrest.catalog(cName).get()
     .then(function(r) {
-        if (r.statusCode === 404) {
-            return ask("'" + cName + "' is not defined on the server. Submit?", {default: 'Y'})
+        if (r.statusCode === 404 || r.error) {
+            return ask("'" + cName + "' is not defined on the server. Submit model?", {default: 'Y'})
             .then(function(r) {
                 if (r === 'Y') {
                     return bbrest.catalog().post(local)
                     .then(function(r) {
                         if (r.statusCode === 204) {
-                            return ask('Add to portal catalog?', {default: 'Y'})
-                            .then(function(r) {
-                                if (r === 'Y') {
-                                    return bbrest.catalog(true).post(local)
-                                    .then(function(r) {
-                                        if (r.statusCode === 204) util.ok('Done.');
-                                        else restUtils.onResponse(r, bbrest, cfg);
-                                    });
-                                }
-                            })
+                            console.log(chalk.green('Done.'));
+                            return false;
                         } else restUtils.onResponse(r, bbrest, cfg);
                     });
+                } else {
+                    return false;
                 }
             });
         } else {
@@ -136,4 +165,3 @@ function sortByName(a, b) {
 function removeEmpty(v) {
     return v.value._ !== undefined;
 }
-

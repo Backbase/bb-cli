@@ -1,0 +1,15 @@
+{
+    "bitwise": true,
+    "curly": false,
+    "eqeqeq": true,
+    "freeze": true,
+    "noarg": true,
+    "nonew": true,
+    "notypeof": true,
+    "shadow": true,
+    "undef": true,
+    "unused": true,
+    "noyield": true,
+    "node": true,
+    "mocha": true
+}
