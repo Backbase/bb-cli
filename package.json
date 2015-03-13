@@ -41,7 +41,6 @@
     "mosaic-rest-js": "Backbase/mosaic-rest-js",
     "mvn-credentials": "^0.2.0",
     "node-fs-extra": "^0.8.1",
-    "osenv": "^0.1.0",
     "q": "^1.1.2",
     "request": "^2.46.0",
     "ronin": "^0.3.10",
