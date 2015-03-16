@@ -28,9 +28,11 @@ module.exports = function(bbscaff){
 			}
 		}
 	], function(answers){
-		bbscaff.generate(answers, './', function(){
-			console.log('Renaming `bowerrc.json` to .bowerrc...');
+        bbscaff.template_dir = path.join(__dirname, 'template');
 
+		bbscaff.generate(answers, {
+            destination_path: './'
+        }, function(){
 			fs.rename('bowerrc.json', '.bowerrc', function(err){
 				if (err) console.log(chalk.red('Error renaming to .bowerrc: '), err);
 
