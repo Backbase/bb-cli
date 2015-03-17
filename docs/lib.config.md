@@ -5,12 +5,13 @@ Use this module for recursive auto parsing of configuration files as discussed a
 
 It also contains getCommon method for retreiving instances of preconfigured commonly used libraries (bbrest and jxon).
 
-### .get()
+### .get(cliConfig)
 - returns all configuration values
+- _cliConfig_ - optional cli configuration object
 ``` js
-config.get()
+config.get(cliConfig)
 .then(function(config) {
-    // config is value of the ./bb.json file with _global and _local keys that store other 2 configs
+    // config is object of different configs: bb, bbrc, global, bower, bowerrc and optionally cli
 });
 ```
 ### .getGlobal
@@ -21,24 +22,25 @@ config.getGlobal
     // globalConfig is value of the ~/.backbase/bb-cli.json
 });
 ```
-### .getConfig()
-- returns main component configuration bb.json file
+### .getBb()
+- returns bb.json file as object
 ``` js
-config.getConfig()
+config.getBb()
 .then(function(config) {
-    // config is value of merged ./bb.json files
+    // config is value of the ./bb.json file
 });
 ```
-### .getLocal()
+### .getBbRc()
 - returns local component configuration by traversing and merging values found in parent dirs
 ``` js
-config.getLocal()
+config.getBbRc()
 .then(function(localConfig) {
     // localConfig is value of merged .bbrc files
 });
 ```
-### .getCommon()
+### .getCommon(cliConfig)
 - returns combined configuration returned by .get but also preconfigured instances of bbrest and jxon
+- _cliConfig_ - optional cli configuration object
 ``` js
 config.getCommon()
 .then(function(obj) {
@@ -70,10 +72,7 @@ config.absolutizePath()
   "path": "/path/to/the/portalserver",
   "username": "john",
   "password": "HU&69wev*!$8",
-  "portal": "myportal",
-  "bower": {
-    "directory": "lib"
-  }
+  "portal": "myportal"
 }
 ```
 
@@ -92,15 +91,46 @@ config.absolutizePath()
     "url": "git://path.to.users.stash.repository/provided.by.bb.config.git"
   },
   "license": "Backbase Standard",
-  "dependencies": {
-    "requirejs": "~1.2.3",
-    "bb-connector": "^1.0.3",
-    "portal.css": "path/to/portal.css"
-  },
   "properties": {
     "myPref": {
       "default": "5"
     }
+  }
+}
+```
+
+#### bower.json - [link](http://bower.io/docs/creating-packages/)
+``` json
+{
+  "name": "my-project",
+  "version": "1.0.0",
+  "main": "path/to/main.css",
+  "ignore": [
+    ".jshintrc",
+    "**/*.txt"
+  ],
+  "dependencies": {
+    "<name>": "<version>",
+    "<name>": "<folder>",
+    "<name>": "<package>"
+  },
+  "devDependencies": {
+    "<test-framework-name>": "<version>"
+  }
+}
+```
+
+#### .bowerrc - [link](http://bower.io/docs/config/)
+``` json
+{
+  "directory": "app/components/",
+  "analytics": false,
+  "timeout": 120000,
+  "registry": {
+    "search": [
+      "http://localhost:8000",
+      "https://bower.herokuapp.com"
+    ]
   }
 }
 ```

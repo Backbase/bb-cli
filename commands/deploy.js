@@ -9,7 +9,7 @@ var depUtils = require('../lib/depUtils');
 var restUtils = require('../lib/restUtils');
 var Q = require('q');
 var fs = require('fs');
-var inquirer = require("inquirer");
+var inquirer = require('inquirer');
 
 var baseUrl = process.cwd();
 
@@ -17,7 +17,7 @@ var preperaComponentPath = function(portalPath){
     var finalPath;
     var relativePath = path.relative(portalPath, baseUrl);
 
-    if (relativePath.substring(0,2) === '..') {
+    if (relativePath.substring(0, 2) === '..') {
         finalPath = baseUrl;
     } else {
         finalPath = './' + relativePath;
@@ -107,7 +107,7 @@ var deploy = function(portalPath, install){
                     console.log(chalk.green('Component deploy done'));
 
                     if (install) {
-                        restUtils.submitToPortal(baseUrl, confs, true, baseUrl);
+                        restUtils.submitToPortal(baseUrl, confs, false, baseUrl);
                     }
                 });
             });

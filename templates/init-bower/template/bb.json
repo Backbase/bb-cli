@@ -1,0 +1,6 @@
+{
+  <% if(componentsWebUrl) { %>"dependenciesWebUrl": "<%=componentsWebUrl%>",<% } %>
+  <% if(requireConfPaths) { %>"requirejsConfigs": [
+    <% _.forEach(requireConfPaths, function(name, index) { %>"<%- name %>"<% if(index + 1 !== requireConfPaths.length) { %>,<% } %><% }); %>
+  ]<% }; %>
+}
