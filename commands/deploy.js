@@ -107,7 +107,7 @@ var deploy = function(portalPath, install){
                     console.log(chalk.green('Component deploy done'));
 
                     if (install) {
-                        restUtils.submitToPortal(baseUrl, confs, true, baseUrl);
+                        restUtils.submitToPortal(baseUrl, confs, false, baseUrl);
                     }
                 });
             });
