@@ -1,0 +1,16 @@
+<widgets>
+    <widget>
+        <name>test-widget-1-inst-487</name>
+        <contextItemName>testa</contextItemName>
+        <extendedItemName>test-widget-1</extendedItemName>
+        <parentItemName>container_a5a27ed7-8c4d-49f4-b38c-faf0c84c670e</parentItemName>
+        <properties>
+            <property name="area">
+                <value type="string">0</value>
+            </property>
+            <property name="order">
+                <value type="double">1.0</value>
+            </property>
+        </properties>
+    </widget>
+</widgets>

@@ -7,16 +7,23 @@
                 <value type="string">Standard_Widget</value>
             </property>
             <property name="title">
-            <value type="string">Theme Switcher</value>
+                <value type="string">Theme Switcher</value>
+            </property>
+            <property name="Description">
+                <value type="string">Theme Switcher Description</value>
             </property>
             <property name="thumbnailUrl">
                 <value type="string">$(contextRoot)/static/mosaic-tools/widgets/theme-switch/icon.png</value>
             </property>
+
             <property label="Widget Chrome" name="widgetChrome" viewHint="select-one,user,designModeOnly">
-                <value type="string">$(contextRoot)/static/launchpad/chromes/blank/chrome-blank.html</value>
+                <value type="string">$(contextRoot)/static/dashboard/templates/html/widgetChrome/defaultWidgetChrome.html</value>
             </property>
             <property name="src">
-                <value type="string">$(contextRoot)/static/backbase.com.2011.ice/widgets/content/index.html</value>
+                <value type="string">$(contextRoot)/static/launchpad/universal/widgets/video/index.html</value>
+            </property>
+            <property name="source">
+                <value type="string">youtube</value>
             </property>
         </properties>
         <tags>

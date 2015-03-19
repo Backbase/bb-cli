@@ -43,7 +43,8 @@
     "request": "^2.46.0",
     "ronin": "^0.3.10",
     "xml2js": "^0.4.4",
-    "assert": "~1.3.0"
+    "assert": "~1.3.0",
+    "json-pointer": "~0.3.0"
   },
   "main": "index.js",
   "repository": {
