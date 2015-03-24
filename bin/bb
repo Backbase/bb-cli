@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
-var ronin = require('ronin')
-var path = require('path')
-var program = ronin(path.join(__dirname, '..'))
+var ronin = require('ronin');
+var path = require('path');
+var program = ronin(path.join(__dirname, '..'));
 
 // prints backbase ascii logo
 // require('../lib/util').backbase()

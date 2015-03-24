@@ -2,17 +2,8 @@
     "disallowEmptyBlocks": true,
     "disallowKeywordsOnNewLine": ["else"],
     "disallowMixedSpacesAndTabs": "smart",
-    "disallowMultipleVarDecl": true,
     "disallowNewlineBeforeBlockStatements": true,
     "disallowQuotedKeysInObjects": "allButReserved",
-    "disallowSpaceAfterKeywords": [
-        "for",
-        "while",
-        "do",
-        "switch",
-        "catch"
-    ],
-
     "disallowSpaceAfterObjectKeys": true,
     "disallowSpaceAfterPrefixUnaryOperators": ["++", "--", "+", "-", "~", "!"],
     "disallowSpacesInCallExpression": true,
@@ -52,6 +43,5 @@
     "requireSpacesInForStatement": true,
     "safeContextKeyword": ["that"],
     "validateIndentation": 4,
-    "validateParameterSeparator": ", ",
-    "validateQuoteMarks": "'"
+    "validateParameterSeparator": ", "
 }
