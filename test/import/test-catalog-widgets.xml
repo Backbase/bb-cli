@@ -3,11 +3,6 @@
         <name>test-widget-1</name>
         <extendedItemName>test-widget-0</extendedItemName>
         <contextItemName>[BBHOST]</contextItemName>
-        <tags>
-            <tag manageable="true" type="section">mosaic</tag>
-            <tag manageable="true" type="regular">mosaic</tag>
-            <tag manageable="true" type="regular">mosaic-tools</tag>
-        </tags>
     </widget>
 
     <widget>
@@ -18,7 +13,7 @@
                 <value type="string">Standard_Widget</value>
             </property>
             <property name="title">
-            <value type="string">Theme Switcher</value>
+                <value type="string">test-widget-2 (theme switcher)</value>
             </property>
             <property name="Description">
                 <value type="string">Theme Switcher Description a</value>
@@ -32,13 +27,13 @@
             <property name="src">
                 <value type="string">$(contextRoot)/static/launchpad/universal/widgets/video/index.html</value>
             </property>
-            <property name="source">
-                <value type="string">youtube</value>
+            <property label="my src 123" name="source">
+                <value type="string">youtube 123</value>
             </property>
         </properties>
         <tags>
             <tag manageable="true" type="section">mosaic</tag>
-            <tag manageable="true" type="regular">mosaic</tag>
+            <!--<tag manageable="true" type="regular">mosaic</tag>-->
             <tag manageable="true" type="regular">mosaic-tools</tag>
         </tags>
     </widget>
