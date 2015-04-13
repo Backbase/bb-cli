@@ -8,7 +8,7 @@ var HOME = process.env[(process.platform === 'win32') ? 'USERPROFILE' : 'HOME'];
 var seq = [searchConfig, askName, askEmail, writeConfig];
 
 module.exports = Command.extend({
-    desc: 'Backbase CLI configuration',
+    desc: 'Prepare CLI configuration.',
 
     run: function () {
         seq.reduce(Q.when, Q({}))

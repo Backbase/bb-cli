@@ -34,7 +34,6 @@ module.exports = Command.extend({
         r += '      bb rest\t\t\t\t\t\tReturns portals defined on the server.\n';
         r += '      bb rest -t catalog -T zak -m delete\t\tDeletes item zak from the server.\n';
         r += '      bb rest -x\t\t\t\t\tDeletes all cache. Same as: bb rest -t cache -T all -m delete\n';
-        r += '\n';
         return r;
     },
 
