@@ -2,9 +2,21 @@
 
 var ronin = require('ronin');
 var path = require('path');
+var spawn = require('cross-spawn');
 var program = ronin(path.join(__dirname, '..'));
 
 // prints backbase ascii logo
 // require('../lib/util').backbase()
 
-program.run();
+// Changing the limit for listeners, since we work ofter with remote calls
+require('events').EventEmitter.prototype._maxListeners = 100;
+
+program.autoupdate(function () {
+    try {
+        program.run();
+    } catch(e){
+        console.log('Command not found. Check the help section.\n');
+
+        spawn('bb', ['-h'], {stdio: 'inherit'});
+    }
+});
