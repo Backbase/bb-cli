@@ -6,7 +6,7 @@
   "license": "Apache-2.0",
   "preferGlobal": "true",
   "scripts": {
-    "test": "node_modules/.bin/mocha --reporter spec"
+    "test": "gulp test"
   },
   "bin": {
     "bb": "bin/bb"
@@ -57,6 +57,7 @@
     "gulp-jshint": "^1.9.2",
     "jshint-stylish": "^1.0.1",
     "mocha": "^2.0.1",
+    "gulp-mocha": "^2.0.1",
     "should": "^4.3.0"
   }
 }
