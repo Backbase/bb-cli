@@ -16,7 +16,15 @@ var templatesDir = [
 ];
 
 module.exports = Command.extend({
-    desc: 'scaffold widgets and containers',
+    help: function () {
+        var title = chalk.bold;
+        var r = '\n  ' + title('Usage') + ': bb ' + this.name + ' <template-name>';
+        r += '\n\t Scaffold widgets and containers.\n';
+        r += '\n  ' + title('Examples') + ':\n';
+        r += '      bb generate widget\n';
+        r += '      bb generate container';
+        return r;
+    },
 
     run: function(template_name){
         if (!template_name) {

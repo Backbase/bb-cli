@@ -4,13 +4,9 @@ var jshintStylish = require('jshint-stylish');
 var jscs = require('gulp-jscs');
 var mocha = require('gulp-mocha');
 
-var src = [
-    'bin/*',
+var jsFiles = [
     'commands/**/*.js',
-    'lib/**/*.js',
-    // Till the merge of PR #26
-    '!commands/export.js',
-    '!lib/bbmodel.js'
+    'lib/**/*.js'
 ];
 
 gulp.task('test', function () {
@@ -19,13 +15,13 @@ gulp.task('test', function () {
 });
 
 gulp.task('jshint', function(){
-    return gulp.src(src)
+    return gulp.src(jsFiles)
         .pipe(jshint())
         .pipe(jshint.reporter(jshintStylish, {verbose: true}));
 });
 
 gulp.task('jscs', function(){
-    return gulp.src(src)
+    return gulp.src(jsFiles)
         .pipe(jscs());
 });
 
