@@ -1,0 +1,6 @@
+{
+  "name": "<%=backbaseProject%>",
+  "dependencies": {
+  },
+  "private": true
+}
