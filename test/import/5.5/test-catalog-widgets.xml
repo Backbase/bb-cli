@@ -1,0 +1,73 @@
+<catalog>
+    <widget>
+        <name>test-widget-1</name>
+        <extendedItemName>test-widget-0</extendedItemName>
+        <contextItemName>[BBHOST]</contextItemName>
+    </widget>
+
+    <widget>
+        <name>test-widget-2</name>
+        <contextItemName>[BBHOST]</contextItemName>
+        <properties>
+            <property name="TemplateName">
+                <value type="string">Standard_Widget</value>
+            </property>
+            <property name="title">
+                <value type="string">test-widget-2 (theme switcher)</value>
+            </property>
+            <property name="Description">
+                <value type="string">Theme Switcher Description a</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/mosaic-tools/widgets/theme-switch/icon.png</value>
+            </property>
+            <property label="Widget Chrome" name="widgetChrome" viewHint="select-one,user,designModeOnly">
+                <value type="string">$(contextRoot)/static/backbase.com.2012.aurora/html/chromes/widget_default.html</value>
+            </property>
+            <property name="src">
+                <value type="string">$(contextRoot)/static/backbase.com.2012.aurora/widgets/standardExample/index.html</value>
+            </property>
+            <property label="my src 123" name="source">
+                <value type="string">youtube 123</value>
+            </property>
+        </properties>
+        <tags>
+            <tag manageable="true" type="section">mosaic</tag>
+            <!--<tag manageable="true" type="regular">mosaic</tag>-->
+            <tag manageable="true" type="regular">mosaic-tools</tag>
+        </tags>
+    </widget>
+
+    <widget>
+        <name>test-widget-0</name>
+        <contextItemName>[BBHOST]</contextItemName>
+        <properties>
+            <property name="TemplateName">
+                <value type="string">Standard_Widget</value>
+            </property>
+            <property name="title">
+                <value type="string">Theme Example</value>
+            </property>
+            <property name="Description">
+                <value type="string">Theme Switcher Description</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/mosaic-tools/widgets/bootstrap-showcase/icon.png</value>
+            </property>
+            <property label="Widget Chrome" name="widgetChrome" viewHint="select-one,user,designModeOnly">
+                <value type="string">$(contextRoot)/static/backbase.com.2012.aurora/html/chromes/widget_default.html</value>
+            </property>
+            <property name="src">
+                <value type="string">$(contextRoot)/static/backbase.com.2012.aurora/widgets/standardExample/index.html</value>
+            </property>
+            <property name="source">
+                <value type="string">youtube</value>
+            </property>
+        </properties>
+        <tags>
+            <tag manageable="true" type="section">mosaic</tag>
+            <tag manageable="true" type="regular">mosaic</tag>
+            <tag manageable="true" type="regular">mosaic-tools</tag>
+        </tags>
+    </widget>
+</catalog>
