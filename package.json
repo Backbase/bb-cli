@@ -1,8 +1,8 @@
 {
-  "name": "bbscaff",
-  "version": "0.0.11",
-  "description": "Backbase Scaffolding Tool ",
-  "author": "Guilherme Medeiros",
+  "name": "bb-cli",
+  "version": "0.1.0-rc",
+  "description": "Command line tools for working with Backbase CXP.",
+  "author": "Backbase",
   "license": "Apache-2.0",
   "preferGlobal": "true",
   "scripts": {
