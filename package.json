@@ -1,12 +1,17 @@
 {
-  "name": "bbscaff",
-  "version": "0.0.11",
-  "description": "Backbase Scaffolding Tool ",
-  "author": "Guilherme Medeiros",
-  "license": "Apache-2.0",
+  "name": "bb-cli",
+  "version": "0.1.0-rc.1",
+  "description": "Command line tools for working with Backbase CXP.",
+  "author": "Backbase",
+  "licenses": [
+    {
+      "type": "Apache-2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0"
+    }
+  ],
   "preferGlobal": "true",
   "scripts": {
-    "test": "node_modules/.bin/mocha --reporter spec"
+    "test": "gulp test"
   },
   "bin": {
     "bb": "bin/bb"
@@ -14,14 +19,10 @@
   "dependencies": {
     "acorn": "^0.11.0",
     "asking": "^0.1.2",
-    "bower": "^1.3.12",
-    "bower-requirejs": "^1.1.2",
     "chalk": "^0.5.1",
     "cli-table": "^0.3.1",
     "clui": "^0.3.1",
-    "cross-spawn": "^0.2.3",
-    "escodegen": "^1.4.3",
-    "estraverse": "^1.9.1",
+    "cross-spawn": "^0.2.6",
     "formattor": "0.0.2",
     "fs-extra": "^0.14.0",
     "fs-finder": "^1.8.0",
@@ -32,32 +33,32 @@
     "gulp-rename": "^1.2.0",
     "gulp-template": "^1.1.1",
     "inquirer": "^0.8.0",
-    "jszip": "^2.4.0",
     "jxon": "^1.2.0",
     "lodash": "^3.2.0",
-    "lodash-contrib": "^241.4.14",
     "map-stream": "0.0.5",
-    "mosaic-rest-js": "Backbase/mosaic-rest-js",
+    "mosaic-rest-js": "0.1.3",
+    "mvn-credentials": "^0.2.0",
     "node-fs-extra": "^0.8.1",
     "q": "^1.1.2",
     "request": "^2.46.0",
     "ronin": "^0.3.10",
     "xml2js": "^0.4.4"
   },
-  "main": "index.js",
+  "main": "lib",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Backbase/Backbase-CLI.git"
+    "url": "https://github.com/Backbase/bb-cli.git"
   },
   "bugs": {
-    "url": "https://github.com/Backbase/Backbase-CLI/issues"
+    "url": "https://github.com/Backbase/bb-cli/issues"
   },
-  "homepage": "https://github.com/Backbase/Backbase-CLI",
+  "homepage": "https://github.com/Backbase/bb-cli",
   "devDependencies": {
     "gulp-jscs": "^1.4.0",
     "gulp-jshint": "^1.9.2",
     "jshint-stylish": "^1.0.1",
     "mocha": "^2.0.1",
+    "gulp-mocha": "^2.0.1",
     "should": "^4.3.0"
   }
 }

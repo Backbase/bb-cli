@@ -17,7 +17,7 @@ describe('bbscaff', function(){
 
     describe('toCamelCase()', function(){
         it('should return a string in CamelCase', function(){
-            bbscaff.toCamelCase('my-string with_spaces').should.be.equal('MyStringWithSpaces');
+            bbscaff.toCamelCase('my-string with_spaces').should.be.equal('myStringWithSpaces');
         });
     });
 
