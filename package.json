@@ -1,9 +1,14 @@
 {
   "name": "bb-cli",
-  "version": "0.1.0-rc",
+  "version": "0.1.0-rc.1",
   "description": "Command line tools for working with Backbase CXP.",
   "author": "Backbase",
-  "license": "Apache-2.0",
+  "licenses": [
+    {
+      "type": "Apache-2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0"
+    }
+  ],
   "preferGlobal": "true",
   "scripts": {
     "test": "gulp test"
@@ -39,15 +44,15 @@
     "ronin": "^0.3.10",
     "xml2js": "^0.4.4"
   },
-  "main": "index.js",
+  "main": "lib",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Backbase/Backbase-CLI.git"
+    "url": "https://github.com/Backbase/bb-cli.git"
   },
   "bugs": {
-    "url": "https://github.com/Backbase/Backbase-CLI/issues"
+    "url": "https://github.com/Backbase/bb-cli/issues"
   },
-  "homepage": "https://github.com/Backbase/Backbase-CLI",
+  "homepage": "https://github.com/Backbase/bb-cli",
   "devDependencies": {
     "gulp-jscs": "^1.4.0",
     "gulp-jshint": "^1.9.2",
