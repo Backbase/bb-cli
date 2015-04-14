@@ -44,15 +44,11 @@ Read more about Archetype API [here](/docs/archetype.md).
 
 Scaffold new widgets, containers and other Backbase CXP components.
 
-In directory where you run the command, tool will generate starting template for chosen item:
-
-#### Generating Widgets
+In directory where you run the command, tool will generate starting template for chosen item.
 
 ``` shell
 $ bb generate widget
 ```
-
-#### Generating Containers
 
 ``` shell
 $ bb generate container
@@ -118,6 +114,13 @@ bb rest [OPTIONS]
 -v,  --verbose					                Prints detailed output.
 -s,  --save <string>				            Saves response into file.
 ```
+
+## API docs
+
+Programmatic API.
+
+* [config](/docs/lib.config.md)
+* [portalUtils](/docs/lib.portalUtils.md)
 
 ___
 
