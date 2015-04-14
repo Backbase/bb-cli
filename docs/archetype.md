@@ -1,4 +1,4 @@
-# BB-CLI Archetype
+# Archetype finder
 
 Providing a simple way to install Backbase Archetypes.
 
