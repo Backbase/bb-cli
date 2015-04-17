@@ -11,8 +11,21 @@ var Command = require('ronin').Command;
 
 module.exports = Command.extend({
     desc: 'Imports portal model from xml files. Yapi CLI.',
+    options: {
+        cleanup: {
+            type: 'boolean',
+            alias: 'c'
+        },
+        unattended: {//Get XML directly from this glob with =out questions
+            type: 'string',
+            alias: 'u'
+        }
+    },
 
     run: function () {
+        if (this.options){
+
+        }
         inquirer.prompt([{
                 message: 'This import will compare remote items and remove redundant preoperties, do you want to continue?',
                 name: 'confirm',
@@ -22,7 +35,7 @@ module.exports = Command.extend({
                 if (answers.confirm) {
                     inquirer.prompt([{
                             message: 'To search for your imports, you can add your glob here:',
-                            default: '/test/import/**/*.xml',
+                            default: '/test/import/5.5/**/*.xml',
                             name: 'fileGlob',
                             type: 'input'
                         }],

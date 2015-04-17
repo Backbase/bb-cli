@@ -25,6 +25,19 @@
             <property name="source">
                 <value type="string">youtube</value>
             </property>
+            <!-- g:prefs-->
+            <property label="Test property" name="Data" viewHint="text,designModeOnly,user">
+                <value type="string">initial value</value>
+            </property>
+            <property label="My location" name="location" viewHint="text,designModeOnly,user">
+                <value type="string"></value>
+            </property>
+            <property label="Temperature scale" name="unit" viewHint="select-one,designModeOnly,user">
+                <value type="string">f</value>
+            </property>
+            <property label="Switch" name="switch" viewHint="checkbox,designModeOnly,user">
+                <value type="string">false</value>
+            </property>
         </properties>
         <tags>
             <tag manageable="true" type="section">mosaic</tag>
