@@ -43,7 +43,7 @@ module.exports = Command.extend({
         var Options = this.options;
 
         if (Options.unattended === true) {
-            if (Options.search.length === 0) {
+            if (!Options.search || Options.search.length === 0) {
                 Options.search = path.join(process.cwd(), '/*.xml');
             } else {
                 Options.search = path.join(process.cwd(), Options.search);
