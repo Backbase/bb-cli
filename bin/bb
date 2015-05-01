@@ -2,7 +2,7 @@
 
 var ronin = require('ronin');
 var path = require('path');
-var spawn = require('cross-spawn');
+var chalk = require('chalk');
 var program = ronin(path.join(__dirname, '..'));
 
 // prints backbase ascii logo
@@ -15,8 +15,7 @@ program.autoupdate(function () {
     try {
         program.run();
     } catch(e){
-        console.log('Command not found. Check the help section.\n');
-
-        spawn('bb', ['-h'], {stdio: 'inherit'});
+        console.log(chalk.red('Error running command. Please check the stacktrace or the help section "bb -h".\n'));
+        console.log(e.stack);
     }
 });
