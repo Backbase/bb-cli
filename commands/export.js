@@ -7,82 +7,74 @@ var loading = new clui.Spinner('Please wait...');
 
 var Command = require('ronin').Command;
 
-var normalizeContextName = function(contextName){
-    return contextName === '/' ? '' : contextName;
-};
-
 module.exports = Command.extend({
     help: function () {
         var title = chalk.bold;
         var d = chalk.gray;
         var r = '\n  ' + title('Usage') + ': bb ' + this.name + ' [OPTIONS]';
-        r += '\n\t Export portal model into xml files. This files can be then imported trough Yapi.';
+        r += '\n\t Export portal model into xml files. This files can be then imported trough Yapi or `bb import`.';
         r += '\n\n  ' + title('Options') + ': -short, --name <type> ' + d('default') + ' description\n\n';
-        r += '      -p,  --portal <string> \t' + d('prompt') + ' \t\t Pre-define portal name.\n';
-        r += '      -c,  --context <string> \t' + d('portalserver') + '\t Pre-define context name.\n';
+        r += '      -s,  --structured <boolean> \t' + d('false') + ' \t\tBreak output xml to smaller files (beta).\n';
+        r += '      -p,  --portal <string> \t\t' + d('<prompt>') + ' \tPre-define portal name.\n';
+        r += '      -c,  --context <string>\t\t' + d('portalserver') + '\tThe application context of the portal foundation.\n';
+        r += '      -H,  --host <string>\t\t' + d('localhost') + '\tThe host name of the server running portal foundation.\n';
+        r += '      -P,  --port <number>\t\t' + d('7777') + '\t\tThe port of the server running portal foundation.\n';
+        r += '      -u,  --username <string>\t\t' + d('admin') + '\t\tUsername.\n';
+        r += '      -w,  --password <string>\t\t' + d('admin') + '\t\tPassword.\n';
         return r;
     },
 
     options: {
-        portal: {
-            type: 'string',
-            alias: 'p'
-        },
-        context: {
-            type: 'string',
-            alias: 'c'
-        }
+        structured: {type: 'boolean', alias: 's'},
+        host: {type: 'string', alias: 'H'},
+        port: {type: 'string', alias: 'P'},
+        context: {type: 'string', alias: 'c'},
+        username: {type: 'string', alias: 'u'},
+        password: {type: 'string', alias: 'w'},
+        portal: {type: 'string', alias: 'p'}
     },
 
-    run: function (portalName, contextName) {
-        contextName = normalizeContextName(contextName);
+    run: function () {
+        var cliOpts = this.options || {};
 
-        inquirer.prompt([{
-            message: 'Server context name',
-            name: 'contextName',
-            type: 'input',
-            default: 'portalserver',
-            filter: function(answer){
-                return normalizeContextName(answer);
-            },
-            when: function() {
-                // Ask only of param was not provided
-                return typeof contextName !== 'string';
-            }
-        }], function (answersLevelOne) {
-            var context = typeof answersLevelOne.contextName === 'string' ? answersLevelOne.contextName : contextName;
+        // Request portals list, if portal is not provided
+        if (!cliOpts.portal) {
+            bbmodel.listPortals(cliOpts, function (portals) {
+                if (!portals) return util.err('Could not get portal list.');
 
-            // Request portals list, if portal is not provided
-            if (!portalName) {
-                bbmodel.listPortals(context, function (portals) {
-                    if (!portals) return util.err('Could not get portal list.');
-
-                    inquirer.prompt([{
-                        message: 'Choose the portal you want to export',
-                        name: 'portalName',
-                        type: 'list',
-                        choices: portals
-                    }], function (answersLevelTwo) {
-                        exportPortal(answersLevelTwo.portalName, context);
-                    });
+                inquirer.prompt([{
+                    message: 'Choose the portal you want to export',
+                    name: 'portalName',
+                    type: 'list',
+                    choices: portals
+                }], function (answersLevelTwo) {
+                    exportPortal(answersLevelTwo.portalName);
                 });
-            } else {
-                exportPortal(portalName, context);
-            }
-        });
+            });
+        } else {
+            exportPortal(cliOpts.portal);
+        }
 
-        function exportPortal(portalName, contextName) {
+        function exportPortal(portalName) {
+            cliOpts.portal = portalName;
+
             loading.start();
-            bbmodel.getPortalModel(portalName, contextName, function (xml) {
+            bbmodel.getPortalModel(cliOpts, function (xmlAst, rawXml) {
                 loading.stop();
-                if (xml) {
+                if (xmlAst && rawXml) {
                     areYouSure(function () {
-                        bbmodel.exportPortal(xml, portalName, process.cwd(), function (file) {
-                            util.ok(file);
-                        });
+                        if (cliOpts.structured) {
+                            bbmodel.exportPortalStructured(xmlAst, portalName, process.cwd(), function (file) {
+                                util.ok(file);
+                            });
+                        } else {
+                            bbmodel.exportPortal(rawXml, portalName, process.cwd(), function (file) {
+                                util.ok(file);
+                            });
+                        }
                     });
                 } else {
-                    util.err("Portal doesn't exist or cannot be exported.");
+                    util.err('Portal doesn\'t exist or cannot be exported.');
                 }
             });
         }
