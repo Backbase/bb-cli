@@ -58,21 +58,25 @@ Read more about generate API [here](/docs/generate.md).
 
 ## Export
 
-Export portal model into xml files. This files can be then imported trough Yapi or `bb import`.
+Export portal model into XML files, which can be then re-imported trough YAPI or `bb import`.
 
 ```
 bb export
 ```
 
-Generated bundle with XML files is placed to the working directory, from where you have spawned the command.
+By default, command exports whole portal as one file. Using `--structured` option (beta) command will breaks portal model into separate files, structuring them by logical groups.
+
+Generated XML files are placed to the working directory, from where you have spawned the command.
 
 ## Import
 
-Imports portal model from xml files. CLI for YAPI portal importer.
+Imports portal model from XML files.
 
 ```
 bb import
 ```
+
+By default uses full portal import (from one file). Using `--yapi` option (beta) command will merge all XML files by glob and import them like client-side YAPI does.
 
 ## Sync
 
@@ -114,6 +118,45 @@ bb rest [OPTIONS]
 -v,  --verbose					                Prints detailed output.
 -s,  --save <string>				            Saves response into file.
 ```
+
+## Configuration
+
+All REST based commands support `.bbrc` configuration. Running the command in the folder with `.bbrc` file or in one of the child folders with defined configuration, CLI will use it to override default options.
+
+Example of `.bbrc` (must contain valid JSON) contents:
+
+```json
+{
+"context": "/",
+"port": "7778",
+"username": "me",
+"password": "it's me"
+}
+```
+
+### Usage example
+
+If CXP based project has custom configuration for context or admin credentials, put custom `.bbrc` into the root folder, so CLI could use custom defaults.
+
+```
+/project
+  .bbrc
+  config
+    some.xml
+```
+
+Where `.bbrc` file contains this conf:
+
+```
+{
+"context": "/",
+"username": "me",
+"password": "it's me"
+}
+```
+
+Now running `bb import` from `/project/config` dir, CLI will use defined REST configuration with overriden `context` and user credentials.
+
 
 ## API docs
 
