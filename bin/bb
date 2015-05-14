@@ -4,18 +4,28 @@ var ronin = require('ronin');
 var path = require('path');
 var chalk = require('chalk');
 var program = ronin(path.join(__dirname, '..'));
-
-// prints backbase ascii logo
-// require('../lib/util').backbase()
+var util = require('../lib/util');
 
 // Changing the limit for listeners, since we work ofter with remote calls
 require('events').EventEmitter.prototype._maxListeners = 100;
+
+program.set({
+    help: function () {
+        util.backbase();
+
+        var title = chalk.bold;
+        var r = '\n  ' + title('Usage') + ': bb <command> [OPTIONS]';
+        r += '\n\n  ' + title('Commands') + ': achetype (arch), export, import, generate, rest, sync.';
+
+        return r;
+    }
+});
 
 program.autoupdate(function () {
     try {
         program.run();
     } catch(e){
-        console.log(chalk.red('Error running command. Please check the stacktrace or the help section "bb -h".\n'));
-        console.log(e.stack);
+        util.err(chalk.red('Error running command. Please check the stacktrace or the help section "bb -h".\n'));
+        util.err(e.stack);
     }
 });
