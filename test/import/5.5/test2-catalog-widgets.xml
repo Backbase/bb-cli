@@ -1,0 +1,48 @@
+<catalog>
+    <widget>
+        <name>test2-widget-sc</name>
+        <contextItemName>[BBHOST]</contextItemName>
+        <properties>
+            <property name="TemplateName">
+                <value type="string">Standard_Widget</value>
+            </property>
+            <property name="title">
+                <value type="string">Theme Switcher</value>
+            </property>
+            <property name="Description">
+                <value type="string">Theme Switcher Description</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/mosaic-tools/widgets/theme-switch/icon.png</value>
+            </property>
+
+            <property label="Widget Chrome" name="widgetChrome" viewHint="select-one,user,designModeOnly">
+                <value type="string">$(contextRoot)/static/backbase.com.2012.aurora/html/chromes/widget_default.html</value>
+            </property>
+            <property name="src">
+                <value type="string">$(contextRoot)/static/backbase.com.2012.aurora/widgets/standardExample/index.html</value>
+            </property>
+            <property name="source">
+                <value type="string">youtube</value>
+            </property>
+            <!-- g:prefs-->
+            <property label="Test property" name="Data" viewHint="text,designModeOnly,user">
+                <value type="string">initial value</value>
+            </property>
+            <property label="My location" name="location" viewHint="text,designModeOnly,user">
+                <value type="string"></value>
+            </property>
+            <property label="Temperature scale" name="unit" viewHint="select-one,designModeOnly,user">
+                <value type="string">f</value>
+            </property>
+            <property label="Switch" name="switch" viewHint="checkbox,designModeOnly,user">
+                <value type="string">false</value>
+            </property>
+        </properties>
+        <tags>
+            <tag manageable="true" type="section">mosaic</tag>
+            <tag manageable="true" type="regular">mosaic</tag>
+            <tag manageable="true" type="regular">mosaic-tools</tag>
+        </tags>
+    </widget>
+</catalog>

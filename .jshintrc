@@ -11,5 +11,9 @@
     "unused": true,
     "noyield": true,
     "node": true,
-    "mocha": true
+    "mocha": true,
+    "globals"   : {
+        "require": false,
+        "console"   : false
+    }
 }
