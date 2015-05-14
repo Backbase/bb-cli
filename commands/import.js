@@ -1,13 +1,33 @@
 var inquirer = require("inquirer");
 var chalk = require('chalk');
-var _ = require('lodash');
-var bbmodel = require('../lib/bbmodel');
 var importCXP = require('../lib/yapi/importCXP');
 var path = require('path');
 var Command = require('ronin').Command;
 
 module.exports = Command.extend({
-    desc: 'Imports portal model from xml files. Yapi CLI.',
+    desc: 'Imports portal model from xml files. YAPI CLI.',
+    help: function () {
+        var title = chalk.bold;
+        var d = chalk.gray;
+        var r = '\n  ' + title('Usage') + ': bb ' + this.name + ' [OPTIONS]';
+        r += '\n\t Imports to remote model from XML files. In default mode it takes first XML from the glob and imports it as full portal. In YAPI mode (experimental) merges all XML\'s same as in client side version.';
+        r += '\n\n  ' + title('Options') + ': -short, --name <type> ' + d('default') + ' description';
+        r += '\n\n      -u,  --unattended <boolean>\t' + d('false') + '\t\tSkip all prompts and use options or defaults.';
+        r += '\n      -s,  --search <string>\t\t' + d('*.xml') + '\t\tWild card glob to find Import files.';
+        r += '\n      -v,  --verbose <boolean>\t\t' + d('false') + '\t\tPrints detailed output.';
+
+        r += '\n      -p,  --portal <string> \t\t' + d('<prompt>') + ' \tPre-define portal name.\n';
+        r += '\n      -c,  --context <string>\t\t' + d('portalserver') + '\tThe application context of the portal foundation.';
+        r += '\n      -H,  --host <string>\t\t' + d('localhost') + '\tThe host name of the server running portal foundation.';
+        r += '\n      -P,  --port <number>\t\t' + d('7777') + '\t\tThe port of the server running portal foundation.';
+        r += '\n      -u,  --username <string>\t\t' + d('admin') + '\t\tUsername.';
+        r += '\n      -w,  --password <string>\t\t' + d('admin') + '\t\tPassword.';
+
+        r += '\n\n      -y,  --yapi <boolean>\t\t' + d('false') + '\t\tSwitch to CLI YAPI mode (experimental).';
+        r += '\n      -c,  --cleanup <boolean>\t\t' + d('true') + '\t\tTo remove redundant remote properties if not matched locally (only in YAPI mode).';
+
+        return r;
+    },
     options: {
         cleanup: {
             type: 'boolean',
@@ -25,70 +45,62 @@ module.exports = Command.extend({
         verbose: {//search using glob wild cards overriding search prompt
             type: 'boolean',
             alias: 'v'
-        }
-    },
-    help: function () {
-        var title = chalk.bold,
-            d = chalk.gray,
-            r = '\n  ' + title('Usage') + ': bb ' + this.name + ' [OPTIONS]'
-                + '\n\t Imports to remote model from XML files.'
-                + '\n\n  ' + title('Options') + ': -short, --name <type> ' + d('default') + ' description'
-                + '\n\n      -c,  --cleanup <boolean>\t\t' + d('true') + '\t\t To remove redundant remote properties if not matched locally.'
-                + '\n      -u,  --unattended <boolean>\t' + d('false') + '\t\t Skip all prompts and use options or defaults.'
-                + '\n      -s,  --search <string>\t\t' + d('*.xml') + '\t\t Wild card glob to find Import files.'
-                + '\n      -v,  --verbose <boolean>\t\t' + d('false') + '\t\t Prints detailed output.';
-        return r;
+        },
+        yapi: {//search using glob wild cards overriding search prompt
+            alias: 'y',
+            type: 'boolean',
+            default: false
+        },
+        host: {type: 'string', alias: 'H'},
+        port: {type: 'string', alias: 'P'},
+        context: {type: 'string', alias: 'c'},
+        username: {type: 'string', alias: 'u'},
+        password: {type: 'string', alias: 'w'},
+        portal: {type: 'string', alias: 'p'}
     },
     run: function () {
-        var Options = this.options;
+        var cliOpts = this.options || {};
 
-        if (Options.unattended === true) {
-            if (!Options.search || Options.search.length === 0) {
-                Options.search = path.join(process.cwd(), '/*.xml');
+        if (!cliOpts.search || cliOpts.search.length === 0) {
+            cliOpts.search = path.join(process.cwd(), '*.xml');
+        } else {
+            cliOpts.search = path.join(process.cwd(), cliOpts.search);
+        }
+
+        var startImport = (function(){
+            if (cliOpts.yapi) {
+                return importCXP.startImport;
             } else {
-                Options.search = path.join(process.cwd(), Options.search);
+                return importCXP.startImportSimple;
             }
+        })();
 
-            importCXP.startImport(Options);
+        if (cliOpts.unattended === true) {
+            startImport(cliOpts);
         } else {
 
             var promptCleanup = {
-                    message: 'Do you want to remove redundant properties?',
-                    name: 'cleanup',
-                    type: 'confirm'
-                },
-                promptSearch = {
-                    message: 'Search for imports:',
-                    default: '/*.xml', //'/test/import/5.5/**/*.xml',
-                    name: 'fileGlob',
-                    type: 'input'
-                },
-                prompts = [];
+                message: 'Do you want to remove redundant properties?',
+                name: 'cleanup',
+                type: 'confirm'
+            };
+            var prompts = [];
 
-
-            if (!Options.cleanup) {
+            if (!cliOpts.cleanup) {
                 prompts.push(promptCleanup);
-            }
-
-            if (!Options.search || Options.search.length === 0) {
-                prompts.push(promptSearch);
-            } else {
-                Options.search = path.join(process.cwd(), Options.search);
             }
 
             if (prompts.length > 0) {
                 inquirer.prompt(prompts,
                     function (answers) {
-                        Options.cleanup = answers.cleanup || Options.cleanup;
-                        Options.search = answers.fileGlob ? path.join(process.cwd() + answers.fileGlob) : Options.search;
+                        cliOpts.cleanup = answers.cleanup || cliOpts.cleanup;
 
-                        importCXP.startImport(Options);
+                        startImport(cliOpts);
                     }
                 );
             } else {
-                importCXP.startImport(Options);
+                startImport(cliOpts);
             }
-
         }
     }
 });
