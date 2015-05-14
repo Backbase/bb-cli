@@ -62,7 +62,7 @@ module.exports = Command.extend({
         return config.getCommon(this.options)
         .then(function(r) {
             bbrest = r.bbrest;
-            _.merge(bbrest.config, _.pick(r.config.cli, ['host', 'port', 'context', 'username', 'password', 'portal']));
+
             cfg = r.config.cli;
             cfg.targetArg = tryParseJSON(cfg.targetArg) || [cfg.targetArg];
             cfg.file = tryParseJSON(cfg.file) || cfg.file;
