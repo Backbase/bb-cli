@@ -14,7 +14,8 @@ module.exports = Command.extend({
         var r = '\n  ' + title('Usage') + ': bb ' + this.name + ' [OPTIONS]';
         r += '\n\t Export portal model into xml files. This files can be then imported trough Yapi or `bb import`.';
         r += '\n\n  ' + title('Options') + ': -short, --name <type> ' + d('default') + ' description\n\n';
-        r += '      -s,  --structured <boolean> \t' + d('false') + ' \t\tBreak output xml to smaller files (beta).\n';
+        r += '      -r,  --raw <boolean> \t' + d('false') + ' \t\tExport raw XML, without beautifucation.\n';
+        r += '      -s,  --structured <boolean> \t' + d('false') + ' \t\tBreak output xml to smaller files (beta). Overrides --raw.\n';
         r += '      -p,  --portal <string> \t\t' + d('<prompt>') + ' \tPre-define portal name.\n';
         r += '      -c,  --context <string>\t\t' + d('portalserver') + '\tThe application context of the portal foundation.\n';
         r += '      -H,  --host <string>\t\t' + d('localhost') + '\tThe host name of the server running portal foundation.\n';
@@ -25,6 +26,7 @@ module.exports = Command.extend({
     },
 
     options: {
+        raw: {type: 'boolean', alias: 'r'},
         structured: {type: 'boolean', alias: 's'},
         host: {type: 'string', alias: 'H'},
         port: {type: 'string', alias: 'P'},
@@ -68,7 +70,9 @@ module.exports = Command.extend({
                                 util.ok(file);
                             });
                         } else {
-                            bbmodel.exportPortal(rawXml, portalName, process.cwd(), function (file) {
+                            var exportRaw = cliOpts.raw;
+
+                            bbmodel.exportPortal(rawXml, portalName, process.cwd(), exportRaw, function (file) {
                                 util.ok(file);
                             });
                         }
