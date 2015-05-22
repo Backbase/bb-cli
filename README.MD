@@ -1,7 +1,7 @@
 Backbase CLI tools
 ===================
 
-[![Build Status](https://travis-ci.org/Backbase/bb-cli.svg?branch=add-ci)](https://travis-ci.org/Backbase/bb-cli)
+[![Build Status](https://travis-ci.org/Backbase/bb-cli.svg)](https://travis-ci.org/Backbase/bb-cli)
 
 Command line tools for working with [Backbase CXP](http://backbase.com).
 
