@@ -78,10 +78,10 @@ function init(r, files) {
                 console.log('Insufficient data to write model xml file. bower.json read failed');
             });
         } else {
-            var prom = Q.defer();
-            prom.reject();
+            var defer = Q.defer();
+            defer.reject();
             console.log('Insufficient data to write model xml file.');
-            return prom;
+            return defer.promise;
         }
     // otherwise submit existing file
     } else {
