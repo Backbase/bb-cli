@@ -100,6 +100,7 @@ bb sync [OPTIONS]	 Syncs local XML model with remote.
       -f,  --file (string)	    first xml file		 A file to target.
       -c,  --context (string)	portalserver		 Portal server context (for other options use `.bbrc`).
       -s,  --save (string)	            			 Name of the server item which model should be exported to a file.
+      -y,  --yes (boolean)	            			 Disables dialogs.
       -v,  --verbose		    false   			 Prints detailed output.
 ```
 
