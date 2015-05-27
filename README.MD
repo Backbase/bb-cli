@@ -83,12 +83,26 @@ By default uses full portal import (from one file). Using `--yapi` option (beta)
 ## Sync
 
 Syncs local XML model with remote.
-
-```
-bb sync
-```
-
 Run it in the component folder to sync with CXP. It parser the first `*.xml` file or defined one from `--file` argument.
+In case that xml file does not exist, it can create one by saving the response from the REST API call.
+This call will be made on server catalog for the item defined by `--save` parameter. 
+In case that `--save` is undefined, it will search for `bower.json` file and use the name of the package as item name (handy for LP widgets).
+
+```
+bb sync [OPTIONS]	 Syncs local XML model with remote.
+```
+
+#### Options
+
+```
+  -short,  --name (type)        default              description
+
+      -f,  --file (string)	    first xml file		 A file to target.
+      -c,  --context (string)	portalserver		 Portal server context (for other options use `.bbrc`).
+      -s,  --save (string)	            			 Name of the server item which model should be exported to a file.
+      -y,  --yes (boolean)	            			 Disables dialogs.
+      -v,  --verbose		    false   			 Prints detailed output.
+```
 
 ### Rest
 
