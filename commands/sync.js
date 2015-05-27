@@ -22,6 +22,7 @@ module.exports = Command.extend({
         r += '      -f,  --file <string>\t' + d('first xml file') + '\t\t A file to target.\n';
         r += '      -c,  --context <string>\t' + d('portalserver') + '\t\t Portal server context (for other options use `.bbrc`).\n';
         r += '      -s,  --save <string>\t' + d('') + '\t\t\t Name of the server item which model should be exported to a file.\n';
+        r += '      -y,  --yes <string>\t' + d('') + '\t\t Disable interactive mode, answer all questions with yes.\n';
         //r += '      -w,  --watch <boolean>\t' + d('false') + '\t\t\t Enables watching for file change.\n';
         r += '      -v,  --verbose\t\t' + d('false') + '\t\t\t Prints detailed output.\n';
         return r;
@@ -31,6 +32,7 @@ module.exports = Command.extend({
         file: {type: 'string', alias: 'f'},
         context: {type: 'context', alias: 'c'},
         save: {type: 'string', alias: 's'},
+        yes: {type: 'boolean', alias: 'y'},
         //watch: {type: 'boolean', alias: 'w'},
         verbose: {type: 'boolean', alias: 'v'}
     },
@@ -103,17 +105,23 @@ function findXmlFile(files) {
 
 function saveFile(fname, itemName) {
     var defer = Q.defer();
-    inquirer.prompt([{
-        message: "'" + fname + "' does not exist. Create one?",
-        name: 'saveModel',
-        type: 'confirm'
-    }], function(answers) {
+
+    var func = function(answers) {
         if (answers.saveModel) {
             defer.resolve(writeModelFile(fname, itemName));
         } else {
             defer.reject('Saving aborted.');
         }
-    });
+    };
+
+    if (cfg.cli.yes) func({saveModel: true});
+    else {
+        inquirer.prompt([{
+            message: "'" + fname + "' does not exist. Create one?",
+            name: 'saveModel',
+            type: 'confirm'
+        }], func);
+    }
     return defer.promise;
 }
 
@@ -135,10 +143,10 @@ function submitFile(xmlFileName) {
             if (origin === false) return true;
             serverProps = origin.catalog[keys[0]].properties.property;
 
-            serverProps = _.filter(serverProps, removeEmpty);
+            //serverProps = _.filter(serverProps, removeEmpty);
             serverProps.sort(sortByName);
 
-            compare(localProps, serverProps);
+            compare(localProps, serverProps, local.catalog.widget.name);
 
             return bbrest.catalog().put(local)
             .then(function(r) {
@@ -161,37 +169,43 @@ function getLocal(fName) {
 
 function getOrigin(itemName, local) {
     return bbrest.catalog(itemName).get()
-        .then(function(r) {
-            if (r.statusCode === 404 || r.error) {
-                var deferred = Q.defer();
+    .then(function(r) {
+        if (r.statusCode === 404 || r.error) {
+            var deferred = Q.defer();
 
+            var doSubmit = function(answers) {
+                if (answers.submitModel) {
+                    bbrest.catalog().post(local)
+                    .then(function (r) {
+                        if (r.statusCode === 204) {
+                            console.log(chalk.green('Submitted.'));
+                        } else restUtils.onResponse(r, bbrest, cfg.cli);
+
+                        deferred.resolve(true);
+                    });
+                } else {
+                    deferred.resolve(false);
+                }
+            };
+
+            if (cfg.cli.yes) return doSubmit({submitModel: true});
+            else {
                 inquirer.prompt([{
                     message: "'" + itemName + "' is not defined on the server. Submit model?",
                     name: 'submitModel',
                     type: 'confirm'
-                }], function(answers){
-                    if (answers.submitModel) {
-                        bbrest.catalog().post(local)
-                        .then(function (r) {
-                            if (r.statusCode === 204) {
-                                console.log(chalk.green('Submitted.'));
-                            } else restUtils.onResponse(r, bbrest, cfg.cli);
-
-                            deferred.resolve(true);
-                        });
-                    } else {
-                        deferred.resolve(false);
-                    }
-                });
-
-                return deferred.promise;
-            } else {
-                return jxon.stringToJs(_.unescape(r.body));
+                }], doSubmit);
             }
-        });
+
+            return deferred.promise;
+        } else {
+            return jxon.stringToJs(_.unescape(r.body));
+        }
+    });
 }
 
-function compare(localProps, serverProps) {
+
+function compare(localProps, serverProps, wname) {
     var lKeys = _.pluck(localProps, '$name');
     var oKeys = _.pluck(serverProps, '$name');
     var toDelete = _.difference(oKeys, lKeys);
@@ -200,7 +214,10 @@ function compare(localProps, serverProps) {
         ov = _.find(serverProps, {$name: toDelete[i]});
 
         // Skip g:preferences fields, since they are not in xml
-        if (ov.$viewHint.indexOf("select-one") > -1) return;
+        if (ov.$viewHint && ov.$viewHint.indexOf('select-one') > -1) return;
+
+        if (ov.$itemName !== wname) console.log(chalk.gray(ov.$name) + ' property ' + chalk.red('can not') + ' be removed because it is shared.');
+        else console.log(chalk.gray(ov.$name) + ' property will be removed. ');
 
         ov.$markedForDeletion = true;
         localProps.push(ov);
