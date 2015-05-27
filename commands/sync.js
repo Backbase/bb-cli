@@ -170,7 +170,6 @@ function getLocal(fName) {
 function getOrigin(itemName, local) {
     return bbrest.catalog(itemName).get()
     .then(function(r) {
-        console.log(jxon.stringToJs(_.unescape(r.body)));
         if (r.statusCode === 404 || r.error) {
             var deferred = Q.defer();
 
