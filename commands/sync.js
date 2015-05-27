@@ -22,7 +22,7 @@ module.exports = Command.extend({
         r += '      -f,  --file <string>\t' + d('first xml file') + '\t\t A file to target.\n';
         r += '      -c,  --context <string>\t' + d('portalserver') + '\t\t Portal server context (for other options use `.bbrc`).\n';
         r += '      -s,  --save <string>\t' + d('') + '\t\t\t Name of the server item which model should be exported to a file.\n';
-        r += '      -y,  --yes <string>\t' + d('') + '\t\t Disable interactive mode, answer all questions with yes.\n';
+        r += '      -y,  --yes <string>\t' + d('') + '\t\t\t Disable interactive mode, answer all questions with yes.\n';
         //r += '      -w,  --watch <boolean>\t' + d('false') + '\t\t\t Enables watching for file change.\n';
         r += '      -v,  --verbose\t\t' + d('false') + '\t\t\t Prints detailed output.\n';
         return r;
