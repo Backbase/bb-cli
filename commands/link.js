@@ -5,14 +5,10 @@ var path = require('path');
 var readFile = Q.denodeify(fs.readFile);
 var readDir = Q.denodeify(fs.readdir);
 var remove = Q.denodeify(fs.remove);
-var _ = require('lodash');
 var inquirer = require('inquirer');
-var config = require('../lib/config');
 var utils = require('../lib/util');
-var portalUtils = require('../lib/portalUtils');
 var createLink = require('../lib/createLink');
 var chalk = require('chalk');
-var bbrest, jxon, cfg;
 
 module.exports = Command.extend({
     help: function () {
