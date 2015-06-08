@@ -1,11 +1,11 @@
 /**
  *  ----------------------------------------------------------------
- *  Copyright © Backbase B.V.
+ *  Copyright © <%= module_author%>.
  *  ----------------------------------------------------------------
- *  Author : Backbase R&D - Amsterdam - New York
+ *  Author : <%= module_author%>
  *  Filename : main.js
  *  Description:
- *  Main File Module Sample
+ *  Main File <%=module_name%>
  *  ----------------------------------------------------------------
  */
 

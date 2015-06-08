@@ -56,9 +56,9 @@ $ bb generate widget
 $ bb generate container
 ```
 
-#### launchpad 12 Generators
+#### Launchpad 0.12 Generators
 
-For launchpad 12 development, please use the following commands:
+For Launchpad 0.12 development, please use the following commands:
 
 ``` shell
 $ bb generate lp12-widget

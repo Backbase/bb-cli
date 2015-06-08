@@ -14,12 +14,12 @@ module.exports = function(bbscaff) {
         {
             name: 'widget_author',
             message: 'Widget author',
-            'default': 'Backbase <practices@backbase.com>'
+            'default': ''
         },
         {
             name: 'widget_version',
             message: 'Widget version',
-            'default': '1.0.0'
+            'default': '0.1.0'
         },
         {
             name: 'widget_description',

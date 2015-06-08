@@ -50,31 +50,6 @@
 ## Custom Components
 - list of widget custom components (if any)
 
-## Develop Standalone
-
-<!-- ```bash
-git clone <repo-url> && cd <widget-path>
-bb install -l
-```  -->
-
-<!-- ## Test
-
-```bash
-$ bb start
-```
-
-with watch flag
-```bash
-bb test -w
-```
-
-
-## Build
-
-```bash
-$ bb build
-```-->
-
 ## Requirements
 
 ### User Requirements

@@ -14,12 +14,12 @@ module.exports = function(bbscaff) {
         {
             name: 'module_author',
             message: 'Module author',
-            'default': 'Backbase <practices@backbase.com>'
+            'default': ''
         },
         {
             name: 'module_version',
             message: 'Module version',
-            'default': '1.0.0'
+            'default': '0.1.0'
         },
         {
             name: 'module_description',
