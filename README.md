@@ -56,6 +56,18 @@ $ bb generate widget
 $ bb generate container
 ```
 
+#### launchpad 12 Generators
+
+For launchpad 12 development, please use the following commands:
+
+``` shell
+$ bb generate lp12-widget
+```
+
+``` shell
+$ bb generate lp12-module
+```
+
 Read more about generate API [here](/docs/generate.md).
 
 ## Export
@@ -85,7 +97,7 @@ By default uses full portal import (from one file). Using `--yapi` option (beta)
 Syncs local XML model with remote.
 Run it in the component folder to sync with CXP. It parser the first `*.xml` file or defined one from `--file` argument.
 In case that xml file does not exist, it can create one by saving the response from the REST API call.
-This call will be made on server catalog for the item defined by `--save` parameter. 
+This call will be made on server catalog for the item defined by `--save` parameter.
 In case that `--save` is undefined, it will search for `bower.json` file and use the name of the package as item name (handy for LP widgets).
 
 ```
