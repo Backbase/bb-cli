@@ -1,6 +1,7 @@
 Backbase CLI tools
 ===================
 
+[![Npm Version](https://badge.fury.io/js/bb-cli.svg)](https://www.npmjs.com/package/bb-cli)
 [![Build Status](https://travis-ci.org/Backbase/bb-cli.svg)](https://travis-ci.org/Backbase/bb-cli)
 
 Command line tools for working with [Backbase CXP](http://backbase.com).
