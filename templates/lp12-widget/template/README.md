@@ -1,4 +1,4 @@
-# <%=widget_name%>
+# <%=widget_title%>
 
 <%=widget_description%>
 
