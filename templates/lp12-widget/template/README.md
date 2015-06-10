@@ -6,7 +6,7 @@
 
 | name                  | version           | bundle           |
 | ----------------------|:-----------------:| ----------------:|
-| <%=widget_name%>      |<%=widget_version%>| Launchpad        |
+| <%=widget_name%>      |<%=widget_version%>| <%=bundle_name%>       |
 
 ## Widget Checklist
 
