@@ -56,7 +56,9 @@ module.exports = Command.extend({
                     if (opts.lp) {
                         if (name.substr(0, 7) === 'widget-') name = name.substr(7);
                         var wdir = lpMap[name] || '';
-                        target = path.resolve(opts.lp, 'launchpad-bundles/static/launchpad', wdir, 'widgets', name);
+                        if (wdir) wdir += '/widgets';
+                        else wdir = 'modules';
+                        target = path.resolve(opts.lp, 'launchpad-bundles/static/launchpad', wdir, name);
                     } else if (opts.cxp) {
                         target = path.resolve(opts.cxp, 'src/main/webapp/static/widgets', name);
                     }
