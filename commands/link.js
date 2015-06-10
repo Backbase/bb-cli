@@ -44,7 +44,7 @@ module.exports = Command.extend({
         var src = opts.source || process.cwd();
         var target;
 
-        if (!opts.target && !opts.lp && !opts.cxp) {
+        if (!opts.target && !opts['lp-portal'] && !opts['lp-trunk'] && !opts.cxp) {
             error(new Error('Target is not defined, see bb link --help'));
         } else {
             // if target is defined, do symlink
