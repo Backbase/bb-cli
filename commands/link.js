@@ -34,7 +34,7 @@ module.exports = Command.extend({
     },
 
     options: {
-        source: {type: 'string', alias: 's', default: '.'},
+        source: {type: 'string', alias: 's'},
         target: {type: 'string', alias: 't'},
         'lp-trunk': {type: 'string'},
         'lp-portal': {type: 'string'},
