@@ -64,7 +64,7 @@ module.exports = Command.extend({
                         if (name.substr(0, 7) === 'widget-') {
                             name = name.substr(7);
                             var wdir = lpMap[name] || '';
-                            wdir += '/widgets';
+                            wdir += wdir ? '/widgets' : 'widgets';
                         } else {
                             wdir = 'modules';
                         }
