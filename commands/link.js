@@ -61,9 +61,11 @@ module.exports = Command.extend({
                 .then(function(man) {
                     var name = man.name;
                     if (opts['lp-trunk'] || opts['lp-portal']) {
+                        var wdir;
+
                         if (name.substr(0, 7) === 'widget-') {
                             name = name.substr(7);
-                            var wdir = lpMap[name] || '';
+                            wdir = lpMap[name] || '';
                             wdir += wdir ? '/widgets' : 'widgets';
                         } else {
                             wdir = 'modules';
@@ -118,7 +120,7 @@ function doUnlink(target) {
 // if target exists fails, if forced removes it
 function removeTarget(target, opts) {
     return lstat(target)
-    .then(function(stats) {
+    .then(function() {
         if (!opts.force) throw new Error('Target ' + chalk.gray(target) + ' exists. Use ' + chalk.bold('--force') + ' flag to remove it before linking.');
         console.log('Removing ' + chalk.gray(target));
         return remove(target);
