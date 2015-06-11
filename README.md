@@ -189,11 +189,14 @@ Now running `bb import` from `/project/config` dir, CLI will use defined REST co
 ## Link
 
 Symlinks source directory to target.
+
 Use this command to symlink clone of your widget/module working repo to the working portal.
 
 ```
-bb link --source /repo/path -- target /path/to/portalserver/static/dir/
+bb link --source /component/path --target /path/to/portalserver/static/dir/
 ```
+
+### Helpers
 
 This command also supports conventions used in Launchpad and ES. For example:
 
@@ -211,7 +214,7 @@ If `--cxp` path is set, target will be:
 
 `{cxp path}/src/main/webapp/static/widgets/{package name}`
 
-where `package_name` will be the name of the package read from `bower.json` or `npm.json`.
+where `package_name` will be the name of the package read from `bower.json` or `package.json`.
 
 #### Options
 
@@ -223,8 +226,8 @@ where `package_name` will be the name of the package read from `bower.json` or `
      --lp-trunk <string>                          Path to `launchpad-trunk`.
      --lp-portal <string>                         Path to portalserver containing lp.
      --cxp <string>                               Path to portalserver.
--f,  --force                              Force removal of the target.
--u,  --unlink                             Remove symlink.
+-f,  --force                                      Force removal of the target.
+-u,  --unlink                                     Remove symlink.
 ```
 
 ## API docs
