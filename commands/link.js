@@ -5,7 +5,7 @@ var path = require('path');
 var readFile = Q.denodeify(fs.readFile);
 var readDir = Q.denodeify(fs.readdir);
 var remove = Q.denodeify(fs.remove);
-var inquirer = require('inquirer');
+var lstat = Q.denodeify(fs.lstat);
 var utils = require('../lib/util');
 var createLink = require('../lib/createLink');
 var chalk = require('chalk');
@@ -28,15 +28,19 @@ module.exports = Command.extend({
         r += '           --lp-trunk <string>\t\t\t\t\t Path to `launchpad-trunk`.\n';
         r += '           --lp-portal <string>\t\t\t\t\t Path to portalserver containing lp.\n';
         r += '           --cxp <string>\t\t\t\t\t Path to portalserver.\n';
+        r += '      -f,  --force\t\t' + '\t\t\t\t Force overwrite.\n';
         r += '      -u,  --unlink\t\t' + '\t\t\t\t Unlink directory.\n';
         return r;
     },
 
     options: {
-        source: {type: 'string', alias: 's'},
+        source: {type: 'string', alias: 's', default: '.'},
         target: {type: 'string', alias: 't'},
-        unlink: {type: 'boolean', alias: 'u'},
-        verbose: {type: 'boolean', alias: 'v'}
+        'lp-trunk': {type: 'string'},
+        'lp-portal': {type: 'string'},
+        cxp: {type: 'string'},
+        force: {type: 'boolean', alias: 'f'},
+        unlink: {type: 'boolean', alias: 'u'}
     },
 
     run: function () {
@@ -45,12 +49,12 @@ module.exports = Command.extend({
         var target;
 
         if (!opts.target && !opts['lp-portal'] && !opts['lp-trunk'] && !opts.cxp) {
-            error(new Error('Target is not defined, see bb link --help'));
+            return error(new Error('Target must be defined.'));
         } else {
             // if target is defined, do symlink
             if (opts.target) {
-                if (opts.unlink) return remove(opts.target).fail(error);
-                return doLink(src, opts.target).fail(error);
+                if (opts.unlink) return doUnlink(opts.target).catch(error);
+                return doLink(src, opts.target, opts).catch(error);
             // otherwise
             } else {
                 return getManifest(src)
@@ -71,63 +75,83 @@ module.exports = Command.extend({
                     } else if (opts.cxp) {
                         target = path.resolve(opts.cxp, 'src/main/webapp/static/widgets', name);
                     }
-                    if (opts.unlink) return remove(target).fail(error);
-                    return doLink(src, target).fail(error);
-                });
+                    if (opts.unlink) return doUnlink(target);
+                    return doLink(src, target, opts);
+                })
+                .catch(error);
             }
 
         }
     }
 });
 
-function doLink(src, target) {
-    var deferred = Q.defer();
-    inquirer.prompt([{
-        message: 'Symlink ' + chalk.gray(path.basename(src)) + ' to ' + chalk.gray(target) + ', which will be deleted if exists.',
-        name: 'doit',
-        type: 'confirm'
-    }], function(answers) {
-        if (answers.doit) {
-            deferred.resolve(remove(target)
-            .then(function() {
-                return createLink(src, target)
+function doLink(src, target, opts) {
+    return removeTarget(target, opts)
+    .then(function() {
+        console.log('Linking \'' + chalk.gray(path.basename(src)) + '\' to \'' + chalk.gray(target) + '\'');
+        return createLink(src, target)
+        .then(function() {
+            utils.ok('Done.');
+        });
+    });
+}
+
+function doUnlink(target) {
+    return lstat(target)
+        .then(function(stats) {
+            if (stats.isSymbolicLink()) {
+                console.log('Removing ' + chalk.gray(target));
+                return remove(target)
                 .then(function() {
                     utils.ok('Done.');
                 });
-            }));
-        } else {
-            deferred.reject(new Error('Canceled.'));
-        }
+            } else {
+                throw new Error(chalk.gray(target) + ' is not a symlink.');
+            }
+        })
+    .catch(function(e) {
+        if (e.code === 'ENOENT') throw new Error(chalk.gray(target) + ' does not exist.');
+        throw e;
     });
-    return deferred.promise;
+}
+
+// if target exists fails, if forced removes it
+function removeTarget(target, opts) {
+    return lstat(target)
+    .then(function(stats) {
+        if (!opts.force) throw new Error('Target ' + chalk.gray(target) + ' exists. Use ' + chalk.bold('--force') + ' flag to remove it before linking.');
+        console.log('Removing ' + chalk.gray(target));
+        return remove(target);
+    })
+    .catch(function(e) {
+        if (e.code === 'ENOENT') return true;
+        throw e;
+    });
 }
 
 function error(err) {
     utils.err(chalk.red('bb link: ') + err.message);
-    return err;
+    throw err;
 }
 
-var manifestPromise;
 // returns manifest data from bower.json or package.json from the given dir
 function getManifest(dir) {
-    if (manifestPromise) return manifestPromise;
-    manifestPromise = readDir(dir)
+    return readDir(dir)
     .then(function(files) {
         var ind, pack;
         if (((ind = files.indexOf('bower.json')) !== -1) || (ind = files.indexOf('package.json')) !== -1) {
             pack = files[ind];
         } else {
-            return error(new Error('No bower.json or package.json in ' + dir));
+            throw new Error('No bower.json or package.json found on target path: ' + chalk.green(dir));
         }
         return readFile(pack)
         .then(function(str) {
             return JSON.parse(str.toString());
         })
-        .catch(function(e) {
-            return error(new Error('Error reading manifest file ' + pack));
+        .catch(function() {
+            throw new Error('Error reading manifest file ' + pack);
         });
     });
-    return manifestPromise;
 }
 
 var lpMap = {
