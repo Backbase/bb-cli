@@ -159,6 +159,46 @@ Where `.bbrc` file contains this conf:
 
 Now running `bb import` from `/project/config` dir, CLI will use defined REST configuration with overriden `context` and user credentials.
 
+## Link
+
+Symlinks source directory to target.
+Use this command to symlink clone of your widget/module working repo to the working portal.
+
+```
+bb link --source /repo/path -- target /path/to/portalserver/static/dir/
+```
+
+This command also supports conventions used in Launchpad and ES. For example:
+
+If `--lp-trunk` path is set, target will be:
+
+`{lp path}/launchpad-bundles/static/launchpad/{bundle}/widgets/{package name}`
+
+If `--lp-portal` path is set, target will be:
+
+`{cxp path}/src/main/webapp/static/launchpad/{bundle}/widgets/{package name}`
+
+As LP convention, if package name starts with `widget-` it will be stripped out when creating a symlink.
+
+If `--cxp` path is set, target will be:
+
+`{cxp path}/src/main/webapp/static/widgets/{package name}`
+
+where `package_name` will be the name of the package read from `bower.json` or `npm.json`.
+
+#### Options
+
+```
+-short, --name <type>           default             description
+
+-s,  --source <string>      current directory     Path to source directory.
+-t,  --target <string>                            Path to directory in which to (un)link a source.
+     --lp-trunk <string>                          Path to `launchpad-trunk`.
+     --lp-portal <string>                         Path to portalserver containing lp.
+     --cxp <string>                               Path to portalserver.
+-f,  --force                              Force removal of the target.
+-u,  --unlink                             Remove symlink.
+```
 
 ## API docs
 

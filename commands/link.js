@@ -28,8 +28,8 @@ module.exports = Command.extend({
         r += '           --lp-trunk <string>\t\t\t\t\t Path to `launchpad-trunk`.\n';
         r += '           --lp-portal <string>\t\t\t\t\t Path to portalserver containing lp.\n';
         r += '           --cxp <string>\t\t\t\t\t Path to portalserver.\n';
-        r += '      -f,  --force\t\t' + '\t\t\t\t Force overwrite.\n';
-        r += '      -u,  --unlink\t\t' + '\t\t\t\t Unlink directory.\n';
+        r += '      -f,  --force\t\t' + '\t\t\t\t Force removal of the target.\n';
+        r += '      -u,  --unlink\t\t' + '\t\t\t\t Remove symlink.\n';
         return r;
     },
 
