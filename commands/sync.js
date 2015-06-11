@@ -143,7 +143,6 @@ function submitFile(xmlFileName) {
             if (origin === false) return true;
             serverProps = origin.catalog[keys[0]].properties.property;
 
-            //serverProps = _.filter(serverProps, removeEmpty);
             serverProps.sort(sortByName);
 
             compare(localProps, serverProps, local.catalog.widget.name);
@@ -256,8 +255,4 @@ function sortByName(a, b) {
     if (a.$name > b.$name) return 1;
     else if (a.$name < b.$name) return -1;
     else return 0;
-}
-
-function removeEmpty(v) {
-    return v.value._ !== undefined;
 }
