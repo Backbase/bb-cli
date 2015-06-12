@@ -8,7 +8,7 @@
 #Information
 | name                  | version       | bundle     |
 | ----------------------|:-------------:| ----------:|
-| <%=module_name %>     | <%=module_version%>        | launchpad  |
+| <%=module_name %>     | <%=module_version%>        | <%=bundle_name%>  |
 
 #Module Checklist
 
