@@ -15,19 +15,23 @@ module.exports = Command.extend({
         var title = chalk.bold;
         var d = chalk.gray;
         var r = '\n  ' + title('Usage') + ': bb ' + this.name + ' [OPTIONS]';
-        r += '\n\t Symlinks source directory to target.\n\t  If --lp-trunk path is set, target will be: ';
-        r += '\n\t    ' +  d('{lp path}/launchpad-bundles/static/launchpad/{bundle}/widgets/{package name}');
-        r += '\n\n\t  If --lp-portal path is set, target will be: ';
-        r += '\n\t    ' +  d('{cxp path}/src/main/webapp/static/launchpad/{bundle}/widgets/{package name}');
-        r += '\n\t  If package name starts with `widget-` it will be stripped out.';
-        r += '\n\n\t  If --cxp path is set, target will be: ';
-        r += '\n\t    ' +  d('{cxp path}/src/main/webapp/static/widgets/{package name}');
+        r += '\n\n\t Symlinks source directory to defined target.';
+        r += '\n\t Note: if package name starts with `widget-` it will be stripped out.';
+        r += '\n\n  ' + title('Examples') + ':';
+        r += '\n\n\t Minimal set-up `bb ln --target /some/path` - will symlink current dir to target. ';
+        r += '\n\n\t As an alternative to `--target`, use other customized target flags: ';
+        r += '\n\n\t - If --lp-trunk path is set, target will be:';
+        r += '\n\t   ' +  d('{lp path}/launchpad-bundles/static/launchpad/{bundle}/widgets/{package name}');
+        r += '\n\n\t - If --lp-portal path is set, target will be: ';
+        r += '\n\t   ' +  d('{cxp portal path}/src/main/webapp/static/launchpad/{bundle}/widgets/{package name}');
+        r += '\n\n\t - If --portal path is set, target will be: ';
+        r += '\n\t\t   ' +  d('{cxp portal path}/src/main/webapp/static/widgets/{package name}');
         r += '\n\n  ' + title('Options') + ': -short, --name <type> ' + d('default') + ' description\n\n';
         r += '      -s,  --source <string>\t\t' + d('current directory') + '\t Path to source directory.\n';
-        r += '      -t,  --target <string>\t\t\t\t\t Path to directory in which to (un)link a source.\n';
+        r += '      -t,  --target <string>\t\t\t\t\t Path to directory in which to link (or unlink) a source.\n';
         r += '           --lp-trunk <string>\t\t\t\t\t Path to `launchpad-trunk`.\n';
         r += '           --lp-portal <string>\t\t\t\t\t Path to portalserver containing lp.\n';
-        r += '           --cxp <string>\t\t\t\t\t Path to portalserver.\n';
+        r += '           --portal <string>\t\t\t\t\t Path to portalserver.\n';
         r += '      -f,  --force\t\t' + '\t\t\t\t Force removal of the target.\n';
         r += '      -u,  --unlink\t\t' + '\t\t\t\t Remove symlink.\n';
         return r;
@@ -38,7 +42,7 @@ module.exports = Command.extend({
         target: {type: 'string', alias: 't'},
         'lp-trunk': {type: 'string'},
         'lp-portal': {type: 'string'},
-        cxp: {type: 'string'},
+        portal: {type: 'string'},
         force: {type: 'boolean', alias: 'f'},
         unlink: {type: 'boolean', alias: 'u'}
     },
@@ -48,7 +52,7 @@ module.exports = Command.extend({
         var src = opts.source || process.cwd();
         var target;
 
-        if (!opts.target && !opts['lp-portal'] && !opts['lp-trunk'] && !opts.cxp) {
+        if (!opts.target && !opts['lp-portal'] && !opts['lp-trunk'] && !opts.portal) {
             return error(new Error('Target must be defined.'));
         } else {
             // if target is defined, do symlink
@@ -74,8 +78,8 @@ module.exports = Command.extend({
                             target = path.resolve(opts['lp-trunk'], 'launchpad-bundles/static/launchpad', wdir, name);
                         else
                             target = path.resolve(opts['lp-portal'], 'src/main/webapp/static/launchpad', wdir, name);
-                    } else if (opts.cxp) {
-                        target = path.resolve(opts.cxp, 'src/main/webapp/static/widgets', name);
+                    } else if (opts.portal) {
+                        target = path.resolve(opts.portal, 'src/main/webapp/static/widgets', name);
                     }
                     if (opts.unlink) return doUnlink(target);
                     return doLink(src, target, opts);
@@ -132,8 +136,7 @@ function removeTarget(target, opts) {
 }
 
 function error(err) {
-    utils.err(chalk.red('bb link: ') + err.message);
-    throw err;
+    utils.err(chalk.red('bb ln: ') + err.message);
 }
 
 // returns manifest data from bower.json or package.json from the given dir
