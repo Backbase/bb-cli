@@ -1,3 +1,6 @@
+var fs = require('fs');
+var path = require('path');
+
 module.exports = function(bbscaff) {
     bbscaff.prompt([
         {
@@ -37,6 +40,8 @@ module.exports = function(bbscaff) {
             'default': bbscaff.getPrefix(bbscaff.getCurrentBundle())
         }
     ], function(answers){
-        bbscaff.generate(answers, answers.widget_name);
+        bbscaff.generate(answers, answers.widget_name, function() {
+            fs.renameSync(path.join(answers.widget_name, '_gitignore'), path.join(answers.widget_name, '.gitignore'));
+        });
     });
 };
