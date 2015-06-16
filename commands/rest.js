@@ -34,7 +34,6 @@ module.exports = Command.extend({
         r += '      bb rest\t\t\t\t\t\tReturns portals defined on the server.\n';
         r += '      bb rest -t catalog -T zak -m delete\t\tDeletes item zak from the server.\n';
         r += '      bb rest -x\t\t\t\t\tDeletes all cache. Same as: bb rest -t cache -T all -m delete\n';
-        r += '\n';
         return r;
     },
 
@@ -63,7 +62,7 @@ module.exports = Command.extend({
         return config.getCommon(this.options)
         .then(function(r) {
             bbrest = r.bbrest;
-            _.merge(bbrest.config, _.pick(r.config.cli, ['host', 'port', 'context', 'username', 'password', 'portal']));
+
             cfg = r.config.cli;
             cfg.targetArg = tryParseJSON(cfg.targetArg) || [cfg.targetArg];
             cfg.file = tryParseJSON(cfg.file) || cfg.file;

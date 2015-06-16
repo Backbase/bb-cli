@@ -1,0 +1,35 @@
+<catalog>
+    <widget>
+        <name>test2-widget-sc</name>
+        <contextItemName>[BBHOST]</contextItemName>
+        <properties>
+            <property name="TemplateName">
+                <value type="string">Standard_Widget</value>
+            </property>
+            <property name="title">
+                <value type="string">Theme Switcher</value>
+            </property>
+            <property name="Description">
+                <value type="string">Theme Switcher Description</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/mosaic-tools/widgets/theme-switch/icon.png</value>
+            </property>
+
+            <property label="Widget Chrome" name="widgetChrome" viewHint="select-one,user,designModeOnly">
+                <value type="string">$(contextRoot)/static/dashboard/templates/html/widgetChrome/defaultWidgetChrome.html</value>
+            </property>
+            <property name="src">
+                <value type="string">$(contextRoot)/static/launchpad/universal/widgets/video/index.html</value>
+            </property>
+            <property name="source">
+                <value type="string">youtube</value>
+            </property>
+        </properties>
+        <tags>
+            <tag manageable="true" type="section">mosaic</tag>
+            <tag manageable="true" type="regular">mosaic</tag>
+            <tag manageable="true" type="regular">mosaic-tools</tag>
+        </tags>
+    </widget>
+</catalog>

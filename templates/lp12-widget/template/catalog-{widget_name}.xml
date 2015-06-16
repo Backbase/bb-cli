@@ -1,0 +1,23 @@
+<catalog>
+    <widget>
+        <name><%=widget_name%></name>
+        <contextItemName>[BBHOST]</contextItemName>
+        <properties>
+            <property name="src">
+                <value type="string">$(contextRoot)/static/<%=bundle_name%>/widgets/<%=widget_name%>/index.html</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/dashboard/media/icons/icons-widgets_01-default.png</value>
+            </property>
+            <property label="Title" name="title">
+                <value type="string"><%=widget_title%></value>
+            </property>
+            <property name="TemplateName">
+                <value type="string">Standard_Widget</value>
+            </property>
+            <property label="Widget Chrome" name="widgetChrome" viewHint="select-one,user,designModeOnly">
+                <value type="string">$(contextRoot)/static/backbase.com.2012.aurora/html/chromes/widget_none.html</value>
+            </property>
+        </properties>
+    </widget>
+</catalog>

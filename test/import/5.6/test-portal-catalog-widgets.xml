@@ -1,0 +1,7 @@
+<catalog>
+    <widget>
+        <name>test-widget-1</name>
+        <extendedItemName>[test-widget-1]</extendedItemName>
+        <contextItemName>testa</contextItemName>
+    </widget>
+</catalog>
