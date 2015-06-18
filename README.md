@@ -4,7 +4,7 @@ Backbase CLI tools
 [![Npm Version](https://badge.fury.io/js/bb-cli-nightly.svg)](https://www.npmjs.com/package/bb-cli-nightly)
 [![Build Status](https://travis-ci.org/Backbase/bb-cli.svg?branch=nightly)](https://travis-ci.org/Backbase/bb-cli)
 
-**Early preview, nightly version. Unstable. **
+**Early preview, nightly version. Unstable.**
 
 [Nightly] Command line tools for working with [Backbase CXP](http://backbase.com).
 
