@@ -1,7 +1,7 @@
 {
-  "name": "bb-cli",
-  "version": "0.1.4",
-  "description": "Command line tools for working with Backbase CXP.",
+  "name": "bb-cli-nightly",
+  "version": "0.2.0-aplha.0",
+  "description": "[Nightly] Command line tools for working with Backbase CXP.",
   "author": "Backbase",
   "licenses": [
     {
@@ -14,7 +14,7 @@
     "test": "gulp"
   },
   "bin": {
-    "bb": "bin/bb"
+    "bb": "bin/bbn"
   },
   "dependencies": {
     "acorn": "^0.11.0",

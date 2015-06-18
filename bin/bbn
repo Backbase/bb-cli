@@ -17,7 +17,8 @@ program.set({
         util.backbase();
 
         var title = chalk.bold;
-        var r = '\n  ' + title('Version') + ': ' + version;
+        var r = '\n  ' + title('NIGHTLY BETA VERSION');
+        r += '\n\n  ' + title('Version') + ': ' + version;
         r += '\n\n  ' + title('Usage') + ': bb <command> [OPTIONS]';
         r += '\n\n  ' + title('Commands') + ': achetype (arch), export, import, generate, rest, sync, ln, install.';
 
