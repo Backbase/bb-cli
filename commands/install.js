@@ -22,8 +22,8 @@ var config = {
 };
 
 var fillConfWithArgs = function(bbRc, argOptions){
-    if (argOptions['base-url']) bbRc.requirejsBaseUrl = argOptions['base-url'];
-    if (argOptions['require-confs']) bbRc.requirejsConfigs = argOptions['require-confs'].split(',');
+    if (argOptions['base-url']) bbRc.install.requirejsBaseUrl = argOptions['base-url'];
+    if (argOptions['require-confs']) bbRc.install.requirejsConfigs = argOptions['require-confs'].split(',');
 
     return bbRc;
 };
@@ -130,8 +130,8 @@ var Install = Command.extend({
         r += '\n\t Also accepts `bower install` arguments like --save, -save-dev, --production, check `bower install -h`.';
         r += '\n\n  ' + title('Options') + ': -short, --name <type> ' + d('default') + ' description\n\n';
         r += '      -C,  --catalog <boolean>\t\t' + d('false') + '\t\t\tUpload components to CXP via REST after install.\n';
-        r += '           --base-url <string>\t\t' + d('bower_components/path') + '\tWeb path to bower components directory.\n';
-        //r += '           --require-confs <string>\t\t\t' + '\t\tComa seperated list of relative paths to existing require configuration.\n';
+        r += '           --base-url <string>\t\t' + d('path/to/bower_comp') + '\tWeb path to bower components directory (also configurable from .bbrc).\n';
+        r += '           --require-confs <string>\t\t\t' + '\tComa seperated list of relative paths to existing require configuration (also configurable from .bbrc).\n';
         r += '\n  ' + title('Examples') + ':\n\n';
         r += '      bb install\t\t\tInstalls all Bower dependencies and runs requirejs conf generation.\n';
         r += '      bb install jquery\t\t\tInstalls jquery component and runs rjs-conf generation.\n';
