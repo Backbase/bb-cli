@@ -11,8 +11,10 @@ var readFile = Q.denodeify(fs.readFile);
 var writeFile = Q.denodeify(fs.writeFile);
 var remove = Q.denodeify(fs.remove);
 var move = Q.denodeify(fs.move);
+var mkdirp = Q.denodeify(fs.mkdirp);
 var path = require('path');
 var extract = require('extract-zip');
+var inquirer = require("inquirer");
 
 var Command = require('ronin').Command;
 
@@ -26,12 +28,25 @@ module.exports = Command.extend({
         r += '\n\t Exports portal.';
         r += '\n\n  ' + title('Options') + ': -short, --name <type> ' + d('default') + ' description';
         r += '\n\t  All `bb rest` options for configuring portal, context, username etc are valid.\n\n';
-        r += '      -s,  --save <string>\t\t' + '\t\tFile to save the response to. Or dir if export is parsed.\n';
+        r += '      -s,  --save <string>\t\t' + '\t\tFile to save the export to.\n';
         r += '      -t,  --type <string>\t\t' + d('model') + '\t\tWhat to export: model(portal without content), portal, widget, container\n';
         r += '      -n,  --name <string>\t\t\t\tName of the widget or container to export.\n';
-        r += '      -C,  --type-context <string>\t\t\tContext of the widget or container that is to be exported.\n';
+        r += '      -C,  --item-context <string>\t\t\tContext of the widget or container that is to be exported.\n';
         r += '           --pretty <boolean>\t\t' + d('true') + '\t\tPrettify the output.\n';
-        r += '      -k,  --chunk <boolean>\t\t' + d('false') + '\t\tParse output and chunk it into multiple files.\n';
+        r += '      -k,  --chunk <boolean>\t\t' + d('false') + '\t\tParse output and chunk it into multiple files.\n\n';
+
+        r += '      -H,  --host <string>\t\t' + d('localhost') + '\tThe host name of the server running portal foundation.\n';
+        r += '      -P,  --port <number>\t\t' + d('7777') + '\t\tThe port of the server running portal foundation.\n';
+        r += '      -c,  --context <string>\t\t' + d('portalserver') + '\tThe application context of the portal foundation.\n';
+        r += '      -u,  --username <string>\t\t' + d('admin') + '\t\tUsername.\n';
+        r += '      -w,  --password <string>\t\t' + d('admin') + '\t\tPassword.\n';
+        r += '      -p,  --portal <string>\t\t\t\tName of the portal on the server to target.\n';
+        r += '\n  ' + title('Examples') + ':\n\n';
+        r += '      bb export \t\t\t\t\t\t\t\tOutputs prettified, sorted xml file.\n';
+        r += '      bb export --save myPortal.xml\t\t\t\t\t\tSaves prettified, sorted export to myPortal.xml\n';
+        r += '      bb export --portal my-portal --save myPortal.xml -k\t\t\tSaves export to myPortal.xml and chunks to ./myPortal dir\n';
+        r += '      bb export --type portal --save retail.zip\t\t\t\t\tSaves export including content to retail.zip\n';
+        r += '      bb export --type portal --portal retail-banking --save retail.zip -k\tSaves export including content to retail.zip and chunks into ./retail dir\n';
         return r;
     },
 
@@ -39,7 +54,7 @@ module.exports = Command.extend({
         save: {type: 'string', alias: 's'},
         type: {type: 'string', alias: 't', default: 'model'},
         name: {type: 'string', alias: 'n'},
-        'type-context': {type: 'string', alias: 'C'},
+        'item-context': {type: 'string', alias: 'C'},
         pretty: {type: 'boolean', default: true},
         chunk: {type: 'boolean', alias: 'k', default: false}
     },
@@ -51,124 +66,170 @@ module.exports = Command.extend({
             bbrest = r.bbrest;
             jxon = r.jxon;
             cfg = r.config.cli;
-            var action = 'post';
-            var jx;
 
-            switch (cfg.type) {
-                case 'portal':
-                    jx = {exportRequest: {portalExportRequest: {
-                        portalName: bbrest.config.portal,
-                        includeContent: true,
-                        includeGroups: true
-                    }}};
-                    break;
-                case 'widget':
-                    jx = {widgetExportRequest: {
-                        widgetName: cfg.widget,
-                        contextItemName: cfg.contextItem,
-                        includeContent: true,
-                        includeGroups: true,
-                        includeSharedResources: true
-                    }};
-                    break;
-                case 'container':
-                    jx = {containerExportRequest: {
-                        containerName: cfg.container,
-                        contextItemName: cfg.contextItem,
-                        includeContent: true,
-                        includeGroups: true,
-                        includeSharedResources: true
-                    }};
-                    break;
-                default:
-                    if (cfg.type !== 'model') return error(new Error('Wrong export type: ' + chalk.gray(cfg.type)));
-                    action = 'get';
-                    break;
-            }
+            return getPortal()
+            .then(function(portal) {
+                bbrest.config.portal = portal;
 
-            loading.start();
-            if (action === 'post') {
-                if (!cfg.save) return error(new Error('Destination file must be defined'));
-                var toPost = cfg.file || jx;
-                return bbrest.export().post(toPost)
-                .then(function(r) {
-                    if (r.error) {
-                        return error(new Error('Error while exporting from Orchestrator'));
-                    }
-                    var id = jxon.stringToJs(_.unescape(r.body)).exportResponse.identifier;
-                    return bbrest.export(id).file(cfg.save).get()
+                var action = 'post';
+                var jx;
+
+                switch (cfg.type) {
+                    case 'portal':
+                        jx = {exportRequest: {portalExportRequest: {
+                            portalName: bbrest.config.portal,
+                            includeContent: true,
+                            includeGroups: true
+                        }}};
+                        break;
+                    case 'widget':
+                        jx = {widgetExportRequest: {
+                            widgetName: cfg.name,
+                            contextItemName: cfg.C,
+                            includeContent: true,
+                            includeGroups: true,
+                            includeSharedResources: true
+                        }};
+                        break;
+                    case 'container':
+                        jx = {containerExportRequest: {
+                            containerName: cfg.name,
+                            contextItemName: cfg.C,
+                            includeContent: true,
+                            includeGroups: true,
+                            includeSharedResources: true
+                        }};
+                        break;
+                    default:
+                        if (cfg.type !== 'model') return error(new Error('Wrong export type: ' + chalk.gray(cfg.type)));
+                        action = 'get';
+                        break;
+                }
+
+                loading.start();
+                if (action === 'post') {
+                    runOrchestratorExport(jx);
+                } else {
+                    return bbrest.export().get()
                     .then(function(r) {
-                        if (cfg.chunk) {
-                            return parseExport()
-                            .then(function(dir) {
-                                var exDir = path.parse(id).name;
-                                var exPath = path.resolve(dir, exDir);
-                                var xmlPath = path.resolve(exPath, 'portalserver.xml');
-                                return readFile(xmlPath)
-                                .then(function(x) {
-                                    return handlePortalXml(x.toString(), dir, exDir)
-                                    .then(function() {
-                                        var content = 'contentservices.zip';
-                                        return move(path.resolve(exPath, content), path.resolve(dir, content))
-                                        .then(function() {
-                                            return remove(exPath)
-                                            .then(ok);
-                                        });
-                                    });
-                                });
-                            });
-                        } else {
-                            return ok(r);
-                        }
-                    });
-                }).catch(error);
-            } else {
-                return bbrest.export().get()
-                .then(function(r) {
-                    return handlePortalXml(_.unescape(r.body))
-                    .then(function(r) {
-                        if (typeof r === 'string') console.log(r);
-                        else ok(r);
-                    });
-                }).catch(error);
-            }
+                        if (r.error) return error(r);
+                        return handlePortalXml(_.unescape(r.body))
+                        .then(function(r) {
+                            loading.stop();
+                            if (typeof r === 'string') console.log(r);
+                            else ok(r);
+                        });
+                    }).catch(error);
+                }
 
+            });
 
         });
     }
 });
 
+function getPortal() {
+    if (bbrest.config.portal) return Q(bbrest.config.portal);
+    return bbrest.server().get()
+    .then(function(v) {
+        v = jxon.stringToJs(_.unescape(v.body));
+        var portals = _.pluck(v.portals.portal, 'name');
+        var defer = Q.defer();
+
+        inquirer.prompt([{
+            message: 'Choose the portal you want to export',
+            name: 'name',
+            type: 'list',
+            choices: portals
+        }], function (answers) {
+            defer.resolve(answers.name);
+        });
+        return defer.promise;
+    });
+}
+
+function runOrchestratorExport(jx) {
+    if (!cfg.save) return error(new Error('File to save to must be defined.'));
+    var toPost = cfg.file || jx;
+
+    return bbrest.export().post(toPost)
+    .then(function(r) {
+        if (r.error) {
+            return error(new Error('Error while exporting from Orchestrator'));
+        }
+        var id = jxon.stringToJs(_.unescape(r.body)).exportResponse.identifier;
+        return bbrest.export(id).file(cfg.save).get()
+        .then(function(r) {
+            if (cfg.chunk) {
+                return unzip()
+                .then(function(dir) {
+                    var exDir = path.parse(id).name;
+                    var exPath = path.resolve(dir, exDir);
+                    var xmlPath = path.resolve(exPath, 'portalserver.xml');
+                    return readFile(xmlPath)
+                    .then(function(x) {
+                        return handlePortalXml(x.toString())
+                        .then(function() {
+                            var content = 'contentservices.zip';
+                            return move(path.resolve(exPath, content), path.resolve(dir, content))
+                            .then(function() {
+                                return remove(exPath)
+                                .then(ok);
+                            });
+                        });
+                    });
+                });
+            } else {
+                return ok(r);
+            }
+        });
+    }).catch(error);
+}
+
 function error(err) {
     loading.stop();
-    util.err(chalk.red('bb export: ') + err.message);
+    util.err(chalk.red('bb export: ') + (err.message || err.error));
 }
 function ok(r) {
     loading.stop();
-    util.ok('Portal `' + cfg.portal + '` exported to: ' + chalk.green(cfg.save));
+    util.ok('Portal `' + bbrest.config.portal + '` exported to: ' + chalk.green(cfg.save));
     return r;
 }
 
-function handlePortalXml(x, dir, exDir) {
+function handlePortalXml(x) {
+    var jx = sort(jxon.stringToJs(x));
     if (cfg.save) {
         if (cfg.chunk) {
-            return chunkXml(x, dir, exDir);
+            return chunkXml(jx);
         } else {
-            return saveFile(cfg.s, x);
+            return saveFile(cfg.s, jxon.jsToString(jx));
         }
     }
-    if (cfg.pretty) x = formattor(x, {method: 'xml'});
-    return x;
+    if (cfg.pretty) x = formattor(jxon.jsToString(jx), {method: 'xml'});
+    return Q(x);
 }
 
 function saveFile(fileName, x) {
     if (cfg.pretty) x = formattor(x, {method: 'xml'});
-    return writeFile(fileName, x);
+    return writeFile(fileName, x)
+    .catch(function(err) {
+        if (err.code === 'ENOENT') {
+            return mkdirp(getDir())
+            .then(function() {
+                return saveFile(fileName, x);
+            });
+        } else return err;
+    });
 }
 
-function parseExport() {
+function getDir() {
     var pth = path.parse(path.resolve(cfg.save));
+    return path.resolve(pth.dir, pth.name);
+}
+
+function unzip() {
     var defer = Q.defer();
-    var dir = path.resolve(pth.dir, pth.name);
+    var dir = getDir();
 
     return remove(dir)
     .then(function() {
@@ -197,26 +258,37 @@ function getMeta(metaPath) {
     });
 }
 
-function chunkXml(x, dir, exDir) {
+function chunkXml(jx) {
+    var dir = getDir();
     return getMeta(path.resolve(dir, 'metadata.xml'))
     .then(function(metaFile) {
         var meta = metaFile.backbaseArchiveDescriptor.bbexport = {};
         meta.exportBundle = {};
-        meta.exportFileName = exDir;
-        var jx = jxon.stringToJs(x);
         var all = [];
+
         _.each(jx.exportBundle, function(v, k) {
             if (typeof v === 'object') {
                 var n = {};
-                n[k] = sortItems(v);
+                n[k] = v;
                 all.push(saveFile(path.resolve(dir, _.kebabCase(k) + '.xml'), jxon.jsToString(n)));
             } else {
-                meta.exportBundle[k] = v;
+                // do not export bundleId and bundleName because of sorting
+                if (k.substr(0, 6) !== 'bundle') meta.exportBundle[k] = v;
             }
         });
+
         all.push(saveFile(path.resolve(dir, 'metadata.xml'), jxon.jsToString(metaFile)));
         return Q.all(all);
     });
+}
+
+function sort(jx) {
+    _.each(jx.exportBundle, function(v, k) {
+        if (typeof v === 'object') {
+            sortItems(v);
+        }
+    });
+    return jx;
 }
 
 function sortItems(items) {
@@ -233,14 +305,23 @@ function sortItems(items) {
         else col = _.sortBy(col, 'name');
 
         _.each(col, function(v) {
-            // console.log('  ', v.name || v.itemName || v.$itemName);
-            if (v.properties) {
-                v.properties.property = _.sortBy(v.properties.property, '$name');
-                // _.each(v.properties.property, function(p) {
-                //     console.log('    ', p.$name);
-                // });
-            }
+            sortItem(v);
         });
+    } else {
+        sortItem(col);
     }
     return items;
+}
+
+function sortItem(item) {
+    if (item.properties) {
+        item.properties.property = _.sortBy(item.properties.property, '$name');
+    } else if (item.rights && item.rights.itemRight) {
+        item.rights.itemRight = _.sortBy(item.rights.itemRight, '$name');
+        item.rights.propertyRight = _.sortBy(item.rights.propertyRight, '$name');
+    }
+    if (item.tags && item.tags.tag) {
+        item.tags.tag = _.sortByAll(item.tags.tag, ['_', '$type', '$blacklist']);
+    }
+
 }
