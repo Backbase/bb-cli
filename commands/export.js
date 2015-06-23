@@ -48,7 +48,6 @@ module.exports = Command.extend({
         r += '      bb export --type portal --save retail.zip\t\t\t\t\tSaves export including content to retail.zip\n';
         r += '      bb export --type portal --portal retail-banking --save retail.zip -k\tSaves export including content to retail.zip and chunks into ./retail dir\n';
         r += '      bb export -s accounts.zip --type widget --name accounts -C [BBHOST] -k\tExports widget and prettify/chunk the model in accounts dir';
-        
         return r;
     },
 
@@ -194,7 +193,7 @@ function error(err) {
 }
 function ok(r) {
     loading.stop();
-    util.ok('Portal `' + bbrest.config.portal + '` exported to: ' + chalk.green(cfg.save));
+    util.ok('Export done.');
     return r;
 }
 
