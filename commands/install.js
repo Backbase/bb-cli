@@ -17,7 +17,8 @@ var config = {
     customArgs: [
         '--catalog','-C',
         '--base-url',
-        '--require-confs'
+        '--require-confs',
+        '--verbose', '-v'
     ]
 };
 
@@ -40,10 +41,11 @@ var install = function(componentEndpoint){
         var bowerCommand = ['install'];
         var cmdArgs = process.argv;
         var argCatalog = cmdArgs.indexOf('--catalog') > -1 || cmdArgs.indexOf('-C') > -1;
+        var argVerbose = cmdArgs.indexOf('--verbose') > -1 || cmdArgs.indexOf('-v') > -1;
         var msg = 'Bower install done, proceed to RequireJS conf generation...';
 
         // Adding default directory field
-        if (!bowerConf.directory) bowerConf.directory = path.join(baseUrl, 'bower_components');
+        if (!bowerConf.directory) bowerConf.directory = 'bower_components';
 
         // Applying arguments overrides
         bbRc = fillConfWithArgs(bbRc, that.options);
@@ -72,7 +74,7 @@ var install = function(componentEndpoint){
         // First, we install all bower deps
         spawn('bower', bowerCommand, {stdio: 'inherit'})
             .on('close', function () {
-                var generateRJSConf = new GenerateRequireConf(baseUrl, bowerJSON, bowerConf, bbRc);
+                var generateRJSConf = new GenerateRequireConf(baseUrl, bowerJSON, bowerConf, bbRc, argVerbose);
 
                 console.log(chalk.gray(msg));
 
@@ -130,6 +132,7 @@ var Install = Command.extend({
         r += '\n\t Also accepts `bower install` arguments like --save, -save-dev, --production, check `bower install -h`.';
         r += '\n\n  ' + title('Options') + ': -short, --name <type> ' + d('default') + ' description\n\n';
         r += '      -C,  --catalog <boolean>\t\t' + d('false') + '\t\t\tUpload components to CXP via REST after install.\n';
+        r += '      -v,  --verbose <boolean>\t\t' + d('false') + '\t\t\tEnable verbose logging mode.\n';
         r += '           --base-url <string>\t\t' + d('path/to/bower_comp') + '\tWeb path to bower components directory (also configurable from .bbrc).\n';
         r += '           --require-confs <string>\t\t\t' + '\tComa seperated list of relative paths to existing require configuration (also configurable from .bbrc).\n';
         r += '\n  ' + title('Examples') + ':\n\n';
