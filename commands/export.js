@@ -47,6 +47,8 @@ module.exports = Command.extend({
         r += '      bb export --portal my-portal --save myPortal.xml -k\t\t\tSaves export to myPortal.xml and chunks to ./myPortal dir\n';
         r += '      bb export --type portal --save retail.zip\t\t\t\t\tSaves export including content to retail.zip\n';
         r += '      bb export --type portal --portal retail-banking --save retail.zip -k\tSaves export including content to retail.zip and chunks into ./retail dir\n';
+        r += '      bb export -s accounts.zip --type widget --name accounts -C [BBHOST] -k\tExports widget and prettify/chunk the model in accounts dir';
+        
         return r;
     },
 
@@ -83,22 +85,22 @@ module.exports = Command.extend({
                         }}};
                         break;
                     case 'widget':
-                        jx = {widgetExportRequest: {
+                        jx = {exportRequest: {widgetExportRequest: {
                             widgetName: cfg.name,
                             contextItemName: cfg.C,
                             includeContent: true,
                             includeGroups: true,
                             includeSharedResources: true
-                        }};
+                        }}};
                         break;
                     case 'container':
-                        jx = {containerExportRequest: {
+                        jx = {exportRequest: {containerExportRequest: {
                             containerName: cfg.name,
                             contextItemName: cfg.C,
                             includeContent: true,
                             includeGroups: true,
                             includeSharedResources: true
-                        }};
+                        }}};
                         break;
                     default:
                         if (cfg.type !== 'model') return error(new Error('Wrong export type: ' + chalk.gray(cfg.type)));
@@ -170,7 +172,7 @@ function runOrchestratorExport(jx) {
                     .then(function(x) {
                         return handlePortalXml(x.toString())
                         .then(function() {
-                            var content = 'contentservices.zip';
+                            var content = (cfg.type === 'portal') ? 'contentservices.zip' : 'resource.zip';
                             return move(path.resolve(exPath, content), path.resolve(dir, content))
                             .then(function() {
                                 return remove(exPath)
