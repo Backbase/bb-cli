@@ -71,6 +71,7 @@ module.exports = Command.extend({
             bbrest = r.bbrest;
             jxon = r.jxon;
             cfg = r.config.cli;
+            jxon.config({parseValues: false});
 
             // check if save destination is proper
             return checkSave()
@@ -154,18 +155,22 @@ function getPortal() {
     return bbrest.server().get()
     .then(function(v) {
         v = jxon.stringToJs(_.unescape(v.body));
-        var portals = _.pluck(v.portals.portal, 'name');
-        var defer = Q.defer();
 
-        inquirer.prompt([{
-            message: 'Choose the portal you want to export',
-            name: 'name',
-            type: 'list',
-            choices: portals
-        }], function (answers) {
-            defer.resolve(answers.name);
-        });
-        return defer.promise;
+        if (v.portals.portal instanceof Array) {
+            var portals = _.pluck(v.portals.portal, 'name');
+            var defer = Q.defer();
+            inquirer.prompt([{
+                message: 'Choose the portal you want to export',
+                name: 'name',
+                type: 'list',
+                choices: portals
+            }], function (answers) {
+                defer.resolve(answers.name);
+            });
+            return defer.promise;
+        }
+        return Q(v.portals.portal.name);
+
     });
 }
 
@@ -267,21 +272,26 @@ function getMeta(metaPath) {
 function chunkXml(jx, metaFile) {
     return getMeta(metaFile)
     .then(function(metaFile) {
+        if (_.isEmpty(metaFile.backbaseArchiveDescriptor)) {
+            metaFile.backbaseArchiveDescriptor = {
+                includesContent: false
+            };
+        }
         var meta = metaFile.backbaseArchiveDescriptor.bbexport = {};
         meta.exportBundle = {};
         var all = [];
+        var order = [];
 
         _.each(jx.exportBundle, function(v, k) {
+            order.push(k);
             if (typeof v === 'object') {
                 var n = {};
                 n[k] = v;
                 all.push(saveFile(path.resolve(cfg.save, _.kebabCase(k) + '.xml'), jxon.jsToString(n)));
-            } else {
-                // do not export bundleId and bundleName because of sorting
-                if (k.substr(0, 6) !== 'bundle') meta.exportBundle[k] = v;
             }
         });
 
+        meta.order = order.join(',');
         all.push(saveFile(path.resolve(cfg.save, 'metadata.xml'), jxon.jsToString(metaFile)));
         return Q.all(all);
     });
@@ -304,7 +314,7 @@ function saveFile(fileName, x) {
 function sort(jx) {
     _.each(jx.exportBundle, function(v) {
         if (typeof v === 'object') {
-            sortItems(v);
+            v = sortItems(v);
         }
     });
     return jx;
@@ -323,19 +333,21 @@ function sortItems(items) {
         else if (key === 'contentItemRef') col = _.sortBy(col, '$itemName');
         else col = _.sortBy(col, 'name');
 
-        _.each(col, function(v) {
-            sortItem(v);
+        _.each(col, function(v, k) {
+            col[k] = sortItem(v);
         });
     } else {
-        sortItem(col);
+        col = sortItem(col);
     }
     return items;
 }
 
 function sortItem(item) {
-    sanitizeItem(item);
-    if (item.properties) {
-        item.properties.property = _.sortBy(item.properties.property, '$name');
+    if (item.properties && item.properties.property) {
+        item = sanitizeItem(item);
+        if (item.properties && item.properties.property.length > 1) {
+            item.properties.property = _.sortBy(item.properties.property, '$name');
+        }
     } else if (item.rights && item.rights.itemRight) {
         item.rights.itemRight = _.sortBy(item.rights.itemRight, '$name');
         item.rights.propertyRight = _.sortBy(item.rights.propertyRight, '$name');
@@ -343,7 +355,7 @@ function sortItem(item) {
     if (item.tags && item.tags.tag) {
         item.tags.tag = _.sortByAll(item.tags.tag, ['_', '$type', '$blacklist']);
     }
-
+    return item;
 }
 
 /**
