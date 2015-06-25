@@ -25,8 +25,8 @@ module.exports = Command.extend({
         var d = chalk.gray;
         var r = '\n  ' + title('Usage') + ': bb ' + this.name + ' [OPTIONS]';
         r += '\n\t Imports portal.';
-        r += '\n\n  ' + title('Options') + ': -short, --name <type> ' + d('default') + ' description';
-        r += '      -t,  --target <string>\t\t' + '\t\tFile or dir to import.\n';
+        r += '\n\n  ' + title('Options') + ': -short, --name <type> ' + d('default') + ' description\n';
+        r += '      -t,  --target <string>\t\t' + '\t\tFile or dir to import.\n\n';
 
         r += '      -H,  --host <string>\t\t' + d('localhost') + '\tThe host name of the server running portal foundation.\n';
         r += '      -P,  --port <number>\t\t' + d('7777') + '\t\tThe port of the server running portal foundation.\n';
@@ -35,12 +35,8 @@ module.exports = Command.extend({
         r += '      -w,  --password <string>\t\t' + d('admin') + '\t\tPassword.\n';
         r += '      -p,  --portal <string>\t\t\t\tName of the portal on the server to target.\n';
         r += '\n  ' + title('Examples') + ':\n\n';
-        r += '      bb export \t\t\t\t\t\t\t\tOutputs prettified, sorted xml file.\n';
-        r += '      bb export --save myPortal.xml\t\t\t\t\t\tSaves prettified, sorted export to myPortal.xml\n';
-        r += '      bb export --portal my-portal --save myPortal.xml -k\t\t\tSaves export to myPortal.xml and chunks to ./myPortal dir\n';
-        r += '      bb export --type portal --save retail.zip\t\t\t\t\tSaves export including content to retail.zip\n';
-        r += '      bb export --type portal --portal retail-banking --save retail.zip -k\tSaves export including content to retail.zip and chunks into ./retail dir\n';
-        r += '      bb export -s accounts.zip --type widget --name accounts -C [BBHOST] -k\tExports widget and prettify/chunk the model in accounts dir';
+        r += '      bb import --target myPortal.xml\t\t\tImports portal from myPortal.xml\n';
+        r += '      bb import --target chunked\t\t\tImports bb export chunked portal from chunked dir\n';
         return r;
     },
 
