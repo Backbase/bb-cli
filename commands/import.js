@@ -9,12 +9,9 @@ var fs = require('fs-extra');
 var readFile = Q.denodeify(fs.readFile);
 var writeFile = Q.denodeify(fs.writeFile);
 var remove = Q.denodeify(fs.remove);
-var copy = Q.denodeify(fs.copy);
 var readDir = Q.denodeify(fs.readdir);
-var mkdirp = Q.denodeify(fs.mkdirp);
 var lstat = Q.denodeify(fs.lstat);
 var path = require('path');
-var os = require('os');
 
 var JSZip = require('jszip');
 
@@ -77,7 +74,7 @@ module.exports = Command.extend({
             .then(function(bbr) {
                 if (bbr.error) {
                     var emsg = jxon.stringToJs(bbr.body);
-                    emsg = emsg.errorMessage || emsg.importErrorMessage || {message: 'Unknown import message.'}
+                    emsg = emsg.errorMessage || emsg.importErrorMessage || {message: 'Unknown import message.'};
                     throw new Error(emsg.message);
                 } else ok(bbr);
             })
@@ -95,7 +92,7 @@ module.exports = Command.extend({
 
 function error(err) {
     loading.stop();
-    util.err(chalk.red('bb export: ') + (err.message || err.error));
+    util.err(chalk.red('bb import: ') + (err.message || err.error));
 }
 function ok(r) {
     loading.stop();
@@ -135,7 +132,7 @@ function importDir() {
                 finalXml += '</exportBundle>';
 
                 delete mj.backbaseArchiveDescriptor.bbexport;
-                
+
                 if (noneXmlFiles.length) {
                     return packAll(mj, finalXml, noneXmlFiles)
                     .then(function(zip) {
@@ -149,7 +146,7 @@ function importDir() {
                         });
                     });
                 } else {
-                    return bbrest.import().post(jxon.stringToJs(finalXml));
+                    return bbrest.import().post({_string: finalXml});
                 }
             });
         });

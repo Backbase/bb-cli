@@ -33,7 +33,7 @@ module.exports = Command.extend({
         r += '      -s,  --save <string>\t\t' + '\t\tFile or dir to save the export to.\n';
         r += '      -t,  --type <string>\t\t' + d('model') + '\t\tWhat to export: model(portal without content), portal, widget, container\n';
         r += '      -n,  --name <string>\t\t\t\tName of the widget or container to export.\n';
-        r += '      -C,  --item-context <string>\t\t\tContext of the widget or container that is to be exported.\n';
+        r += '      -C,  --item-context <string>\t' + d('[BBHOST]') + '\tContext of the widget or container that is to be exported.\n';
         r += '           --pretty <boolean>\t\t' + d('true') + '\t\tPrettify the output.\n';
         r += '      -k,  --chunk <boolean>\t\t' + d('false') + '\t\tParse output and chunk it into multiple files.\n';
         r += '      -f,  --force <boolean>\t\t' + d('false') + '\t\tForce overwrite.\n\n';
@@ -50,7 +50,7 @@ module.exports = Command.extend({
         r += '      bb export --portal my-portal --save myPortal.xml -k\t\t\tSaves export to myPortal.xml and chunks to ./myPortal dir\n';
         r += '      bb export --type portal --save retail.zip\t\t\t\t\tSaves export including content to retail.zip\n';
         r += '      bb export --type portal --portal retail-banking --save retail.zip -k\tSaves export including content to retail.zip and chunks into ./retail dir\n';
-        r += '      bb export -s accounts.zip --type widget --name accounts -C [BBHOST] -k\tExports widget and prettify/chunk the model in accounts dir';
+        r += '      bb export -s accounts.zip --type widget --name accounts -C [BBHOST] -k\tExports widget and prettify/chunk the model in accounts dir\n';
         return r;
     },
 
@@ -95,7 +95,7 @@ module.exports = Command.extend({
                         case 'widget':
                             jx = {exportRequest: {widgetExportRequest: {
                                 widgetName: cfg.name,
-                                contextItemName: cfg.C,
+                                contextItemName: cfg.C || '[BBHOST]',
                                 includeContent: true,
                                 includeGroups: true,
                                 includeSharedResources: true
@@ -104,7 +104,7 @@ module.exports = Command.extend({
                         case 'container':
                             jx = {exportRequest: {containerExportRequest: {
                                 containerName: cfg.name,
-                                contextItemName: cfg.C,
+                                contextItemName: cfg.C || '[BBHOST]',
                                 includeContent: true,
                                 includeGroups: true,
                                 includeSharedResources: true
@@ -152,6 +152,9 @@ function checkSave() {
 
 function getPortal() {
     if (bbrest.config.portal) return Q(bbrest.config.portal);
+
+    if (cfg.type === 'widget' || cfg.type === 'container') return Q('');
+
     return bbrest.server().get()
     .then(function(v) {
         v = jxon.stringToJs(_.unescape(v.body));
