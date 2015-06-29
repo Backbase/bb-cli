@@ -56,7 +56,8 @@ var propsToKeep = {
     name: true,
     contextItemName: true,
     extendedItemName: true,
-    properties: true
+    properties: true,
+    tags: true
 };
 function init(r, files) {
     bbrest = r.bbrest;
