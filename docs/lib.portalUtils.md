@@ -28,17 +28,7 @@ portalUtils.getStaticFiles(config, 'readme.md')
     // files will contain paths to all files
 });
 ```
-### .getRequireConfs(config)
-traverses target/static and returns object where keys are paths to found require-conf.js files and values are JS objects containing 'paths' and 'shim' values
 
-* config - common configuration object containing config, bbrest and jxon, see lib/config docs
-
-``` js
-portalUtils.getRequireConfs(config)
-.then(function(rjsconfs) {
-    
-});
-```
 ### .getMasterTemplatePaths(config)
 returns paths to .jsp templates used in master pages
 
