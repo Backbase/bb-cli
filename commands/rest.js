@@ -106,7 +106,7 @@ function sendRequest(creq) {
         cfg = creq || cfg;
 
         if (cfg.portal) bbrest.config.portal = cfg.portal;
-        if (['server', 'user', 'group', 'audit', 'cache', 'catalog'].indexOf(cfg.target) === -1 && !bbrest.config.portal)
+        if (['server', 'user', 'group', 'audit', 'cache', 'catalog', 'template'].indexOf(cfg.target) === -1 && !bbrest.config.portal)
             throw new Error('portal is not defined');
         var r = bbrest[cfg.target];
 
