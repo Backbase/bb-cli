@@ -93,6 +93,7 @@ module.exports = Command.extend({
                             }}};
                             break;
                         case 'widget':
+                            if (!cfg.name) throw new Error('Name of the widget must be defined. Use --name flag to define it.');
                             jx = {exportRequest: {widgetExportRequest: {
                                 widgetName: cfg.name,
                                 contextItemName: cfg.C || '[BBHOST]',
@@ -102,6 +103,7 @@ module.exports = Command.extend({
                             }}};
                             break;
                         case 'container':
+                            if (!cfg.name) throw new Error('Name of the container must be defined. Use --name flag to define it.');
                             jx = {exportRequest: {containerExportRequest: {
                                 containerName: cfg.name,
                                 contextItemName: cfg.C || '[BBHOST]',
