@@ -1,6 +1,6 @@
 {
   "name": "bb-cli",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Command line tools for working with Backbase CXP.",
   "author": "Backbase",
   "licenses": [
