@@ -47,6 +47,7 @@ module.exports = Command.extend({
         })
         .fail(function(e) {
             console.log(chalk.red('bb prop error: '), e);
+            console.log(e.stack);
         });
     }
 });
@@ -56,7 +57,8 @@ var propsToKeep = {
     name: true,
     contextItemName: true,
     extendedItemName: true,
-    properties: true
+    properties: true,
+    tags: true
 };
 function init(r, files) {
     bbrest = r.bbrest;
@@ -145,7 +147,9 @@ function submitFile(xmlFileName) {
 
             serverProps.sort(sortByName);
 
-            compare(localProps, serverProps, local.catalog.widget.name);
+            if (localProps && serverProps && local.catalog && local.catalog.widget) {
+                compare(localProps, serverProps, local.catalog.widget.name);
+            }
 
             return bbrest.catalog().put(local)
             .then(function(r) {
@@ -178,9 +182,11 @@ function getOrigin(itemName, local) {
                     .then(function (r) {
                         if (r.statusCode === 204) {
                             console.log(chalk.green('Submitted.'));
-                        } else restUtils.onResponse(r, bbrest, cfg.cli);
+                        } else {
+                            restUtils.onResponse(r, bbrest, cfg.cli);
+                        }
 
-                        deferred.resolve(true);
+                        deferred.resolve(false);
                     });
                 } else {
                     deferred.resolve(false);
