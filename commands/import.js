@@ -12,6 +12,7 @@ var remove = Q.denodeify(fs.remove);
 var readDir = Q.denodeify(fs.readdir);
 var lstat = Q.denodeify(fs.lstat);
 var path = require('path');
+var formattor = require('formattor');
 
 var JSZip = require('jszip');
 
@@ -154,6 +155,8 @@ function packAll(metadata, xml, other) {
 
     var zip = new JSZip();
     var all = [];
+
+    xml = formattor(xml, {method: 'xmlmin'});
 
     zip.file('metadata.xml', '<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>' + jxon.jsToString(metadata));
     zip.file('content/portalserver.xml', '<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>' + xml);
