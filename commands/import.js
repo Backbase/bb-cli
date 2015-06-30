@@ -77,7 +77,7 @@ module.exports = Command.extend({
             })
             .catch(function(err) {
                 if (err.code === 'ENOENT') return error(new Error('Target does not exist.'));
-                return error(err);
+                return error(new Error(err.statusInfo));
             });
 
 
