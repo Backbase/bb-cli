@@ -339,20 +339,18 @@ function sortItems(items) {
         else col = _.sortBy(col, 'name');
 
         _.each(col, function(v, k) {
-            col[k] = sortItem(v);
+            items[key][k] = sortItem(v, key);
         });
     } else {
-        col = sortItem(col);
+        col = sortItem(col, key);
     }
     return items;
 }
 
-function sortItem(item) {
-    if (item.properties && item.properties.property) {
-        item = sanitizeItem(item);
-        if (item.properties && item.properties.property.length > 1) {
-            item.properties.property = _.sortBy(item.properties.property, '$name');
-        }
+function sortItem(item, key) {
+    if (_.has(item, 'properties')) {
+        item = cleanItem(item, key);
+        //item = sanitizeItem(item);
     } else if (item.rights && item.rights.itemRight) {
         item.rights.itemRight = _.sortBy(item.rights.itemRight, '$name');
         item.rights.propertyRight = _.sortBy(item.rights.propertyRight, '$name');
@@ -362,64 +360,55 @@ function sortItem(item) {
     }
     return item;
 }
+// itemHandlerBeanName: 'portalHandler',
+//   createdBy: '2',
+//   createdTimestamp: '2015-06-30T10:58:18.772+02:00',
+//   lastModifiedBy: '2',
+//   lastModifiedTimestamp: '2015-06-30T10:58:28.895+02:00',
+//   hidden: 'false',
+//   contents: '',
+//   tags: '',
+//   uuid: 'a28599b4-b994-4ac3-ae66-b379ef5b3d24',
+//   lockState: 'UNLOCKED',
+//   children: '' }
+var itemBlackList = {
+    itemHandlerBeanName: true,
+    createdBy: true,
+    createdTimestamp: true,
+    lastModifiedBy: true,
+    lastModifiedTimestamp: true,
+    contents: true,
+    hidden: true,
+    lockState: true
+};
+// DO NOT REMOVE uuid
 
-/**
- * Removes all unwanted inherited values and generated model from remote items
- * So they can be compared with clean local model
- * @param {object} item
- * @returns {object} new cleaned item
- */
-function sanitizeItem(item) {
+// var logged = {};
+function cleanItem(item) {
 
-    // Only for templates, but not validating item type here
-    var fieldWhitelist = ['name',
-        'contextItemName',
-        'parentItemName',
-        'extendedItemName',
-        'properties',
-        'tags',
-        'type'
-    ];
+    var newItem = {};
+    var keys = _.keys(item).sort();
 
-    for (var field in item) {
-        if (!_.contains(fieldWhitelist, field)) {
-            delete item[field];
-        }
-    }
+    _.each(keys, function(k) {
+        if (!itemBlackList[k]) newItem[k] = item[k];
+    });
 
-    //Remote items remove the [] from the extended items name,
-    // so we will remove the local ones to match
-    if (item.extendedItemName) {
-        //As the remote item has removed its brackets we will follow :(
-        //TODO: Raise with CXP team
-        item.extendedItemName = item.extendedItemName.replace(/\[|\]/g, '');
-        //if (item.contextItemName !== '[BBHOST]' && item.tags) {
-        if (item.tags) {
-            //TODO: Check tags inheritance and raise with CXP team
-            //As the remote item is showing inherited tags, with no way if knowing if
-            // these are owned or inherited we will assume extended items can't
-            // own tags and remove them
-            delete item.tags;
-        }
-    }
+    item = newItem;
+    item = cleanProps(item);
+    item = cleanTags(item);
 
-    if (item.tags && item.tags.tag) {
-        if (item.tags.tag.length > 0) {
-            _.forEach(item.tags.tag, function (tag) {
-                //Remote items in 5.6 have blacklist set to false by default
-                //if (!tag.$blacklist) {
-                //tag['$blacklist'] = 'false';
-                //}
-                delete tag.$manageable;
-            });
-        } else {
-            delete item.tags;
-        }
-    } else if (item.tags) {
-        delete item.tags;
-    }
+    return item;
 
-    if (item.properties && item.properties.property) {
+    // if (!logged[key]) {
+    //     console.log('----------', key, _.has(item, 'properties.property'));
+    //     console.log(item);
+    // }
+    // logged[key] = true;
+}
+
+function cleanProps(item) {
+    if (_.has(item, 'properties.property')) {
+
         if (item.properties.property.length > 0) {
             var removeInheritedProperties = {};
 
@@ -443,13 +432,123 @@ function sanitizeItem(item) {
             _.remove(item.properties.property, function (value) {
                 return removeInheritedProperties[value.$name] ? true : false;
             });
-        } else {
-            delete item.properties;
-        }
-    } else if (item.properties) {
-        delete item.properties;
-    }
 
+            item.properties.property = _.sortBy(item.properties.property, '$name');
+        }
+    }
+    // DO NOT DELETE empty properties tag
     return item;
 }
+
+function cleanTags(item) {
+
+    // DO NOT DELETE square brackets from extended
+
+    if (item.tags && item.tags.tag) {
+        if (item.tags.tag.length > 0) {
+            _.forEach(item.tags.tag, function (tag) {
+                //Remote items in 5.6 have blacklist set to false by default
+                //if (!tag.$blacklist) {
+                //tag['$blacklist'] = 'false';
+                //}
+                delete tag.$manageable;
+            });
+        } else {
+            delete item.tags;
+        }
+    } else if (item.tags) {
+        delete item.tags;
+    }
+    return item;
+}
+
+/**
+ * Removes all unwanted inherited values and generated model from remote items
+ * So they can be compared with clean local model
+ * @param {object} item
+ * @returns {object} new cleaned item
+ */
+// function sanitizeItem(item) {
+//
+//     // Only for templates, but not validating item type here
+//     var fieldWhitelist = ['name',
+//         'contextItemName',
+//         'parentItemName',
+//         'extendedItemName',
+//         'properties',
+//         'tags',
+//         'type'
+//     ];
+//
+//     for (var field in item) {
+//         if (!_.contains(fieldWhitelist, field)) {
+//             delete item[field];
+//         }
+//     }
+//
+//     //Remote items remove the [] from the extended items name,
+//     // so we will remove the local ones to match
+//     if (item.extendedItemName) {
+//         //As the remote item has removed its brackets we will follow :(
+//         //TODO: Raise with CXP team
+//         item.extendedItemName = item.extendedItemName.replace(/\[|\]/g, '');
+//         //if (item.contextItemName !== '[BBHOST]' && item.tags) {
+//         if (item.tags) {
+//             //TODO: Check tags inheritance and raise with CXP team
+//             //As the remote item is showing inherited tags, with no way if knowing if
+//             // these are owned or inherited we will assume extended items can't
+//             // own tags and remove them
+//             delete item.tags;
+//         }
+//     }
+//
+//     if (item.tags && item.tags.tag) {
+//         if (item.tags.tag.length > 0) {
+//             _.forEach(item.tags.tag, function (tag) {
+//                 //Remote items in 5.6 have blacklist set to false by default
+//                 //if (!tag.$blacklist) {
+//                 //tag['$blacklist'] = 'false';
+//                 //}
+//                 delete tag.$manageable;
+//             });
+//         } else {
+//             delete item.tags;
+//         }
+//     } else if (item.tags) {
+//         delete item.tags;
+//     }
+//
+//     if (item.properties && item.properties.property) {
+//         if (item.properties.property.length > 0) {
+//             var removeInheritedProperties = {};
+//
+//             _.forEach(item.properties.property, function (property) {
+//                 //TODO: templates don't return $itemName attr, another small inconsistency
+//                 if ((property.$itemName && property.$itemName === item.name) || item.type) {
+//                     delete property.$readonly;
+//                     delete property.$manageable;
+//                     delete property.$itemName;
+//
+//                     //TODO: property type values are auto generated differently and stored as
+//                     //      Title case, we will make them all lowercase
+//                     property.value.$type = property.value.$type.toLowerCase();
+//
+//                 } else if (property.$itemName) {
+//                     removeInheritedProperties[property.$name] = true;
+//                 }
+//             });
+//
+//             //when reading rest remove inherited values so matches local version
+//             _.remove(item.properties.property, function (value) {
+//                 return removeInheritedProperties[value.$name] ? true : false;
+//             });
+//         } else {
+//             delete item.properties;
+//         }
+//     } else if (item.properties) {
+//         delete item.properties;
+//     }
+//
+//     return item;
+// }
 
