@@ -379,7 +379,8 @@ var itemBlackList = {
     lastModifiedTimestamp: true,
     contents: true,
     hidden: true,
-    lockState: true
+    lockState: true,
+    children: true
 };
 // DO NOT REMOVE uuid
 
@@ -412,20 +413,14 @@ function cleanProps(item) {
         if (item.properties.property.length > 0) {
             var removeInheritedProperties = {};
 
-            _.forEach(item.properties.property, function (property) {
-                //TODO: templates don't return $itemName attr, another small inconsistency
-                if ((property.$itemName && property.$itemName === item.name) || item.type) {
-                    delete property.$readonly;
-                    delete property.$manageable;
-                    delete property.$itemName;
-
-                    //TODO: property type values are auto generated differently and stored as
-                    //      Title case, we will make them all lowercase
-                    property.value.$type = property.value.$type.toLowerCase();
-
-                } else if (property.$itemName) {
+            _.each(item.properties.property, function (property) {
+                // remove inherited props
+                if (property.$itemName) {
                     removeInheritedProperties[property.$name] = true;
                 }
+                delete property.$readonly;
+                delete property.$manageable;
+                delete property.$itemName;
             });
 
             //when reading rest remove inherited values so matches local version
