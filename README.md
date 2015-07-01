@@ -194,6 +194,24 @@ where `package_name` will be the name of the package read from `bower.json` or `
 -u,  --unlink                                     Remove symlink.
 ```
 
+### Install
+
+Wraps a `bower install` and applies additional options like `requirejs-conf` generation and server catalog update.
+
+```
+Usage: bb install [OPTIONS]
+       bb install <bower-endpoint> [<bower-endpoint> ..] [OPTIONS]
+
+       Also accepts `bower install` arguments like --save, -save-dev, --production, check `bower install -h`.
+
+Options: -short, --name <type> default description
+
+    -C,  --catalog <boolean>		false			    Upload components to CXP via REST after install.
+    -v,  --verbose <boolean>		false			    Enable verbose logging mode.
+         --base-url <string>        path/to/bower_comp	Web path to bower components directory (also configurable from .bbrc).
+         --require-confs <string>				        Coma seperated list of relative paths to existing require configuration (also configurable from .bbrc).
+```
+
 
 ## Configuration
 
