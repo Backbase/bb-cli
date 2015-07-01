@@ -19,7 +19,7 @@ program.set({
         var title = chalk.bold;
         var r = '\n  ' + title('Version') + ': ' + version;
         r += '\n\n  ' + title('Usage') + ': bb <command> [OPTIONS]';
-        r += '\n\n  ' + title('Commands') + ': achetype (arch), export, import, generate, rest, sync, ln.';
+        r += '\n\n  ' + title('Commands') + ': achetype (arch), export, import, generate, rest, sync, ln, install.';
 
         return r;
     }
