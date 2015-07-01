@@ -80,11 +80,12 @@ It will also pretty print xml files and sort items and properties alphabetically
 #### Options
 
 ```
--s,  --save <string>			       File or dir to save the export to.
+-s,  --save <string>		portal     File or dir to save the export to.
 -t,  --type <string>		model	   What to export: model(portal without content), portal, widget, container
 -n,  --name <string>			       Name of the widget or container to export.
 -C,  --item-context <string>[BBHOST]   Context of the widget or container that is to be exported.
      --pretty <boolean>		 true		Prettify the output.
+     --sanitize <boolean>    true           Sanitize the output.
 -k,  --chunk <boolean>		 false		Parse output and chunk it into multiple files.
 -f,  --force <boolean>		 false		Force overwrite.
      --portal <string>                 Name of the portal to export.

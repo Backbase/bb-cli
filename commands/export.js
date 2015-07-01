@@ -39,12 +39,12 @@ module.exports = Command.extend({
         r += '      -k,  --chunk <boolean>\t\t\t' + d('false') + '\t\tParse output and chunk it into multiple files.\n';
         r += '      -f,  --force <boolean>\t\t\t' + d('false') + '\t\tForce overwrite.\n\n';
 
-        r += '      -H,  --host <string>\t\t\t' + d('localhost') + '\tThe host name of the server running portal foundation.\n';
-        r += '      -P,  --port <number>\t\t\t' + d('7777') + '\t\tThe port of the server running portal foundation.\n';
-        r += '      -c,  --context <string>\t\t\t' + d('portalserver') + '\tThe application context of the portal foundation.\n';
-        r += '      -u,  --username <string>\t\t' + d('admin') + '\t\tUsername.\n';
-        r += '      -w,  --password <string>\t\t' + d('admin') + '\t\tPassword.\n';
-        r += '      -p,  --portal <string>\t\t\t\t\tName of the portal on the server to target.\n';
+        r += '           --host <string>\t\t\t' + d('localhost') + '\tThe host name of the server running portal foundation.\n';
+        r += '           --port <number>\t\t\t' + d('7777') + '\t\tThe port of the server running portal foundation.\n';
+        r += '           --context <string>\t\t\t' + d('portalserver') + '\tThe application context of the portal foundation.\n';
+        r += '           --username <string>\t\t' + d('admin') + '\t\tUsername.\n';
+        r += '           --password <string>\t\t' + d('admin') + '\t\tPassword.\n';
+        r += '           --portal <string>\t\t\t\t\tName of the portal on the server to target.\n';
         r += '\n  ' + title('Examples') + ':\n\n';
         r += '      bb export \t\t\t\t\t\t\t\tOutputs prettified, sorted xml file.\n';
         r += '      bb export --save myPortal.xml\t\t\t\t\t\tSaves export to myPortal.xml\n';
@@ -147,7 +147,7 @@ function checkSave() {
         if (cfg.type === 'widget' || cfg.type === 'container') name = [cfg.name, 'zip'];
         else name = [bbrest.config.portal, (cfg.type === 'model') ? 'xml' : 'zip'];
 
-        if (cfg.chunked) cfg.save = name[0];
+        if (cfg.chunk) cfg.save = name[0];
         else cfg.save = name.join('.');
     }
 
@@ -191,6 +191,7 @@ function runOrchestratorExport(jx) {
     return bbrest.export().post(toPost)
     .then(function(r) {
         if (r.error) {
+            console.log(r);
             return error(new Error('Error while exporting from Orchestrator'));
         }
         var id = jxon.stringToJs(_.unescape(r.body)).exportResponse.identifier;
