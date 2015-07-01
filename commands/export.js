@@ -30,24 +30,25 @@ module.exports = Command.extend({
         r += '\n\t Exports portal.';
         r += '\n\n  ' + title('Options') + ': -short, --name <type> ' + d('default') + ' description';
         r += '\n\t  All `bb rest` options for configuring portal, context, username etc are valid.\n\n';
-        r += '      -s,  --save <string>\t\t' + '\t\tFile or dir to save the export to.\n';
-        r += '      -t,  --type <string>\t\t' + d('model') + '\t\tWhat to export: model(portal without content), portal, widget, container\n';
-        r += '      -n,  --name <string>\t\t\t\tName of the widget or container to export.\n';
+        r += '      -s,  --save <string>\t\t\t' + d('portal-name.ext') + '\tFile or dir to save the export to.\n';
+        r += '      -t,  --type <string>\t\t\t' + d('model') + '\t\tWhat to export: model(portal without content), portal, widget, container\n';
+        r += '      -n,  --name <string>\t\t\t\t\tName of the widget or container to export.\n';
         r += '      -C,  --item-context <string>\t' + d('[BBHOST]') + '\tContext of the widget or container that is to be exported.\n';
-        r += '           --pretty <boolean>\t\t' + d('true') + '\t\tPrettify the output.\n';
-        r += '      -k,  --chunk <boolean>\t\t' + d('false') + '\t\tParse output and chunk it into multiple files.\n';
-        r += '      -f,  --force <boolean>\t\t' + d('false') + '\t\tForce overwrite.\n\n';
+        r += '           --pretty <boolean>\t\t\t' + d('true') + '\t\tPrettify the output.\n';
+        r += '           --sanitize <boolean>\t\t' + d('true') + '\t\tSanitize the output.\n';
+        r += '      -k,  --chunk <boolean>\t\t\t' + d('false') + '\t\tParse output and chunk it into multiple files.\n';
+        r += '      -f,  --force <boolean>\t\t\t' + d('false') + '\t\tForce overwrite.\n\n';
 
-        r += '      -H,  --host <string>\t\t' + d('localhost') + '\tThe host name of the server running portal foundation.\n';
-        r += '      -P,  --port <number>\t\t' + d('7777') + '\t\tThe port of the server running portal foundation.\n';
-        r += '      -c,  --context <string>\t\t' + d('portalserver') + '\tThe application context of the portal foundation.\n';
+        r += '      -H,  --host <string>\t\t\t' + d('localhost') + '\tThe host name of the server running portal foundation.\n';
+        r += '      -P,  --port <number>\t\t\t' + d('7777') + '\t\tThe port of the server running portal foundation.\n';
+        r += '      -c,  --context <string>\t\t\t' + d('portalserver') + '\tThe application context of the portal foundation.\n';
         r += '      -u,  --username <string>\t\t' + d('admin') + '\t\tUsername.\n';
         r += '      -w,  --password <string>\t\t' + d('admin') + '\t\tPassword.\n';
-        r += '      -p,  --portal <string>\t\t\t\tName of the portal on the server to target.\n';
+        r += '      -p,  --portal <string>\t\t\t\t\tName of the portal on the server to target.\n';
         r += '\n  ' + title('Examples') + ':\n\n';
         r += '      bb export \t\t\t\t\t\t\t\tOutputs prettified, sorted xml file.\n';
         r += '      bb export --save myPortal.xml\t\t\t\t\t\tSaves export to myPortal.xml\n';
-        r += '      bb export --portal my-portal --save myPortal.xml -k\t\t\tChunks my-portal export to myPortal dir\n';
+        r += '      bb export --portal my-portal --save myPortal -k\t\t\tChunks my-portal export to myPortal dir\n';
         r += '      bb export --type portal --save retail.zip\t\t\t\t\tSaves export including content to retail.zip\n';
         r += '      bb export --type portal --portal retail-banking --save retail.zip -k\tChunks full portal export(including content) into retail dir\n';
         r += '      bb export -s accounts --type widget --name accounts -k\t\t\tChunks export of accounts widget into accounts dir\n';
@@ -60,6 +61,7 @@ module.exports = Command.extend({
         name: {type: 'string', alias: 'n'},
         'item-context': {type: 'string', alias: 'C'},
         pretty: {type: 'boolean', default: true},
+        sanitize: {type: 'boolean', default: true},
         chunk: {type: 'boolean', alias: 'k', default: false},
         force: {type: 'boolean', alias: 'f', default: false}
     },
@@ -74,12 +76,12 @@ module.exports = Command.extend({
             jxon.config({parseValues: false});
 
             // check if save destination is proper
-            return checkSave()
-            .then(function() {
+            return getPortal()
+            .then(function(portal) {
+                bbrest.config.portal = portal;
 
-                return getPortal()
-                .then(function(portal) {
-                    bbrest.config.portal = portal;
+                return checkSave()
+                .then(function() {
 
                     var action = 'post';
                     var jx;
@@ -126,11 +128,7 @@ module.exports = Command.extend({
                         .then(function(r) {
                             if (r.error) return error(r);
                             return handlePortalXml(_.unescape(r.body))
-                            .then(function(r) {
-                                loading.stop();
-                                if (typeof r === 'string') console.log(r);
-                                else ok(r);
-                            });
+                            .then(ok);
                         }).catch(error);
                     }
 
@@ -143,7 +141,15 @@ module.exports = Command.extend({
 });
 
 function checkSave() {
-    if (cfg.type === 'model' && !cfg.save) return Q(true);
+    // auto generate export file name
+    if (!cfg.save) {
+        var name;
+        if (cfg.type === 'widget' || cfg.type === 'container') name = [cfg.name, 'zip'];
+        else name = [bbrest.config.portal, (cfg.type === 'model') ? 'xml' : 'zip'];
+
+        if (cfg.chunked) cfg.save = name[0];
+        else cfg.save = name.join('.');
+    }
 
     return exists(cfg.save)
     .catch(function() {
@@ -232,16 +238,12 @@ function ok(r) {
 
 function handlePortalXml(x, metaFile) {
     var jx = sort(jxon.stringToJs(x));
-    if (cfg.save) {
-        if (cfg.chunk) {
-            return chunkXml(jx, metaFile);
-        } else {
-            if (cfg.pretty) x = formattor(x, {method: 'xml'});
-            return writeFile(cfg.s, jxon.jsToString(jx));
-        }
+    if (cfg.chunk) {
+        return chunkXml(jx, metaFile);
+    } else {
+        if (cfg.pretty) x = formattor(jxon.jsToString(jx), {method: 'xml'});
+        return writeFile(cfg.save, x);
     }
-    if (cfg.pretty) x = formattor(jxon.jsToString(jx), {method: 'xml'});
-    return Q(x);
 }
 
 function unzip(src, dir) {
@@ -342,7 +344,7 @@ function sortItems(items) {
             items[key][k] = sortItem(v, key);
         });
     } else {
-        col = sortItem(col, key);
+        items[key] = sortItem(col, key);
     }
     return items;
 }
@@ -390,13 +392,19 @@ function cleanItem(item) {
     var newItem = {};
     var keys = _.keys(item).sort();
 
-    _.each(keys, function(k) {
-        if (!itemBlackList[k]) newItem[k] = item[k];
-    });
+    if (cfg.sanitize) {
+        _.each(keys, function(k) {
+            if (!itemBlackList[k]) newItem[k] = item[k];
+        });
+    } else {
+        _.each(keys, function(k) {
+            newItem[k] = item[k];
+        });
+    }
 
     item = newItem;
     item = cleanProps(item);
-    item = cleanTags(item);
+    if (cfg.sanitize) item = cleanTags(item);
 
     return item;
 
@@ -411,22 +419,25 @@ function cleanProps(item) {
     if (_.has(item, 'properties.property')) {
 
         if (item.properties.property.length > 0) {
-            var removeInheritedProperties = {};
 
-            _.each(item.properties.property, function (property) {
-                // remove inherited props
-                if (property.$itemName) {
-                    removeInheritedProperties[property.$name] = true;
-                }
-                delete property.$readonly;
-                delete property.$manageable;
-                delete property.$itemName;
-            });
+            if (cfg.sanitize) {
+                var removeInheritedProperties = {};
 
-            //when reading rest remove inherited values so matches local version
-            _.remove(item.properties.property, function (value) {
-                return removeInheritedProperties[value.$name] ? true : false;
-            });
+                _.each(item.properties.property, function (property) {
+                    // remove inherited props
+                    if (property.$itemName) {
+                        removeInheritedProperties[property.$name] = true;
+                    }
+                    delete property.$readonly;
+                    delete property.$manageable;
+                    delete property.$itemName;
+                });
+
+                //when reading rest remove inherited values so matches local version
+                _.remove(item.properties.property, function (value) {
+                    return removeInheritedProperties[value.$name] ? true : false;
+                });
+            }
 
             item.properties.property = _.sortBy(item.properties.property, '$name');
         }
