@@ -75,25 +75,55 @@ Read more about generate API [here](/docs/generate.md).
 
 ### Export
 
-Export portal model into XML files, which can be then re-imported trough YAPI or `bb import`.
+Exports portal. Chunk option will divide export into separate xml files grouped by item type.
+It will also pretty print xml files and sort items and properties alphabetically on name.  
+`bb rest` options for defining host, port, contaxt, username and password also work. Or you can define those properties inside .bbrc file.
+
+#### Options
 
 ```
-bb export
+-s,  --save <string>		portal     File or dir to save the export to.
+-t,  --type <string>		model	   What to export: model(portal without content), portal, widget, container
+-n,  --name <string>			       Name of the widget or container to export.
+-C,  --item-context <string>[BBHOST]   Context of the widget or container that is to be exported.
+     --pretty <boolean>		 true		Prettify the output.
+     --sanitize <boolean>    true           Sanitize the output.
+-k,  --chunk <boolean>		 false		Parse output and chunk it into multiple files.
+-f,  --force <boolean>		 false		Force overwrite.
+     --portal <string>                 Name of the portal to export.
 ```
 
-By default, command exports whole portal as one file. Using `--structured` option (beta) command will breaks portal model into separate files, structuring them by logical groups.
+#### Examples
 
-Generated XML files are placed to the working directory, from where you have spawned the command.
+Outputs prettified, sorted xml file.  
+`bb export`  
+Saves export to myPortal.xml  
+`bb export --save myPortal.xml`  
+Chunks export to myPortal dir  
+`bb export --portal my-portal --save myPortal -k`  
+Saves export including content to retail.zip  
+`bb export --type portal --save retail.zip`  
+Chunks full export into retail dir  
+`bb export --type portal --portal retail-banking --save retail -k`  
+Chunks widget-accounts export to accounts dir  
+`bb export -s accounts --type widget --name widget-accounts -k`
 
 ### Import
 
-Imports portal model from XML files.
+Imports portal exported by export tool. It supports importing of chunked exports.
+
+#### Options
 
 ```
-bb import
+-t,  --target <string>			       File or dir to import.
 ```
 
-By default uses full portal import (from one file). Using `--yapi` option (beta) command will merge all XML files by glob and import them like client-side YAPI does.
+#### Examples
+
+Imports portal from myPortal.xml  
+`bb import --target myPortal.xml`  
+Imports bb export chunked portal from chunked dir  
+`bb import --target chunked`	
 
 ### Sync
 
@@ -192,6 +222,24 @@ where `package_name` will be the name of the package read from `bower.json` or `
      --portal <string>                            Path to portalserver.
 -f,  --force                                      Force removal of the target.
 -u,  --unlink                                     Remove symlink.
+```
+
+### Install
+
+Wraps a `bower install` and applies additional options like `requirejs-conf` generation and server catalog update.
+
+```
+Usage: bb install [OPTIONS]
+       bb install <bower-endpoint> [<bower-endpoint> ..] [OPTIONS]
+
+       Also accepts `bower install` arguments like --save, -save-dev, --production, check `bower install -h`.
+
+Options: -short, --name <type> default description
+
+    -C,  --catalog <boolean>		false			    Upload components to CXP via REST after install.
+    -v,  --verbose <boolean>		false			    Enable verbose logging mode.
+         --base-url <string>        path/to/bower_comp	Web path to bower components directory (also configurable from .bbrc).
+         --require-confs <string>				        Coma seperated list of relative paths to existing require configuration (also configurable from .bbrc).
 ```
 
 
