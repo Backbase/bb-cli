@@ -275,7 +275,7 @@ Wraps a `bower install` and applies additional options like `requirejs-conf` gen
 
 Also accepts `bower install` arguments like --save, -save-dev, --production, check `bower install -h`.
 
-#### Exampels
+#### Examples
 
 ```
 bb install jquery --save
