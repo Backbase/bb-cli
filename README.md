@@ -8,14 +8,16 @@ Command line tools for working with [Backbase CXP](http://backbase.com).
 
 Scaffold new components, navigate through archetypes and work with REST API helpers using clean, automated workflow.
 
-## Requirements
-- [Node.js](http://nodejs.org/)
 
 ## Install
 
-``` shell
+```shell
 npm i bb-cli --global
 ```
+
+### Requirements
+- [Node.js](http://nodejs.org/)
+
 
 ## Commands
 
@@ -71,7 +73,7 @@ $ bb generate lp12-module
 
 Read more about generate API [here](/docs/generate.md).
 
-## Export
+### Export
 
 Exports portal. Chunk option will divide export into separate xml files grouped by item type.
 It will also pretty print xml files and sort items and properties alphabetically on name.  
@@ -106,7 +108,7 @@ Chunks full export into retail dir
 Chunks widget-accounts export to accounts dir  
 `bb export -s accounts --type widget --name widget-accounts -k`
 
-## Import
+### Import
 
 Imports portal exported by export tool. It supports importing of chunked exports.
 
@@ -123,7 +125,7 @@ Imports portal from myPortal.xml
 Imports bb export chunked portal from chunked dir  
 `bb import --target chunked`	
 
-## Sync
+### Sync
 
 Syncs local XML model with remote.
 Run it in the component folder to sync with CXP. It parser the first `*.xml` file or defined one from `--file` argument.
@@ -178,6 +180,69 @@ bb rest [OPTIONS]
 -s,  --save <string>				            Saves response into file.
 ```
 
+### Ln (Symlink)
+
+Symlinks source directory to defined target.
+
+Use this command to symlink clone of your widget/module working repo to the working portal.
+
+```
+bb ln --source /component/path --target /path/to/portalserver/static/dir/
+```
+
+#### Helpers
+
+This command also supports conventions used in Launchpad and ES. For example:
+
+If `--lp-trunk` path is set, target will be:
+
+`{lp path}/launchpad-bundles/static/launchpad/{bundle}/widgets/{package name}`
+
+If `--lp-portal` path is set, target will be:
+
+`{cxp portal path}/src/main/webapp/static/launchpad/{bundle}/widgets/{package name}`
+
+As LP convention, if package name starts with `widget-` it will be stripped out when creating a symlink.
+
+If `--portal` path is set, target will be:
+
+`{cxp portal path}/src/main/webapp/static/widgets/{package name}`
+
+where `package_name` will be the name of the package read from `bower.json` or `package.json`.
+
+#### Options
+
+```
+-short, --name <type>       default               description
+
+-s,  --source <string>      current directory     Path to source directory.
+-t,  --target <string>                            Path to directory in which to (un)link a source.
+     --lp-trunk <string>                          Path to `launchpad-trunk`.
+     --lp-portal <string>                         Path to portalserver containing lp.
+     --portal <string>                            Path to portalserver.
+-f,  --force                                      Force removal of the target.
+-u,  --unlink                                     Remove symlink.
+```
+
+### Install
+
+Wraps a `bower install` and applies additional options like `requirejs-conf` generation and server catalog update.
+
+```
+Usage: bb install [OPTIONS]
+       bb install <bower-endpoint> [<bower-endpoint> ..] [OPTIONS]
+
+       Also accepts `bower install` arguments like --save, -save-dev, --production, check `bower install -h`.
+
+Options: -short, --name <type> default description
+
+    -C,  --catalog <boolean>		false			    Upload components to CXP via REST after install.
+    -v,  --verbose <boolean>		false			    Enable verbose logging mode.
+         --base-url <string>        path/to/bower_comp	Web path to bower components directory (also configurable from .bbrc).
+         --require-confs <string>				        Coma seperated list of relative paths to existing require configuration (also configurable from .bbrc).
+```
+
+
 ## Configuration
 
 All REST based commands support `.bbrc` configuration. Running the command in the folder with `.bbrc` file or in one of the child folders with defined configuration, CLI will use it to override default options.
@@ -215,50 +280,6 @@ Where `.bbrc` file contains this conf:
 ```
 
 Now running `bb import` from `/project/config` dir, CLI will use defined REST configuration with overriden `context` and user credentials.
-
-## Ln (Symlink)
-
-Symlinks source directory to defined target.
-
-Use this command to symlink clone of your widget/module working repo to the working portal.
-
-```
-bb ln --source /component/path --target /path/to/portalserver/static/dir/
-```
-
-### Helpers
-
-This command also supports conventions used in Launchpad and ES. For example:
-
-If `--lp-trunk` path is set, target will be:
-
-`{lp path}/launchpad-bundles/static/launchpad/{bundle}/widgets/{package name}`
-
-If `--lp-portal` path is set, target will be:
-
-`{cxp portal path}/src/main/webapp/static/launchpad/{bundle}/widgets/{package name}`
-
-As LP convention, if package name starts with `widget-` it will be stripped out when creating a symlink.
-
-If `--portal` path is set, target will be:
-
-`{cxp portal path}/src/main/webapp/static/widgets/{package name}`
-
-where `package_name` will be the name of the package read from `bower.json` or `package.json`.
-
-#### Options
-
-```
--short, --name <type>       default               description
-
--s,  --source <string>      current directory     Path to source directory.
--t,  --target <string>                            Path to directory in which to (un)link a source.
-     --lp-trunk <string>                          Path to `launchpad-trunk`.
-     --lp-portal <string>                         Path to portalserver containing lp.
-     --portal <string>                            Path to portalserver.
--f,  --force                                      Force removal of the target.
--u,  --unlink                                     Remove symlink.
-```
 
 ## API docs
 

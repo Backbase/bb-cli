@@ -4,11 +4,22 @@
     <meta http-equiv="Content-Type" content="text/xml; charset=UTF-8" />
     <link rel="stylesheet" href="styles/base.css" type="text/css" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.8.3/jquery.js"></script>
+    <script>
+        // Re-define jquery in require
+        requirejs.undef("jquery");
+        define("jquery", [], function () {
+            return jQuery;
+        });
+    </script>
+
     <script src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.15/require.js"></script>
     <script src="/bower_components/config/requirejs.conf.js"></script>
+
     <script>
     require(['base'], function (base) {
+
         var __WIDGET__ = {
             body:  document.body,
             getPreference: function(name){
@@ -16,8 +27,9 @@
                     case 'some-pref': return 'some-value'; break;
                 }
             }
-        }
+        };
         base.requireWidget(__WIDGET__ , 'scripts/main');
+
     });
     </script>
 
@@ -25,7 +37,23 @@
 
 <body ng-controller="MainCtrl as mainCtrl" class="lp-<%=bundle_prefix%>-<%=widget_name%>">
 
-    <lp-template src="templates/<%=widget_name%>-tpl.ng.html"></lp-template>
+    <h1><%=widget_title%></h1>
+
+    <div class="source_section">
+        <h2>Default</h2>
+
+        <markdown>
+            Components description with **markdown**.
+        </markdown>
+
+        <code class="src-html">
+            <lp-template src="templates/<%=widget_name%>-tpl.ng.html"></lp-template>
+        </code>
+
+        <div class="source_example">
+            <lp-template src="templates/<%=widget_name%>-tpl.ng.html"></lp-template>
+        </div>
+    </div>
 
 </body>
 </html>
