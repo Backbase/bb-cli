@@ -17,7 +17,7 @@ npm i bb-cli --global
 
 ### Requirements
 - [Node.js](http://nodejs.org/)
-
+- [Bower](http://bower.io) - for `bb install`
 
 ## Commands
 
@@ -104,19 +104,19 @@ This call will be made on server catalog for the item defined by `--save` parame
 In case that `--save` is undefined, it will search for `bower.json` file and use the name of the package as item name (handy for LP widgets).
 
 ```
-bb sync [OPTIONS]	 Syncs local XML model with remote.
+bb sync
 ```
 
 #### Options
 
 ```
-  -short,  --name (type)        default              description
+-short, --name (type)          default              description
 
-      -f,  --file (string)	    first xml file		 A file to target.
-      -c,  --context (string)	portalserver		 Portal server context (for other options use `.bbrc`).
-      -s,  --save (string)	            			 Name of the server item which model should be exported to a file.
-      -y,  --yes (boolean)	            			 Disables dialogs.
-      -v,  --verbose		    false   			 Prints detailed output.
+    -f, --file <string>	        first xml file		A file to target.
+    -c, --context <string>	    portalserver		Portal server context (for other options use `.bbrc`).
+    -s, --save <string>				                Name of the server item which model should be exported to a file.
+    -y, --yes <string>				                Disable interactive mode, answer all questions with yes.
+    -v, --verbose		        false			    Prints detailed output.
 ```
 
 ### Rest
@@ -130,24 +130,24 @@ bb rest [OPTIONS]
 #### Options
 
 ```
--short, --name <type>           default         description
+-short, --name <type>               default         description
 
--H,  --host <string>		    localhost	    The host name of the server running portal foundation.
--P,  --port <number>		    7777		    The port of the server running portal foundation.
--c,  --context <string>		    portalserver	The application context of the portal foundation.
--u,  --username <string>		admin   		Username.
--w,  --password <string>		admin	    	Password.
--p,  --portal <string   >				        Name of the portal on the server to target.
--t,  --target <string>		    server		    Context target: server, portal, catalog, portalCatalog, page, container, widget, link, template, user, group, audit or cache.
--T,  --target-arg <string/json>			        Target arguments. When there are more arguments, pass JSON array.
--m,  --method <string>		    get		        HTTP method to use: get, post, put or delete.
--f,  --file <string/json>				        Path of the file to send. Or JSON string when using mosaic-xml-js.
--r,  --rights					                Targets context rights.
--g,  --tags					                    Targets context tags.
--q,  --query <json>				                Sets query string.
--x,  --empty-cache				                Shortcut to empty all server caches.
--v,  --verbose					                Prints detailed output.
--s,  --save <string>				            Saves response into file.
+    -H,  --host <string>		    localhost	    The host name of the server running portal foundation.
+    -P,  --port <number>		    7777		    The port of the server running portal foundation.
+    -c,  --context <string>		    portalserver	The application context of the portal foundation.
+    -u,  --username <string>		admin   		Username.
+    -w,  --password <string>		admin	    	Password.
+    -p,  --portal <string   >				        Name of the portal on the server to target.
+    -t,  --target <string>		    server		    Context target: server, portal, catalog, portalCatalog, page, container, widget, link, template, user, group, audit or cache.
+    -T,  --target-arg <string/json>			        Target arguments. When there are more arguments, pass JSON array.
+    -m,  --method <string>		    get		        HTTP method to use: get, post, put or delete.
+    -f,  --file <string/json>				        Path of the file to send. Or JSON string when using mosaic-xml-js.
+    -r,  --rights					                Targets context rights.
+    -g,  --tags					                    Targets context tags.
+    -q,  --query <json>				                Sets query string.
+    -x,  --empty-cache				                Shortcut to empty all server caches.
+    -v,  --verbose					                Prints detailed output.
+    -s,  --save <string>				            Saves response into file.
 ```
 
 ### Ln (Symlink)
@@ -183,37 +183,53 @@ where `package_name` will be the name of the package read from `bower.json` or `
 #### Options
 
 ```
--short, --name <type>       default               description
+-short, --name <type>          default               description
 
--s,  --source <string>      current directory     Path to source directory.
--t,  --target <string>                            Path to directory in which to (un)link a source.
-     --lp-trunk <string>                          Path to `launchpad-trunk`.
-     --lp-portal <string>                         Path to portalserver containing lp.
-     --portal <string>                            Path to portalserver.
--f,  --force                                      Force removal of the target.
--u,  --unlink                                     Remove symlink.
+    -s, --source <string>      current directory     Path to source directory.
+    -t, --target <string>                            Path to directory in which to (un)link a source.
+        --lp-trunk <string>                          Path to `launchpad-trunk`.
+        --lp-portal <string>                         Path to portalserver containing lp.
+        --portal <string>                            Path to portalserver.
+    -f, --force                                      Force removal of the target.
+    -u, --unlink                                     Remove symlink.
 ```
 
 ### Install
 
-Wraps a `bower install` and applies additional options like `requirejs-conf` generation and server catalog update.
+Wraps a `bower install` and applies additional options like RequireJS conf generation and server catalog update.
+
+
+#### Options
+```
+-short, --name <type>               default             description
+
+     C, --catalog <boolean>		    false			    Upload single component to CXP via REST after install.
+    -A, --catalog-all <boolean>	    false			    Upload all installed components to CXP via REST after install.
+    -n, --nested <boolean>		    false			    Run secondary `bb install` in installed component.
+    -v, --verbose <boolean>		    false			    Enable verbose logging mode.
+        --base-url <string>		    path/to/bower_comp	Web path to bower components directory (also configurable from .bbrc).
+        --require-confs <string>				        Coma seperated list of relative paths to existing require configuration (also configurable from .bbrc).
+```
+
+Available options in `.bbrc`:
 
 ```
-Usage: bb install [OPTIONS]
-       bb install <bower-endpoint> [<bower-endpoint> ..] [OPTIONS]
-
-       Also accepts `bower install` arguments like --save, -save-dev, --production, check `bower install -h`.
-
-Options: -short, --name <type> default description
-
-    -C,  --catalog <boolean>		false			    Upload components to CXP via REST after install.
-    -v,  --verbose <boolean>		false			    Enable verbose logging mode.
-         --base-url <string>        path/to/bower_comp	Web path to bower components directory (also configurable from .bbrc).
-         --require-confs <string>				        Coma seperated list of relative paths to existing require configuration (also configurable from .bbrc).
+{
+  "install": {
+    "excludes": ["jquery"],
+    "includes" ["jquery"],
+    "requirejsConfigs": ["./portal/target/portal/static/launchpad/modules/config/requirejs.conf.js"],
+    "requirejsBaseUrl": "bower_components"
+  }
+}
 ```
 
+* `excludes` - define paths to exclude from generated RequireJS conf
+* `includes` - define paths to include to generated RequireJS conf, ignoring existing configurations merge
+* `requirejsConfigs` - list of paths to existing RequireJS confs, to automatically get excludes list
+* `requirejsBaseUrl` - base url for paths in RequireJS conf
 
-## Configuration
+## CLI Configuration
 
 All REST based commands support `.bbrc` configuration. Running the command in the folder with `.bbrc` file or in one of the child folders with defined configuration, CLI will use it to override default options.
 
