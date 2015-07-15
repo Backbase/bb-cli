@@ -4,11 +4,12 @@ var Command = require('ronin').Command;
 var chalk = require('chalk');
 var spawn = require('cross-spawn');
 var path = require('path');
+var util = require('../lib/util');
 var GenerateRequireConf = require('../lib/generateRequireConf');
 var restUtils = require('../lib/restUtils');
 var depUtils = require('../lib/depUtils');
 var configLib = require('../lib/config');
-var q = require('q');
+var Q = require('q');
 var bower = require('bower');
 
 var baseUrl = process.cwd();
@@ -16,9 +17,11 @@ var baseUrl = process.cwd();
 var config = {
     customArgs: [
         '--catalog','-C',
+        '--catalog-all','-A',
         '--base-url',
         '--require-confs',
-        '--verbose', '-v'
+        '--verbose', '-v',
+        '--nested', '-n'
     ]
 };
 
@@ -30,19 +33,20 @@ var fillConfWithArgs = function(bbRc, argOptions){
 };
 
 var install = function(componentEndpoint){
+    var cmdArgs = process.argv;
     var that = this;
 
     // Get bower.json and .bowerrc
-    q.all([
+    Q.all([
         configLib.getBower(),
         configLib.getBowerRc(),
         configLib.getBbRc()
     ]).spread(function (bowerJSON, bowerConf, bbRc) {
+        var deffered = Q.defer();
         var bowerCommand = ['install'];
-        var cmdArgs = process.argv;
-        var argCatalog = cmdArgs.indexOf('--catalog') > -1 || cmdArgs.indexOf('-C') > -1;
         var argVerbose = cmdArgs.indexOf('--verbose') > -1 || cmdArgs.indexOf('-v') > -1;
-        var msg = 'Bower install done, proceed to RequireJS conf generation...';
+        var argCatalogAll = cmdArgs.indexOf('--catalog-all') > -1 || cmdArgs.indexOf('-A') > -1;
+        var msg = '\nBower install done, proceed to RequireJS conf generation...';
 
         // Adding default directory field
         if (!bowerConf.directory) bowerConf.directory = 'bower_components';
@@ -80,43 +84,98 @@ var install = function(componentEndpoint){
 
                 // Then we generate RequireJS conf
                 generateRJSConf.process().then(function(output){
-                    var componentPathAbsolute;
-                    var noName;
+                    var payload = {};
 
-                    if (componentEndpoint) {
-                        if (componentEndpoint.split('/').length === 1) {
-                            componentPathAbsolute = path.join(baseUrl, output.fsPaths[componentEndpoint]);
-
-                            console.log('componentPathAbsolute', componentPathAbsolute);
-
-                        } else {
-                            // If we're asked to install relative component, we can't get it's name and path
-                            noName = true;
-                        }
+                    // Pass list with all bower components
+                    if (argCatalogAll) {
+                        payload.installAdditionalComponents = output.fsPaths;
                     }
 
-                    if (argCatalog) {
-                        if (!noName) {
-                            restUtils.submitToPortal(baseUrl, output.fsPaths, false, componentPathAbsolute);
-                        } else {
-                            // Get component name by endpoint
-                            bower.commands.info(componentEndpoint)
-                                .on('end', function (componentInfo) {
-                                    var componentName = componentInfo.latest.name;
-                                    var componentPath = path.join(baseUrl, output.fsPaths[componentName]);
-
-                                    restUtils.submitToPortal(baseUrl, {}, false, componentPath);
-                                });
-                        }
+                    if (!componentEndpoint) {
+                        deffered.resolve(payload);
+                        return;
                     }
+
+                    // Check if we get plain component name or local path
+                    if (componentEndpoint.split('/').length === 1) {
+                        payload.componentPathAbsolute = path.join(baseUrl, output.fsPaths[componentEndpoint]);
+
+                        deffered.resolve(payload);
+                    } else {
+                        // Get latest installed components name
+                        bower.commands.info(componentEndpoint)
+                            .on('end', function (componentInfo) {
+                                var componentName = componentInfo.latest.name;
+                                payload.componentPathAbsolute = path.join(baseUrl, output.fsPaths[componentName]);
+
+                                deffered.resolve(payload);
+                            })
+                            .on('error', function (err) {
+                                util.err(chalk.red('Error running Bower info.'));
+                                deffered.reject(new Error(err));
+                            });
+                    }
+
                 }).fail(function(err){
-                    console.log(chalk.red('Something went wrong during requirejs configuration generation: '), err);
+                    util.err(chalk.red('Something went wrong during requirejs configuration generation: '), err);
                     console.log(err.stack);
                 });
+            })
+            .on('error', function(err) {
+                util.err(chalk.red('Error running Bower command.'));
+                deffered.reject(new Error(err));
             });
 
+        return deffered.promise;
+
+    }).then(function(payload){
+        var deffered = Q.defer();
+        var argCatalog = cmdArgs.indexOf('--catalog') > -1 || cmdArgs.indexOf('-C') > -1;
+        var argCatalogAll = cmdArgs.indexOf('--catalog-all') > -1 || cmdArgs.indexOf('-A') > -1;
+
+        if ((argCatalog || argCatalogAll) && (payload.installAdditionalComponents || payload.componentPathAbsolute)) {
+            restUtils.submitToPortal(baseUrl, payload.installAdditionalComponents, false, payload.componentPathAbsolute).then(function(){
+                deffered.resolve(payload);
+            });
+        } else {
+            deffered.resolve(payload);
+        }
+
+        return deffered.promise;
+    }).then(function(payload){
+        var deffered = Q.defer();
+        var argNested = cmdArgs.indexOf('--nested') > -1 || cmdArgs.indexOf('-n') > -1;
+
+        if (argNested) {
+            if (!payload.componentPathAbsolute) {
+                util.warn('Can\'t get component path for nested install.');
+
+                deffered.resolve(payload);
+
+                return;
+            }
+
+            payload.nestedInstall = true;
+
+            console.log(chalk.gray('\nRunning nested bb install...'));
+            spawn('bb', ['install'], {
+                    stdio: 'inherit',
+                    cwd: payload.componentPathAbsolute
+                })
+                .on('close', function () {
+                    deffered.resolve(payload);
+                });
+        } else {
+            deffered.resolve(payload);
+        }
+
+        return deffered.promise;
+    }).then(function(payload){
+        if (!payload.nestedInstall) {
+            util.ok('bb install finished successfully.');
+        }
     }).fail(function(err){
-        console.log(chalk.red('Something went wrong, during Bower configuration read: '), err);
+        util.err(chalk.red('Something went wrong: '), err);
         console.log(err.stack);
     });
 };
@@ -131,7 +190,9 @@ var Install = Command.extend({
         r += '\n\n\t Installs all or specified Bower dependencies, generates RequireJS configuration and uploads component model to portal on request.';
         r += '\n\t Also accepts `bower install` arguments like --save, -save-dev, --production, check `bower install -h`.';
         r += '\n\n  ' + title('Options') + ': -short, --name <type> ' + d('default') + ' description\n\n';
-        r += '      -C,  --catalog <boolean>\t\t' + d('false') + '\t\t\tUpload components to CXP via REST after install.\n';
+        r += '      -C,  --catalog <boolean>\t\t' + d('false') + '\t\t\tUpload single component to CXP via REST after install.\n';
+        r += '      -A,  --catalog-all <boolean>\t' + d('false') + '\t\t\tUpload all installed components to CXP via REST after install.\n';
+        r += '      -n,  --nested <boolean>\t\t' + d('false') + '\t\t\tRun secondary `bb install` in installed component.\n';
         r += '      -v,  --verbose <boolean>\t\t' + d('false') + '\t\t\tEnable verbose logging mode.\n';
         r += '           --base-url <string>\t\t' + d('path/to/bower_comp') + '\tWeb path to bower components directory (also configurable from .bbrc).\n';
         r += '           --require-confs <string>\t\t\t' + '\tComa seperated list of relative paths to existing require configuration (also configurable from .bbrc).\n';
