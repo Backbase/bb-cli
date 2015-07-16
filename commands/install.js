@@ -11,8 +11,10 @@ var depUtils = require('../lib/depUtils');
 var configLib = require('../lib/config');
 var Q = require('q');
 var bower = require('bower');
+var mvnCredentials = require('mvn-credentials');
 
 var baseUrl = process.cwd();
+var cliRoot = path.resolve(__dirname, '..');
 
 var config = {
     customArgs: [
@@ -36,17 +38,29 @@ var install = function(componentEndpoint){
     var cmdArgs = process.argv;
     var that = this;
 
-    // Get bower.json and .bowerrc
-    Q.all([
+    Q.allSettled([
         configLib.getBower(),
         configLib.getBowerRc(),
-        configLib.getBbRc()
-    ]).spread(function (bowerJSON, bowerConf, bbRc) {
+        configLib.getBbRc(),
+        mvnCredentials.fetch()
+    ]).spread(function (bowerJSON, bowerConf, bbRc, credentials) {
+        bowerJSON = bowerJSON.state === 'fulfilled' ? bowerJSON.value : {};
+        bowerConf = bowerConf.state === 'fulfilled' ? bowerConf.value : {};
+        bbRc = bbRc.state === 'fulfilled' ? bbRc.value : {};
+        credentials = credentials.state === 'fulfilled' ? credentials.value : undefined;
+
         var deffered = Q.defer();
-        var bowerCommand = ['install'];
+        var localBowerBin = path.join(cliRoot, 'node_modules/bower/bin/bower');
+        var bowerCommand = [localBowerBin, 'install'];
         var argVerbose = cmdArgs.indexOf('--verbose') > -1 || cmdArgs.indexOf('-v') > -1;
         var argCatalogAll = cmdArgs.indexOf('--catalog-all') > -1 || cmdArgs.indexOf('-A') > -1;
         var msg = '\nBower install done, proceed to RequireJS conf generation...';
+        var credentialsAvailable = credentials && credentials.username && credentials.password;
+
+        if (credentialsAvailable) {
+            bowerCommand.push('--config.auth.username=' + credentials.username);
+            bowerCommand.push('--config.auth.password=' + credentials.password);
+        }
 
         // Adding default directory field
         if (!bowerConf.directory) bowerConf.directory = 'bower_components';
@@ -76,7 +90,7 @@ var install = function(componentEndpoint){
         console.log(chalk.gray('Running Bower install...'));
 
         // First, we install all bower deps
-        spawn('bower', bowerCommand, {stdio: 'inherit'})
+        spawn('node', bowerCommand, {stdio: 'inherit'})
             .on('close', function () {
                 var generateRJSConf = new GenerateRequireConf(baseUrl, bowerJSON, bowerConf, bbRc, argVerbose);
 
@@ -102,8 +116,12 @@ var install = function(componentEndpoint){
 
                         deffered.resolve(payload);
                     } else {
+                        var bowerInfoConfig = {};
+
+                        if (credentialsAvailable) bowerInfoConfig.auth = credentials;
+
                         // Get latest installed components name
-                        bower.commands.info(componentEndpoint)
+                        bower.commands.info(componentEndpoint, undefined, bowerInfoConfig)
                             .on('end', function (componentInfo) {
                                 var componentName = componentInfo.latest.name;
                                 payload.componentPathAbsolute = path.join(baseUrl, output.fsPaths[componentName]);
