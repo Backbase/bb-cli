@@ -17,7 +17,6 @@ npm i bb-cli --global
 
 ### Requirements
 - [Node.js](http://nodejs.org/)
-- [Bower](http://bower.io) - for `bb install`
 
 ## Commands
 
