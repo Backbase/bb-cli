@@ -123,7 +123,7 @@ var install = function(componentEndpoint){
                         // Get latest installed components name
                         bower.commands.info(componentEndpoint, undefined, bowerInfoConfig)
                             .on('end', function (componentInfo) {
-                                var componentName = componentInfo.latest.name;
+                                var componentName = componentInfo.latest && componentInfo.latest.name ? componentInfo.latest.name : componentInfo.name;
                                 payload.componentPathAbsolute = path.join(baseUrl, output.fsPaths[componentName]);
 
                                 deffered.resolve(payload);
