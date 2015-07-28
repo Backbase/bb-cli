@@ -5,9 +5,6 @@ var clui = require('clui');
 var _ = require('lodash');
 var loading = new clui.Spinner('Please wait...');
 var jxon = require('jxon');
-var Q = require('q');
-var fs = require('fs-extra');
-var remove = Q.denodeify(fs.remove);
 
 var zipDir = require('../lib/zipDir');
 
@@ -46,21 +43,14 @@ module.exports = Command.extend({
             jxon = r.jxon;
             cfg = r.config.cli;
 
-            var cwd = process.cwd();
-            process.chdir(cfg.target);
-
-            return zipDir('./', exclude)
+            return zipDir(cfg.target, exclude)
             .then(function(zip) {
                 return bbrest.importItem().file(zip.path).post()
                 .then(function(r) {
-                    var body =  jxon.stringToJs(_.unescape(r.body)).import;
+                    var body = jxon.stringToJs(_.unescape(r.body)).import;
                     if (body.level === 'ERROR') throw new Error(body.message);
-                    return remove(zip.path)
-                    .then(function() {
-                        zip.clean();
-                        process.chdir(cwd);
-                        ok(r);
-                    });
+                    zip.clean();
+                    ok(r);
                 })
                 .catch(function(err) {
                     error(err);
