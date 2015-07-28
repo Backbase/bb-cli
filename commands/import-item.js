@@ -5,6 +5,9 @@ var clui = require('clui');
 var _ = require('lodash');
 var loading = new clui.Spinner('Please wait...');
 var jxon = require('jxon');
+var Q = require('q');
+var fs = require('fs-extra');
+var remove = Q.denodeify(fs.remove);
 
 var zipDir = require('../lib/zipDir');
 
@@ -17,9 +20,9 @@ module.exports = Command.extend({
         var title = chalk.bold;
         var d = chalk.gray;
         var r = '\n  ' + title('Usage') + ': bb ' + this.name + ' [OPTIONS]';
-        r += '\n\t Imports portal.';
+        r += '\n\t Zips and imports item.';
         r += '\n\n  ' + title('Options') + ': -short, --name <type> ' + d('default') + ' description\n';
-        r += '      -t,  --target <string>\t\t' + '\t\tFile or dir to import.\n\n';
+        r += '      -t,  --target <string>\t\t' + '\t\tDir to import.\n\n';
 
         r += '      -H,  --host <string>\t\t' + d('localhost') + '\tThe host name of the server running portal foundation.\n';
         r += '      -P,  --port <number>\t\t' + d('7777') + '\t\tThe port of the server running portal foundation.\n';
@@ -27,9 +30,6 @@ module.exports = Command.extend({
         r += '      -u,  --username <string>\t\t' + d('admin') + '\t\tUsername.\n';
         r += '      -w,  --password <string>\t\t' + d('admin') + '\t\tPassword.\n';
         r += '      -p,  --portal <string>\t\t\t\tName of the portal on the server to target.\n';
-        r += '\n  ' + title('Examples') + ':\n\n';
-        r += '      bb import --target myPortal.xml\t\t\tImports portal from myPortal.xml\n';
-        r += '      bb import --target chunked\t\t\tImports bb export chunked portal from chunked dir\n';
         return r;
     },
 
@@ -46,14 +46,21 @@ module.exports = Command.extend({
             jxon = r.jxon;
             cfg = r.config.cli;
 
-            return zipDir(cfg.target, exclude)
+            var cwd = process.cwd();
+            process.chdir(cfg.target);
+
+            return zipDir('./', exclude)
             .then(function(zip) {
                 return bbrest.importItem().file(zip.path).post()
                 .then(function(r) {
                     var body =  jxon.stringToJs(_.unescape(r.body)).import;
                     if (body.level === 'ERROR') throw new Error(body.message);
-                    zip.clean();
-                    ok(r);
+                    return remove(zip.path)
+                    .then(function() {
+                        zip.clean();
+                        process.chdir(cwd);
+                        ok(r);
+                    });
                 })
                 .catch(function(err) {
                     error(err);
