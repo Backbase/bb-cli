@@ -160,7 +160,8 @@ function makeModelAndImport(dirPath, exclude) {
                     name: bjson.name,
                     contextItemName: '[BBHOST]',
                     properties: {
-                        property: {
+                        property: [
+                        {
                             $name: 'title',
                             $label: 'Title',
                             $viewHint: 'admin,designModeOnly',
@@ -168,14 +169,34 @@ function makeModelAndImport(dirPath, exclude) {
                                 $type: 'string',
                                 _: _.startCase(bjson.name)
                             }
-                        }
+                        },
+                        {
+                            $name: 'version',
+                            $label: 'Version',
+                            $readonly: 'true',
+                            $viewHint: 'designModeOnly',
+                            value: {
+                                $type: 'string',
+                                _: bjson.version
+                            }
+                        },
+                        {
+                            $name: 'description',
+                            $label: 'Description',
+                            $readonly: 'true',
+                            $viewHint: 'designModeOnly',
+                            value: {
+                                $type: 'string',
+                                _: bjson.description
+                            }
+                        }]
                     }
                 }
             }
         };
         jx = '<?xml version="1.0" encoding="UTF-8"?>' + jxon.jsToString(jx);
         jx = formattor(jx, {method: 'xml'});
-        //console.log(chalk.red(bjson.name + ' xml: \n') + jx);
+        // console.log(chalk.red(bjson.name + ' xml: \n') + jx);
         var filePath = path.resolve(dirPath, 'model.xml');
         return writeFile(filePath, jx)
         .then(function() {
