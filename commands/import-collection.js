@@ -7,8 +7,12 @@ var Q = require('q');
 var fs = require('fs-extra');
 var readDir = Q.denodeify(fs.readdir);
 var lstat = Q.denodeify(fs.lstat);
+var readFile = Q.denodeify(fs.readFile);
+var writeFile = Q.denodeify(fs.writeFile);
+var remove = Q.denodeify(fs.remove);
 var path = require('path');
 var zipDir = require('../lib/zipDir');
+var formattor = require('formattor');
 
 var Command = require('ronin').Command;
 
@@ -22,6 +26,7 @@ module.exports = Command.extend({
         r += '\n\t Zips and imports directory recursively.';
         r += '\n\n  ' + title('Options') + ': -short, --name <type> ' + d('default') + ' description\n';
         r += '      -t,  --target <string>\t\t' + '\t\tDir to import.\n\n';
+        r += '      -a,  --auto <boolean>\t\t' + '\t\tAuto generate model.xml when it is missing.\n\n';
 
         r += '      -H,  --host <string>\t\t' + d('localhost') + '\tThe host name of the server running portal foundation.\n';
         r += '      -P,  --port <number>\t\t' + d('7777') + '\t\tThe port of the server running portal foundation.\n';
@@ -33,7 +38,8 @@ module.exports = Command.extend({
     },
 
     options: {
-        target: {type: 'string', alias: 't', default: './'}
+        target: {type: 'string', alias: 't', default: './'},
+        auto: {type: 'boolean', alias: 'a'}
     },
 
     run: function () {
@@ -54,8 +60,12 @@ module.exports = Command.extend({
                 .then(function(rall) {
                     all = [];
                     _.each(rall, function(rv) {
-                        if (!rv.model) console.log(chalk.gray(path.parse(rv.path).base) + ' model.xml not found');
-                        else all.push(doImport(rv.path, exclude));
+                        if (!rv.model) {
+                            if (cfg.auto) all.push(makeModelAndImport(rv.path, exclude));
+                            else console.log(chalk.gray(path.parse(rv.path).base) + ' model.xml not found');
+                        } else {
+                            all.push(doImport(rv.path, exclude));
+                        }
                     });
                     return Q.all(all)
                     .then(function(r) {
@@ -131,7 +141,48 @@ function doImport(dirPath, exclude) {
         .then(function(r) {
             zip.clean();
             var body = jxon.stringToJs(_.unescape(r.body)).import;
-            if (body.level === 'ERROR') console.log(chalk.yellow(path.parse(dirPath).base) + ' ' + body.message);
+            if (body.level === 'ERROR') {
+                console.log(chalk.yellow(path.parse(dirPath).base) + ' ' + body.message);
+            } else {
+                console.log(chalk.green(path.parse(dirPath).base) + ' ' + body.message);
+            }
+        });
+    });
+}
+
+function makeModelAndImport(dirPath, exclude) {
+    return readFile(path.resolve(dirPath, 'bower.json'))
+    .then(function(s) {
+        var bjson = JSON.parse(s.toString());
+        var jx = {
+            catalog: {
+                feature: {
+                    name: bjson.name,
+                    contextItemName: '[BBHOST]',
+                    properties: {
+                        property: {
+                            $name: 'title',
+                            $label: 'Title',
+                            $viewHint: 'admin,designModeOnly',
+                            value: {
+                                $type: 'string',
+                                _: _.startCase(bjson.name)
+                            }
+                        }
+                    }
+                }
+            }
+        };
+        jx = '<?xml version="1.0" encoding="UTF-8"?>' + jxon.jsToString(jx);
+        jx = formattor(jx, {method: 'xml'});
+        //console.log(chalk.red(bjson.name + ' xml: \n') + jx);
+        var filePath = path.resolve(dirPath, 'model.xml');
+        return writeFile(filePath, jx)
+        .then(function() {
+            return doImport(dirPath, exclude)
+            .then(function() {
+                remove(filePath);
+            });
         });
     });
 }
