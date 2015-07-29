@@ -224,11 +224,17 @@ function compare(localProps, serverProps, wname) {
     }
 }
 
-function writeModelFile(fname, itemName) {
+function writeModelFile(fname, itemName, widgetTry) {
     return bbrest.catalog(itemName).get()
     .then(function(res) {
-        if (res.error) throw new Error(res.error);
-        var xml = parseRawModel(_.unescape(res.body), cfg.cli.edge);
+        if (res.error) {
+            if (!widgetTry && res.error.indexOf('not found for context') !== -1) {
+                return writeModelFile(fname, itemName.replace('widget-', ''), true);
+            } else {
+                throw new Error(res.error);
+            }
+        }
+        var xml = parseRawModel(_.unescape(res.body), cfg.cli.edge, widgetTry);
         // if (cfg.cli.edge) {
         //     console.log(xml);
         //     return true;
