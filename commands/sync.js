@@ -21,10 +21,11 @@ module.exports = Command.extend({
         r += '\n\n  ' + title('Options') + ': -short, --name <type> ' + d('default') + ' description\n\n';
         r += '      -f,  --file <string>\t' + d('first xml file') + '\t\t A file to target.\n';
         r += '      -c,  --context <string>\t' + d('portalserver') + '\t\t Portal server context (for other options use `.bbrc`).\n';
-        r += '      -s,  --save <string>\t' + d('') + '\t\t\t Name of the server item which model should be exported to a file.\n';
-        r += '      -y,  --yes <string>\t' + d('') + '\t\t\t Disable interactive mode, answer all questions with yes.\n';
+        r += '      -s,  --save <string>\t' + d('') + '\t\t\t Name of the item which model should be exported to a file.\n';
+        r += '      -y,  --yes <boolean>\t' + d('false') + '\t\t\t Disable interactive mode, answer all questions with yes.\n';
+        r += '      -e,  --edge <boolean>\t' + d('false') + '\t\t\t Convert model.xml to 5.6 format.\n';
         //r += '      -w,  --watch <boolean>\t' + d('false') + '\t\t\t Enables watching for file change.\n';
-        r += '      -v,  --verbose\t\t' + d('false') + '\t\t\t Prints detailed output.\n';
+        r += '      -v,  --verbose <boolean>\t' + d('false') + '\t\t\t Prints detailed output.\n';
         return r;
     },
 
@@ -33,6 +34,7 @@ module.exports = Command.extend({
         context: {type: 'context', alias: 'c'},
         save: {type: 'string', alias: 's'},
         yes: {type: 'boolean', alias: 'y'},
+        edge: {type: 'boolean', alias: 'e'},
         //watch: {type: 'boolean', alias: 'w'},
         verbose: {type: 'boolean', alias: 'v'}
     },
@@ -225,11 +227,14 @@ function compare(localProps, serverProps, wname) {
 function writeModelFile(fname, itemName) {
     return bbrest.catalog(itemName).get()
     .then(function(res) {
-        console.log('hello');
-        var xml = parseRawModel(_.unescape(res.body));
+        var xml = parseRawModel(_.unescape(res.body), cfg.cli.edge);
+        // if (cfg.cli.edge) {
+        //     console.log(xml);
+        //     return true;
+        // }
         return writeFile(fname, xml)
         .then(function() {
-            console.log(fname + ' saved.');
+            console.log(chalk.green(fname) + ' saved.');
         });
     })
     .catch(function(e) {
