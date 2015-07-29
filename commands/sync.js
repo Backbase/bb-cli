@@ -227,6 +227,7 @@ function compare(localProps, serverProps, wname) {
 function writeModelFile(fname, itemName) {
     return bbrest.catalog(itemName).get()
     .then(function(res) {
+        if (res.error) throw new Error(res.error);
         var xml = parseRawModel(_.unescape(res.body), cfg.cli.edge);
         // if (cfg.cli.edge) {
         //     console.log(xml);
@@ -238,7 +239,7 @@ function writeModelFile(fname, itemName) {
         });
     })
     .catch(function(e) {
-        console.log(e);
+        console.log(chalk.red('bb sync'), e.toString());
     });
 }
 
