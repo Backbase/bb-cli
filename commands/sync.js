@@ -9,7 +9,7 @@ var _ = require('lodash');
 var inquirer = require('inquirer');
 var config = require('../lib/config');
 var chalk = require('chalk');
-var formattor = require('formattor');
+var parseRawModel = require('../lib/parseRawModel');
 var bbrest, jxon, cfg;
 
 module.exports = Command.extend({
@@ -45,21 +45,14 @@ module.exports = Command.extend({
                     return init(r, files);
                 });
         })
-        .fail(function(e) {
-            console.log(chalk.red('bb prop error: '), e);
+        .catch(function(e) {
+            console.log(chalk.red('bb sync error: '), e);
             console.log(e.stack);
         });
     }
 });
 
 
-var propsToKeep = {
-    name: true,
-    contextItemName: true,
-    extendedItemName: true,
-    properties: true,
-    tags: true
-};
 function init(r, files) {
     bbrest = r.bbrest;
     jxon = r.jxon;
@@ -232,12 +225,9 @@ function compare(localProps, serverProps, wname) {
 function writeModelFile(fname, itemName) {
     return bbrest.catalog(itemName).get()
     .then(function(res) {
-        var jx = jxon.stringToJs(_.unescape(res.body));
-        delete (jx.catalog.$totalSize);
-        for (var k in jx.catalog.widget) if (!propsToKeep[k]) delete (jx.catalog.widget[k]);
-        jx = '<?xml version="1.0" encoding="UTF-8"?>' + jxon.jsToString(jx);
-        jx = formattor(jx, {method: 'xml'});
-        return writeFile(fname, jx)
+        console.log('hello');
+        var xml = parseRawModel(_.unescape(res.body));
+        return writeFile(fname, xml)
         .then(function() {
             console.log(fname + ' saved.');
         });
