@@ -18,6 +18,7 @@ var orderDeps = require('../lib/orderDependencies');
 var Command = require('ronin').Command;
 
 var queue = [];
+var currentlyImporting = '';
 
 var bbrest, jxon, cfg;
 
@@ -163,6 +164,7 @@ function zipPackage(dirPath, exclude) {
 function importQueue() {
     var qu = queue.shift();
     if (!qu.zip && queue.length) return importQueue();
+    currentlyImporting = qu.zip.dirName;
     return bbrest.importItem().file(qu.zip.path).post()
     .then(function(r) {
         qu.zip.clean();
@@ -240,7 +242,7 @@ function makeModelAndZip(dirPath, exclude) {
 
 
 function error(err) {
-    util.err(chalk.red('bb import-collection: ') + (err.message || err.error));
+    util.err(chalk.red((currentlyImporting || 'bb import-collection') + ': ') + (err.message || err.error));
 }
 function ok(r) {
     util.ok('Importing ' + chalk.green(cfg.target) + '. Done.');
