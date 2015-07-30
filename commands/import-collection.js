@@ -60,6 +60,7 @@ module.exports = Command.extend({
                 var all = [];
                 console.log('reading bower components...');
                 _.each(deps, function(depName) {
+                    if (depName.indexOf('collection-') === 0) return;
                     queue.push({name: depName});
                     var dirPath = path.resolve(cfg.target, depName);
                     all.push(parseDir(dirPath, exclude));
