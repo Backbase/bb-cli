@@ -13,8 +13,11 @@ var remove = Q.denodeify(fs.remove);
 var path = require('path');
 var zipDir = require('../lib/zipDir');
 var formattor = require('formattor');
+var orderDeps = require('../lib/orderDependencies');
 
 var Command = require('ronin').Command;
+
+var queue = [];
 
 var bbrest, jxon, cfg;
 
@@ -50,26 +53,36 @@ module.exports = Command.extend({
             jxon = r.jxon;
             cfg = r.config.cli;
 
-            return parseDir(path.resolve(cfg.target), exclude)
-            .then(function(r) {
+            // return parseDir(path.resolve(cfg.target), exclude)
+            return orderDeps(path.resolve(cfg.target, '../../'))
+            .then(function(deps) {
                 var all = [];
-                _.each(r.dirs, function(dirPath) {
+                console.log('reading bower components...');
+                _.each(deps, function(depName) {
+                    queue.push({name: depName});
+                    var dirPath = path.resolve(cfg.target, depName);
                     all.push(parseDir(dirPath, exclude));
                 });
                 return Q.all(all)
                 .then(function(rall) {
+                    console.log('creating zips...');
                     all = [];
                     _.each(rall, function(rv) {
+                        if (!rv) return;
                         if (!rv.model) {
-                            if (cfg.auto) all.push(makeModelAndImport(rv.path, exclude));
+                            if (cfg.auto) all.push(makeModelAndZip(rv.path, exclude));
                             else console.log(chalk.gray(path.parse(rv.path).base) + ' model.xml not found');
                         } else {
-                            all.push(doImport(rv.path, exclude));
+                            all.push(zipPackage(rv.path, exclude));
                         }
                     });
                     return Q.all(all)
-                    .then(function(r) {
-                        ok(r);
+                    .then(function() {
+                        console.log('importing...');
+                        return importQueue()
+                        .then(function(r) {
+                            ok(r);
+                        });
                     });
                 });
             })
@@ -89,6 +102,10 @@ function parseDir(dirPath, exclude) {
     return readDir(dirPath)
     .then(function(files) {
         return parseFiles(dirPath, files, exclude);
+    })
+    .catch(function() {
+        var name = path.parse(dirPath).base;
+        console.log(chalk.yellow(name) + ' problem parsing dir');
     });
 }
 
@@ -134,23 +151,32 @@ function doLstat(filePath) {
     });
 }
 
-function doImport(dirPath, exclude) {
+function zipPackage(dirPath, exclude) {
     return zipDir(dirPath, exclude)
     .then(function(zip) {
-        return bbrest.importItem().file(zip.path).post()
-        .then(function(r) {
-            zip.clean();
-            var body = jxon.stringToJs(_.unescape(r.body)).import;
-            if (body.level === 'ERROR') {
-                console.log(chalk.yellow(path.parse(dirPath).base) + ' ' + body.message);
-            } else {
-                console.log(chalk.green(path.parse(dirPath).base) + ' ' + body.message);
-            }
-        });
+        zip.dirName = path.parse(dirPath).base;
+        var item = _.where(queue, {name: zip.dirName})[0];
+        item.zip = zip;
     });
 }
 
-function makeModelAndImport(dirPath, exclude) {
+function importQueue() {
+    var qu = queue.shift();
+    if (!qu.zip && queue.length) return importQueue();
+    return bbrest.importItem().file(qu.zip.path).post()
+    .then(function(r) {
+        qu.zip.clean();
+        var body = jxon.stringToJs(_.unescape(r.body)).import;
+        if (body.level === 'ERROR') {
+            console.log(chalk.yellow(qu.zip.dirName) + ' ' + body.message);
+        } else {
+            console.log(chalk.green(qu.zip.dirName) + ' ' + body.message);
+        }
+        if (queue.length) return importQueue();
+    });
+}
+
+function makeModelAndZip(dirPath, exclude) {
     return readFile(path.resolve(dirPath, 'bower.json'))
     .then(function(s) {
         var bjson = JSON.parse(s.toString());
@@ -187,7 +213,7 @@ function makeModelAndImport(dirPath, exclude) {
                             $viewHint: 'designModeOnly',
                             value: {
                                 $type: 'string',
-                                _: bjson.description
+                                _: bjson.description || ''
                             }
                         }]
                     }
@@ -200,11 +226,15 @@ function makeModelAndImport(dirPath, exclude) {
         var filePath = path.resolve(dirPath, 'model.xml');
         return writeFile(filePath, jx)
         .then(function() {
-            return doImport(dirPath, exclude)
+            return zipPackage(dirPath, exclude)
             .then(function() {
                 remove(filePath);
             });
         });
+    })
+    .catch(function(err) {
+        error('make model.xml problem');
+        throw err;
     });
 }
 
