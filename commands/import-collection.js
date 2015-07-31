@@ -183,7 +183,7 @@ function importQueue() {
             console.log(chalk.green(qu.zip.dirName) + ' ' + body.message);
         }
         if (queue.length) return importQueue();
-    });
+    })
 }
 
 function readBowerJson(dir) {
@@ -290,6 +290,10 @@ function makeModelAndZip(dirPath, bjson, exclude) {
 
 
 function error(err) {
+    if (err.statusInfo === 'Error: connect ECONNREFUSED') {
+        currentlyImporting = '';
+        err.message = 'Check if CXP portal is runing';
+    }
     util.err(chalk.red((currentlyImporting || 'bb import-collection') + ': ') + (err.message || err.error));
 }
 function ok(r) {
