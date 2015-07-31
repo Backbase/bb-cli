@@ -32,6 +32,7 @@ module.exports = Command.extend({
         r += '\n\n  ' + title('Options') + ': -short, --name <type> ' + d('default') + ' description\n';
         r += '      -t,  --target <string>\t\t' + '\t\tDir to import.\n\n';
         r += '      -a,  --auto <boolean>\t\t' + '\t\tAuto generate model.xml when it is missing.\n\n';
+        r += '      -r,  --remove <boolean>\t\t' + '\t\tRemoves components in target instead of adding them.\n\n';
 
         r += '      -H,  --host <string>\t\t' + d('localhost') + '\tThe host name of the server running portal foundation.\n';
         r += '      -P,  --port <number>\t\t' + d('7777') + '\t\tThe port of the server running portal foundation.\n';
@@ -44,7 +45,8 @@ module.exports = Command.extend({
 
     options: {
         target: {type: 'string', alias: 't', default: './'},
-        auto: {type: 'boolean', alias: 'a'}
+        auto: {type: 'boolean', alias: 'a'},
+        remove: {type: 'boolean', alias: 'r'}
     },
 
     run: function () {
@@ -61,16 +63,20 @@ module.exports = Command.extend({
             .then(function(r) {
                 var all = [];
                 console.log('reading bower components...');
-                _.each(r.dirs, function(dir, i) {
-                    if (dir.name.indexOf('collection-') === 0) return;
+                _.each(r.dirs, function(dir) {
                     queue.push({name: dir.name});
                     // if (path.parse(dirPath).base !== bjson.name) console.log(path.parse(dirPath).base, bjson.name);
                     all.push(parseDir(dir.path, exclude));
                 });
                 return Q.all(all)
                 .then(function(rall) {
-                    console.log('creating zips...');
                     all = [];
+                    if (cfg.remove) {
+                        console.log('removing...');
+                        queue.reverse();
+                        return removeQueue();
+                    }
+                    console.log('creating zips...');
                     _.each(rall, function(rv) {
                         if (!rv) return;
                         if (!rv.model) {
@@ -183,7 +189,7 @@ function importQueue() {
             console.log(chalk.green(qu.zip.dirName) + ' ' + body.message);
         }
         if (queue.length) return importQueue();
-    })
+    });
 }
 
 function readBowerJson(dir) {
@@ -191,7 +197,7 @@ function readBowerJson(dir) {
     .then(function(s) {
         var bjson = JSON.parse(s.toString());
         dir.json = bjson;
-    })
+    });
 
 }
 
@@ -221,6 +227,7 @@ function getBowers(mainPath, exclude) {
             var order = orderDeps(flat);
             var newDirs = [];
             _.each(order, function(dep) {
+                if (dep.indexOf('collection-') === 0) return;
                 newDirs.push(_.where(r.dirs, {name: dep})[0]);
             });
             r.dirs = newDirs;
@@ -288,6 +295,18 @@ function makeModelAndZip(dirPath, bjson, exclude) {
     });
 }
 
+function removeQueue() {
+    var qu = queue.shift();
+    return bbrest.catalog(qu.name).delete()
+    .then(function(r) {
+        if (r.error) {
+            currentlyImporting = qu.name;
+            error({message: r.statusInfo});
+        }
+        console.log(chalk.green(qu.name) + chalk.red(' deleted'));
+        if (queue.length) return removeQueue();
+    });
+}
 
 function error(err) {
     if (err.statusInfo === 'Error: connect ECONNREFUSED') {
