@@ -19,6 +19,7 @@ var Command = require('ronin').Command;
 
 var queue = [];
 var currentlyImporting = '';
+var exclude = ['.git', '.gitignore', 'bower_components', 'node_modules'];
 
 var bbrest, jxon, cfg;
 
@@ -55,15 +56,16 @@ module.exports = Command.extend({
             cfg = r.config.cli;
 
             // return parseDir(path.resolve(cfg.target), exclude)
-            return orderDeps(path.resolve(cfg.target, '../../'))
-            .then(function(deps) {
+            // return orderDeps(path.resolve(cfg.target, '../../'))
+            return getBowers(path.resolve(cfg.target), exclude)
+            .then(function(r) {
                 var all = [];
                 console.log('reading bower components...');
-                _.each(deps, function(depName) {
-                    if (depName.indexOf('collection-') === 0) return;
-                    queue.push({name: depName});
-                    var dirPath = path.resolve(cfg.target, depName);
-                    all.push(parseDir(dirPath, exclude));
+                _.each(r.dirs, function(dir, i) {
+                    if (dir.name.indexOf('collection-') === 0) return;
+                    queue.push({name: dir.name});
+                    // if (path.parse(dirPath).base !== bjson.name) console.log(path.parse(dirPath).base, bjson.name);
+                    all.push(parseDir(dir.path, exclude));
                 });
                 return Q.all(all)
                 .then(function(rall) {
@@ -72,7 +74,9 @@ module.exports = Command.extend({
                     _.each(rall, function(rv) {
                         if (!rv) return;
                         if (!rv.model) {
-                            if (cfg.auto) all.push(makeModelAndZip(rv.path, exclude));
+                            var json = _.where(r.dirs, {name: rv.name})[0].json;
+                            if (!json) console.log(rv);
+                            if (cfg.auto) all.push(makeModelAndZip(rv.path, json, exclude));
                             else console.log(chalk.gray(path.parse(rv.path).base) + ' model.xml not found');
                         } else {
                             all.push(zipPackage(rv.path, exclude));
@@ -97,7 +101,6 @@ module.exports = Command.extend({
     }
 });
 
-var exclude = ['.git', '.gitignore', 'bower_components', 'node_modules'];
 
 
 function parseDir(dirPath, exclude) {
@@ -115,6 +118,11 @@ function parseDir(dirPath, exclude) {
 function parseFiles(dirPath, files, exclude) {
     var all = [];
     var filePath;
+    var o = {
+        path: dirPath,
+        name: path.parse(dirPath).base,
+        dirs: []
+    };
     _.each(files, function(fileName) {
 
         if (exclude.indexOf(path.parse(fileName).base) !== -1) return;
@@ -125,10 +133,6 @@ function parseFiles(dirPath, files, exclude) {
 
     return Q.all(all)
     .then(function(rall) {
-        var o = {
-            path: dirPath,
-            dirs: []
-        };
         _.each(rall, function(v) {
             if (v) {
                 if (v.dir) o.dirs.push(v.dir);
@@ -147,7 +151,10 @@ function doLstat(filePath) {
         if (stat.isFile()) {
             if (fileName === 'model.xml') return {model: filePath};
         } else if (stat.isDirectory()) {
-            return {dir: filePath};
+            return {dir: {
+                path: filePath,
+                name: fileName
+            }};
         }
         return;
     });
@@ -179,60 +186,100 @@ function importQueue() {
     });
 }
 
-function makeModelAndZip(dirPath, exclude) {
-    return readFile(path.resolve(dirPath, 'bower.json'))
+function readBowerJson(dir) {
+    return readFile(path.resolve(dir.path, 'bower.json'))
     .then(function(s) {
         var bjson = JSON.parse(s.toString());
-        var jx = {
-            catalog: {
-                feature: {
-                    name: bjson.name,
-                    contextItemName: '[BBHOST]',
-                    properties: {
-                        property: [
-                        {
-                            $name: 'title',
-                            $label: 'Title',
-                            $viewHint: 'admin,designModeOnly',
-                            value: {
-                                $type: 'string',
-                                _: _.startCase(bjson.name)
-                            }
-                        },
-                        {
-                            $name: 'version',
-                            $label: 'Version',
-                            $readonly: 'true',
-                            $viewHint: 'designModeOnly',
-                            value: {
-                                $type: 'string',
-                                _: bjson.version
-                            }
-                        },
-                        {
-                            $name: 'description',
-                            $label: 'Description',
-                            $readonly: 'true',
-                            $viewHint: 'designModeOnly',
-                            value: {
-                                $type: 'string',
-                                _: bjson.description || ''
-                            }
-                        }]
-                    }
+        dir.json = bjson;
+    })
+
+}
+
+function getBowers(mainPath, exclude) {
+    return parseDir(mainPath, exclude)
+    .then(function(r) {
+        var all = [];
+        _.each(r.dirs, function(dir) {
+            all.push(readBowerJson(dir));
+        });
+        return Q.all(all)
+        .then(function() {
+            var flat = {};
+            _.each(r.dirs, function(dir) {
+                if (!dir.json || !dir.json.dependencies) return;
+                // if (dir.json.dependencies['module-transactions-2']) delete dir.json.dependencies['module-transactions-2'];
+                flat[dir.name] = dir.json.dependencies;
+                flat[dir.name] = _.keys(flat[dir.name]);
+            });
+            _.each(flat, function(deps, depName) {
+                var alldeps = [];
+                _.each(deps, function(key) {
+                    alldeps = _.union(alldeps, flat[key]);
+                });
+                flat[depName] = _.union(deps, alldeps);
+            });
+            var order = orderDeps(flat);
+            var newDirs = [];
+            _.each(order, function(dep) {
+                newDirs.push(_.where(r.dirs, {name: dep})[0]);
+            });
+            r.dirs = newDirs;
+            return r;
+        });
+    });
+
+}
+
+function makeModelAndZip(dirPath, bjson, exclude) {
+    var jx = {
+        catalog: {
+            feature: {
+                name: bjson.name,
+                contextItemName: '[BBHOST]',
+                properties: {
+                    property: [
+                    {
+                        $name: 'title',
+                        $label: 'Title',
+                        $viewHint: 'admin,designModeOnly',
+                        value: {
+                            $type: 'string',
+                            _: _.startCase(bjson.name)
+                        }
+                    },
+                    {
+                        $name: 'version',
+                        $label: 'Version',
+                        $readonly: 'true',
+                        $viewHint: 'designModeOnly',
+                        value: {
+                            $type: 'string',
+                            _: bjson.version
+                        }
+                    },
+                    {
+                        $name: 'description',
+                        $label: 'Description',
+                        $readonly: 'true',
+                        $viewHint: 'designModeOnly',
+                        value: {
+                            $type: 'string',
+                            _: bjson.description || ''
+                        }
+                    }]
                 }
             }
-        };
-        jx = '<?xml version="1.0" encoding="UTF-8"?>' + jxon.jsToString(jx);
-        jx = formattor(jx, {method: 'xml'});
-        // console.log(chalk.red(bjson.name + ' xml: \n') + jx);
-        var filePath = path.resolve(dirPath, 'model.xml');
-        return writeFile(filePath, jx)
+        }
+    };
+    jx = '<?xml version="1.0" encoding="UTF-8"?>' + jxon.jsToString(jx);
+    jx = formattor(jx, {method: 'xml'});
+    // console.log(chalk.red(bjson.name + ' xml: \n') + jx);
+    var filePath = path.resolve(dirPath, 'model.xml');
+    return writeFile(filePath, jx)
+    .then(function() {
+        return zipPackage(dirPath, exclude)
         .then(function() {
-            return zipPackage(dirPath, exclude)
-            .then(function() {
-                remove(filePath);
-            });
+            remove(filePath);
         });
     })
     .catch(function(err) {
