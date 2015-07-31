@@ -44,7 +44,7 @@
     "lodash": "^3.2.0",
     "lodash-contrib": "^241.4.14",
     "map-stream": "0.0.5",
-    "mosaic-rest-js": "^0.3.0",
+    "mosaic-rest-js": "^0.3.1",
     "mvn-credentials": "^0.2.0",
     "node-fs-extra": "^0.8.1",
     "q": "^1.1.2",
