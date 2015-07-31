@@ -14,6 +14,7 @@ var path = require('path');
 var zipDir = require('../lib/zipDir');
 var formattor = require('formattor');
 var orderDeps = require('../lib/orderDependencies');
+var BowerConfig = require('bower-config');
 
 var Command = require('ronin').Command;
 
@@ -30,7 +31,7 @@ module.exports = Command.extend({
         var r = '\n  ' + title('Usage') + ': bb ' + this.name + ' [OPTIONS]';
         r += '\n\t Zips and imports directory recursively.';
         r += '\n\n  ' + title('Options') + ': -short, --name <type> ' + d('default') + ' description\n';
-        r += '      -t,  --target <string>\t\t' + '\t\tDir to import.\n\n';
+        r += '      -t,  --target <string>\t\t' + '\t\tDir where bower.json is.\n\n';
         r += '      -a,  --auto <boolean>\t\t' + '\t\tAuto generate model.xml when it is missing.\n\n';
         r += '      -r,  --remove <boolean>\t\t' + '\t\tRemoves components in target instead of adding them.\n\n';
 
@@ -197,13 +198,17 @@ function readBowerJson(dir) {
     .then(function(s) {
         var bjson = JSON.parse(s.toString());
         dir.json = bjson;
+        if (!dir.name) dir.name = bjson.name;
     });
 
 }
 
-function getBowers(mainPath, exclude) {
+function getBowers(startPath, exclude) {
+    var bowerDir = BowerConfig.create(startPath).load().toObject().directory;
+    var mainPath = path.resolve(startPath, bowerDir);
     return parseDir(mainPath, exclude)
     .then(function(r) {
+        r.dirs.unshift({path: startPath});
         var all = [];
         _.each(r.dirs, function(dir) {
             all.push(readBowerJson(dir));
@@ -214,8 +219,9 @@ function getBowers(mainPath, exclude) {
             _.each(r.dirs, function(dir) {
                 if (!dir.json || !dir.json.dependencies) return;
                 // if (dir.json.dependencies['module-transactions-2']) delete dir.json.dependencies['module-transactions-2'];
-                flat[dir.name] = dir.json.dependencies;
-                flat[dir.name] = _.keys(flat[dir.name]);
+                var keys = _.keys(dir.json.dependencies);
+                flat[dir.name] = keys;
+                // if (keys.indexOf('requirejs') !== -1) console.log('hello');
             });
             _.each(flat, function(deps, depName) {
                 var alldeps = [];
@@ -297,21 +303,38 @@ function makeModelAndZip(dirPath, bjson, exclude) {
 
 function removeQueue() {
     var qu = queue.shift();
-    return bbrest.catalog(qu.name).delete()
-    .then(function(r) {
-        if (r.error) {
-            currentlyImporting = qu.name;
-            error({message: r.statusInfo});
-        }
-        console.log(chalk.green(qu.name) + chalk.red(' deleted'));
-        if (queue.length) return removeQueue();
+    return getModelName(qu.name)
+    .then(function(name) {
+        return bbrest.catalog(name).delete()
+        .then(function(r) {
+            if (r.error) {
+                currentlyImporting = name;
+                error({message: r.statusInfo});
+            } else {
+                console.log(chalk.green(name) + chalk.red(' deleted'));
+            }
+            if (queue.length) return removeQueue();
+        });
+    });
+}
+
+function getModelName(repoName) {
+    var modelPath = path.resolve(cfg.target, repoName, 'model.xml');
+    return readFile(modelPath)
+    .then(function(s) {
+        var jx = jxon.stringToJs(s.toString());
+        var key = _.keys(jx.catalog)[0];
+        return jx.catalog[key].name;
+    })
+    .catch(function(err) {
+        return repoName;
     });
 }
 
 function error(err) {
     if (err.statusInfo === 'Error: connect ECONNREFUSED') {
         currentlyImporting = '';
-        err.message = 'Check if CXP portal is runing';
+        err.message = 'Check if CXP portal is running';
     }
     util.err(chalk.red((currentlyImporting || 'bb import-collection') + ': ') + (err.message || err.error));
 }
