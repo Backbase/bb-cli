@@ -8,6 +8,7 @@ var Q = require('q');
 var fs = require('fs-extra');
 var readFile = Q.denodeify(fs.readFile);
 var writeFile = Q.denodeify(fs.writeFile);
+var move = Q.denodeify(fs.move);
 var remove = Q.denodeify(fs.remove);
 var readDir = Q.denodeify(fs.readdir);
 var lstat = Q.denodeify(fs.lstat);
@@ -27,7 +28,8 @@ module.exports = Command.extend({
         var r = '\n  ' + title('Usage') + ': bb ' + this.name + ' [OPTIONS]';
         r += '\n\t Imports portal.';
         r += '\n\n  ' + title('Options') + ': -short, --name <type> ' + d('default') + ' description\n';
-        r += '      -t,  --target <string>\t\t' + '\t\tFile or dir to import.\n\n';
+        r += '      -t,  --target <string>\t\t' + '\t\tFile or dir to import.\n';
+        r += '      -s,  --save <string>\t\t' + '\t\tName of the file to save. If defined, directory import zip will be saved instead of submitted.\n\n';
 
         r += '      -H,  --host <string>\t\t' + d('localhost') + '\tThe host name of the server running portal foundation.\n';
         r += '      -P,  --port <number>\t\t' + d('7777') + '\t\tThe port of the server running portal foundation.\n';
@@ -42,7 +44,8 @@ module.exports = Command.extend({
     },
 
     options: {
-        target: {type: 'string', alias: 't'}
+        target: {type: 'string', alias: 't'},
+        save: {type: 'string', alias: 's'}
     },
 
     run: function () {
@@ -77,7 +80,7 @@ module.exports = Command.extend({
             })
             .catch(function(err) {
                 if (err.code === 'ENOENT') return error(new Error('Target does not exist.'));
-                return error(new Error(err.statusInfo));
+                return error(new Error(err.statusInfo || err));
             });
 
 
@@ -136,10 +139,16 @@ function importDir() {
                         var pth = path.resolve(path.parse(cfg.target).dir, '_$import-temp$_.zip');
                         return writeFile(pth, zip)
                         .then(function() {
+                            if (cfg.save) {
+                                return move(pth, path.resolve(cfg.save), {clobber: true})
+                                .then(function() {
+                                    return {error: false};
+                                });
+                            }
                             return bbrest.import().file(pth).post();
                         })
                         .fin(function() {
-                            remove(pth);
+                            if (!cfg.save) remove(pth);
                         });
                     });
                 } else {
