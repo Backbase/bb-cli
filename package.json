@@ -51,6 +51,7 @@
     "request": "^2.46.0",
     "ronin": "git+https://github.com/operatino/ronin#v0.3.11",
     "tmp": "0.0.26",
+    "watch": "^0.16.0",
     "xml2js": "^0.4.4"
   },
   "main": "lib",
