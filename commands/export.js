@@ -207,9 +207,16 @@ function runOrchestratorExport(jx) {
                     return readFile(xmlPath)
                     .then(function(x) {
                         return handlePortalXml(x.toString(), path.resolve(cfg.save, 'metadata.xml'))
-                        .then(function() {
+                        .then(function(contentRepoId) {
                             var content = (cfg.type === 'portal') ? 'contentservices.zip' : 'resource.zip';
-                            return move(path.resolve(exPath, content), path.resolve(cfg.save, content))
+                            var moves = [
+                                move(path.resolve(exPath, content), path.resolve(cfg.save, content))
+                            ];
+                            if (contentRepoId) {
+                                var repoZip = contentRepoId + '.zip';
+                                moves.push(move(path.resolve(exPath, repoZip), path.resolve(cfg.save, repoZip)));
+                            }
+                            return Q.all(moves)
                             .fin(function() {
                                 return remove(exPath)
                                 .then(ok);
@@ -240,7 +247,13 @@ function ok(r) {
 function handlePortalXml(x, metaFile) {
     var jx = sort(jxon.stringToJs(x));
     if (cfg.chunk) {
-        return chunkXml(jx, metaFile);
+        var props = _.get(jx, 'exportBundle.portalContentRepositories.contentRepository.properties.property');
+        var id = props ? _.find(props, {$name: 'repositoryId'}).value._ : '';
+        //_.where(jx.exportBundle.portalContentRepositories.contentRepository.properties.property, {$name: 'repositoryId'})[0].value._);
+        return chunkXml(jx, metaFile)
+        .then(function() {
+            return id;
+        });
     } else {
         if (cfg.pretty) x = formattor(jxon.jsToString(jx), {method: 'xml'});
         return writeFile(cfg.save, x);
