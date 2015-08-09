@@ -1,0 +1,468 @@
+<links>
+    <link>
+        <contextItemName>my-customers-site</contextItemName>
+        <finalUrl>my-customers-site/ddd</finalUrl>
+        <name>link_ddd_1439842513365</name>
+        <parentItemName>navroot_mainmenu</parentItemName>
+        <properties>
+            <property name="Description">
+                <value type="string"/>
+            </property>
+            <property name="ItemRef">
+                <value type="uuidref">f96a28e6-6db9-4f23-9e68-a78764739a3b</value>
+            </property>
+            <property name="SecuritySameAsParent">
+                <value type="boolean">true</value>
+            </property>
+            <property name="TemplateName">
+                <value type="string">link-default</value>
+            </property>
+            <property name="generatedUrl">
+                <value type="string">my-customers-site/ddd</value>
+            </property>
+            <property name="itemType">
+                <value type="string">page</value>
+            </property>
+            <property name="order">
+                <value type="double">996.1328125</value>
+            </property>
+            <property name="sectionName">
+                <value type="string">ddd</value>
+            </property>
+            <property name="title">
+                <value type="string">ddd</value>
+            </property>
+        </properties>
+        <tags></tags>
+        <uuid>20b84d81-f9e6-4277-ae67-981b67a69ad8</uuid>
+    </link>
+    <link>
+        <contextItemName>my-customers-site</contextItemName>
+        <finalUrl>my-customers-site/index</finalUrl>
+        <name>link_navrootMainMenu</name>
+        <parentItemName>navroot_mainmenu</parentItemName>
+        <properties>
+            <property name="Description">
+                <value type="string"/>
+            </property>
+            <property name="ItemRef">
+                <value type="uuidref">28aa1797-aa54-4beb-817c-9d519026bb17</value>
+            </property>
+            <property name="SecuritySameAsParent">
+                <value type="boolean">true</value>
+            </property>
+            <property name="TemplateName">
+                <value type="string">link-default</value>
+            </property>
+            <property name="generatedUrl">
+                <value type="string">my-customers-site/index</value>
+            </property>
+            <property name="itemType">
+                <value type="string">page</value>
+            </property>
+            <property name="order">
+                <value type="double">10.0</value>
+            </property>
+            <property name="sectionName">
+                <value type="string">index</value>
+            </property>
+            <property name="title">
+                <value type="string">Default Page</value>
+            </property>
+        </properties>
+        <tags></tags>
+        <uuid>5b7a915c-bd6e-4be8-8792-6cae8668f614</uuid>
+    </link>
+    <link>
+        <contextItemName>my-customers-site</contextItemName>
+        <finalUrl>my-customers-site/test1/t2</finalUrl>
+        <name>link_t2_1439842476088</name>
+        <parentItemName>link_test1_1439842417552</parentItemName>
+        <properties>
+            <property name="Description">
+                <value type="string"/>
+            </property>
+            <property name="ItemRef">
+                <value type="uuidref">619770cf-c3c8-4b58-8ed4-48b587ba0dbe</value>
+            </property>
+            <property name="SecuritySameAsParent">
+                <value type="boolean">true</value>
+            </property>
+            <property name="TemplateName">
+                <value type="string">link-default</value>
+            </property>
+            <property name="generatedUrl">
+                <value type="string">my-customers-site/test1/t2</value>
+            </property>
+            <property name="itemType">
+                <value type="string">page</value>
+            </property>
+            <property name="order">
+                <value type="double">0.0</value>
+            </property>
+            <property name="sectionName">
+                <value type="string">t2</value>
+            </property>
+            <property name="title">
+                <value type="string">t2</value>
+            </property>
+        </properties>
+        <tags></tags>
+        <uuid>8b215e8f-b741-4bc0-9453-3e83e88ac716</uuid>
+    </link>
+    <link>
+        <contextItemName>my-customers-site</contextItemName>
+        <finalUrl>my-customers-site/test1/t3</finalUrl>
+        <name>link_t3_1439842479890</name>
+        <parentItemName>link_test1_1439842417552</parentItemName>
+        <properties>
+            <property name="Description">
+                <value type="string"/>
+            </property>
+            <property name="ItemRef">
+                <value type="uuidref">9a2bf247-02fa-4fcc-8998-5163cb574906</value>
+            </property>
+            <property name="SecuritySameAsParent">
+                <value type="boolean">true</value>
+            </property>
+            <property name="TemplateName">
+                <value type="string">link-default</value>
+            </property>
+            <property name="generatedUrl">
+                <value type="string">my-customers-site/test1/t3</value>
+            </property>
+            <property name="itemType">
+                <value type="string">page</value>
+            </property>
+            <property name="order">
+                <value type="double">500.0</value>
+            </property>
+            <property name="sectionName">
+                <value type="string">t3</value>
+            </property>
+            <property name="title">
+                <value type="string">t3</value>
+            </property>
+        </properties>
+        <tags></tags>
+        <uuid>9b87c1a7-0ea6-4335-9f67-2d8688ecfb14</uuid>
+    </link>
+    <link>
+        <contextItemName>my-customers-site</contextItemName>
+        <finalUrl>my-customers-site/t5/t4</finalUrl>
+        <name>link_t4_1439842483230</name>
+        <parentItemName>link_t5_1439842487014</parentItemName>
+        <properties>
+            <property name="Description">
+                <value type="string"/>
+            </property>
+            <property name="ItemRef">
+                <value type="uuidref">1b75dd79-405d-473e-8e06-ef2a39eaeb8c</value>
+            </property>
+            <property name="SecuritySameAsParent">
+                <value type="boolean">true</value>
+            </property>
+            <property name="TemplateName">
+                <value type="string">link-default</value>
+            </property>
+            <property name="generatedUrl">
+                <value type="string">my-customers-site/t5/t4</value>
+            </property>
+            <property name="itemType">
+                <value type="string">page</value>
+            </property>
+            <property name="order">
+                <value type="double">0.0</value>
+            </property>
+            <property name="sectionName">
+                <value type="string">t4</value>
+            </property>
+            <property name="title">
+                <value type="string">t4</value>
+            </property>
+        </properties>
+        <tags></tags>
+        <uuid>d52113c0-f362-4908-9b34-1e735a553e7a</uuid>
+    </link>
+    <link>
+        <contextItemName>my-customers-site</contextItemName>
+        <finalUrl>my-customers-site/t5</finalUrl>
+        <name>link_t5_1439842487014</name>
+        <parentItemName>navroot_mainmenu</parentItemName>
+        <properties>
+            <property name="Description">
+                <value type="string"/>
+            </property>
+            <property name="ItemRef">
+                <value type="uuidref">3a981799-ef57-410e-87ed-cdb21d87583b</value>
+            </property>
+            <property name="SecuritySameAsParent">
+                <value type="boolean">true</value>
+            </property>
+            <property name="TemplateName">
+                <value type="string">link-default</value>
+            </property>
+            <property name="generatedUrl">
+                <value type="string">my-customers-site/t5</value>
+            </property>
+            <property name="itemType">
+                <value type="string">page</value>
+            </property>
+            <property name="order">
+                <value type="double">969.0625</value>
+            </property>
+            <property name="sectionName">
+                <value type="string">t5</value>
+            </property>
+            <property name="title">
+                <value type="string">t5</value>
+            </property>
+        </properties>
+        <tags></tags>
+        <uuid>4f0ff077-1d62-4051-91a6-5ea0fefa6613</uuid>
+    </link>
+    <link>
+        <contextItemName>my-customers-site</contextItemName>
+        <finalUrl>my-customers-site/t6</finalUrl>
+        <name>link_t6_1439842490525</name>
+        <parentItemName>navroot_mainmenu</parentItemName>
+        <properties>
+            <property name="Description">
+                <value type="string"/>
+            </property>
+            <property name="ItemRef">
+                <value type="uuidref">739b2dab-f2f8-47f1-b39a-45c6c0758e82</value>
+            </property>
+            <property name="SecuritySameAsParent">
+                <value type="boolean">true</value>
+            </property>
+            <property name="TemplateName">
+                <value type="string">link-default</value>
+            </property>
+            <property name="generatedUrl">
+                <value type="string">my-customers-site/t6</value>
+            </property>
+            <property name="itemType">
+                <value type="string">page</value>
+            </property>
+            <property name="order">
+                <value type="double">984.53125</value>
+            </property>
+            <property name="sectionName">
+                <value type="string">t6</value>
+            </property>
+            <property name="title">
+                <value type="string">t6</value>
+            </property>
+        </properties>
+        <tags></tags>
+        <uuid>9ea8c2e9-7686-49d2-81d5-673c7144dd48</uuid>
+    </link>
+    <link>
+        <contextItemName>my-customers-site</contextItemName>
+        <finalUrl>my-customers-site/t7</finalUrl>
+        <name>link_t7_1439842496520</name>
+        <parentItemName>navroot_mainmenu</parentItemName>
+        <properties>
+            <property name="Description">
+                <value type="string"/>
+            </property>
+            <property name="ItemRef">
+                <value type="uuidref">000a8d54-799b-462a-b142-88605e711e07</value>
+            </property>
+            <property name="SecuritySameAsParent">
+                <value type="boolean">true</value>
+            </property>
+            <property name="TemplateName">
+                <value type="string">link-default</value>
+            </property>
+            <property name="generatedUrl">
+                <value type="string">my-customers-site/t7</value>
+            </property>
+            <property name="itemType">
+                <value type="string">page</value>
+            </property>
+            <property name="order">
+                <value type="double">992.265625</value>
+            </property>
+            <property name="sectionName">
+                <value type="string">t7</value>
+            </property>
+            <property name="title">
+                <value type="string">t7</value>
+            </property>
+        </properties>
+        <tags></tags>
+        <uuid>d0381077-a4e5-43fd-bbdb-c7b82450cd03</uuid>
+    </link>
+    <link>
+        <contextItemName>my-customers-site</contextItemName>
+        <finalUrl>my-customers-site/test1</finalUrl>
+        <name>link_test1_1439842417552</name>
+        <parentItemName>navroot_mainmenu</parentItemName>
+        <properties>
+            <property name="Description">
+                <value type="string"/>
+            </property>
+            <property name="ItemRef">
+                <value type="uuidref">22427ba3-712e-42a2-85e4-d2fcf8a13581</value>
+            </property>
+            <property name="SecuritySameAsParent">
+                <value type="boolean">true</value>
+            </property>
+            <property name="TemplateName">
+                <value type="string">link-default</value>
+            </property>
+            <property name="generatedUrl">
+                <value type="string">my-customers-site/test1</value>
+            </property>
+            <property name="itemType">
+                <value type="string">page</value>
+            </property>
+            <property name="order">
+                <value type="double">505.0</value>
+            </property>
+            <property name="sectionName">
+                <value type="string">test1</value>
+            </property>
+            <property name="title">
+                <value type="string">test1</value>
+            </property>
+        </properties>
+        <tags></tags>
+        <uuid>324cdee3-b258-43f5-9e16-6ad1d89a127c</uuid>
+    </link>
+    <link>
+        <contextItemName>my-customers-site</contextItemName>
+        <finalUrl>my-customers-site/page_1439842445474</finalUrl>
+        <name>link_undefined_1439842445475</name>
+        <parentItemName>masterpage_root</parentItemName>
+        <properties>
+            <property name="Description">
+                <value type="string"/>
+            </property>
+            <property name="ItemRef">
+                <value type="uuidref">bfdfb020-5788-4719-bac7-de5750f49760</value>
+            </property>
+            <property name="SecuritySameAsParent">
+                <value type="boolean">true</value>
+            </property>
+            <property name="TemplateName">
+                <value type="string">link-default</value>
+            </property>
+            <property name="generatedUrl">
+                <value type="string">my-customers-site/page_1439842445474</value>
+            </property>
+            <property name="itemType">
+                <value type="string">page</value>
+            </property>
+            <property name="order">
+                <value type="double">515.0</value>
+            </property>
+            <property name="sectionName">
+                <value type="string">page_1439842445474</value>
+            </property>
+            <property name="title">
+                <value type="string">lpm</value>
+            </property>
+        </properties>
+        <tags></tags>
+        <uuid>a7ed1e19-52df-4a84-a03b-a008dd61e8cb</uuid>
+    </link>
+    <link>
+        <contextItemName>my-customers-site</contextItemName>
+        <finalUrl>my-customers-site/masterpage_root</finalUrl>
+        <name>masterpage_root</name>
+        <parentItemName>my-customers-site</parentItemName>
+        <properties>
+            <property name="Description">
+                <value type="String"/>
+            </property>
+            <property name="SecuritySameAsParent">
+                <value type="boolean">false</value>
+            </property>
+            <property name="TemplateName">
+                <value type="String">link-default</value>
+            </property>
+            <property name="generatedUrl">
+                <value type="string">my-customers-site/masterpage_root</value>
+            </property>
+            <property name="itemType">
+                <value type="string">menuHeader</value>
+            </property>
+            <property name="order">
+                <value type="double">30.0</value>
+            </property>
+            <property name="title">
+                <value type="string">Master Pages</value>
+            </property>
+        </properties>
+        <tags></tags>
+        <uuid>4444fe8e-e3ae-43af-ba89-0dc01b344001</uuid>
+    </link>
+    <link>
+        <contextItemName>my-customers-site</contextItemName>
+        <finalUrl>my-customers-site/main</finalUrl>
+        <name>navroot_mainmenu</name>
+        <parentItemName>my-customers-site</parentItemName>
+        <properties>
+            <property name="Description">
+                <value type="string"/>
+            </property>
+            <property name="SecuritySameAsParent">
+                <value type="boolean">true</value>
+            </property>
+            <property name="TemplateName">
+                <value type="string">link-default</value>
+            </property>
+            <property name="generatedUrl">
+                <value type="string">my-customers-site/main</value>
+            </property>
+            <property name="itemType">
+                <value type="string">menuHeader</value>
+            </property>
+            <property name="order">
+                <value type="double">10.0</value>
+            </property>
+            <property name="sectionName">
+                <value type="string">main</value>
+            </property>
+            <property name="title">
+                <value type="string">Main Navigation</value>
+            </property>
+        </properties>
+        <tags></tags>
+        <uuid>37c939ec-32ff-4b0a-8c83-9252cabda3f7</uuid>
+    </link>
+    <link>
+        <contextItemName>my-customers-site</contextItemName>
+        <finalUrl>my-customers-site/navroot_notinmenu</finalUrl>
+        <name>navroot_notinmenu</name>
+        <parentItemName>my-customers-site</parentItemName>
+        <properties>
+            <property name="Description">
+                <value type="string"/>
+            </property>
+            <property name="SecuritySameAsParent">
+                <value type="boolean">true</value>
+            </property>
+            <property name="TemplateName">
+                <value type="string">link-default</value>
+            </property>
+            <property name="generatedUrl">
+                <value type="string">my-customers-site/navroot_notinmenu</value>
+            </property>
+            <property name="itemType">
+                <value type="string">menuHeader</value>
+            </property>
+            <property name="order">
+                <value type="double">20.0</value>
+            </property>
+            <property name="title">
+                <value type="string">Not in Navigation</value>
+            </property>
+        </properties>
+        <tags></tags>
+        <uuid>5af4d721-6e92-419b-9d2b-ba276642d7ee</uuid>
+    </link>
+</links>

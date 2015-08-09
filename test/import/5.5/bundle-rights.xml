@@ -1,0 +1,1726 @@
+<bundleRights>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>CarouselContainer</itemName>
+        <itemType>TEMPLATE</itemType>
+        <rights>
+            <itemRight name="CarouselContainer" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="CarouselContainer" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="CarouselContainer" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="CarouselContainer" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>ColumnContainer</itemName>
+        <itemType>TEMPLATE</itemType>
+        <rights>
+            <itemRight name="ColumnContainer" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="ColumnContainer" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="ColumnContainer" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="ColumnContainer" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>Column_table</itemName>
+        <itemType>TEMPLATE</itemType>
+        <rights>
+            <itemRight name="Column_table" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_manager</sid>
+            </itemRight>
+            <itemRight name="Column_table" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="Column_table" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>DeckContainer</itemName>
+        <itemType>TEMPLATE</itemType>
+        <rights>
+            <itemRight name="DeckContainer" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="DeckContainer" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="DeckContainer" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="DeckContainer" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>LauncherDeckContainer</itemName>
+        <itemType>TEMPLATE</itemType>
+        <rights>
+            <itemRight name="LauncherDeckContainer" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="LauncherDeckContainer" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="LauncherDeckContainer" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="LauncherDeckContainer" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>LaunchpadPageTemplate</itemName>
+        <itemType>TEMPLATE</itemType>
+        <rights>
+            <itemRight name="LaunchpadPageTemplate" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="LaunchpadPageTemplate" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="LaunchpadPageTemplate" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="LaunchpadPageTemplate" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>LightboxContainer</itemName>
+        <itemType>TEMPLATE</itemType>
+        <rights>
+            <itemRight name="LightboxContainer" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="LightboxContainer" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="LightboxContainer" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="LightboxContainer" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>ManageableArea</itemName>
+        <itemType>TEMPLATE</itemType>
+        <rights>
+            <itemRight name="ManageableArea" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_manager</sid>
+            </itemRight>
+            <itemRight name="ManageableArea" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="ManageableArea" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>PageLayoutContainer</itemName>
+        <itemType>TEMPLATE</itemType>
+        <rights>
+            <itemRight name="PageLayoutContainer" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="PageLayoutContainer" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="PageLayoutContainer" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="PageLayoutContainer" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>PanelContainer</itemName>
+        <itemType>TEMPLATE</itemType>
+        <rights>
+            <itemRight name="PanelContainer" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="PanelContainer" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="PanelContainer" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="PanelContainer" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>SpringboardContainer</itemName>
+        <itemType>TEMPLATE</itemType>
+        <rights>
+            <itemRight name="SpringboardContainer" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="SpringboardContainer" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="SpringboardContainer" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="SpringboardContainer" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>Standard_Widget</itemName>
+        <itemType>TEMPLATE</itemType>
+        <rights>
+            <itemRight name="Standard_Widget" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_manager</sid>
+            </itemRight>
+            <itemRight name="Standard_Widget" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="Standard_Widget" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>TCont</itemName>
+        <itemType>TEMPLATE</itemType>
+        <rights>
+            <itemRight name="TCont" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_manager</sid>
+            </itemRight>
+            <itemRight name="TCont" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="TCont" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>Tabs</itemName>
+        <itemType>TEMPLATE</itemType>
+        <rights>
+            <itemRight name="Tabs" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="Tabs" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="Tabs" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="Tabs" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>carousel-container</itemName>
+        <itemType>CONTAINER</itemType>
+        <rights>
+            <itemRight name="carousel-container" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="carousel-container" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="carousel-container" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="carousel-container" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>column-layout</itemName>
+        <itemType>CONTAINER</itemType>
+        <rights>
+            <itemRight name="column-layout" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="column-layout" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="column-layout" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="column-layout" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>deck-container</itemName>
+        <itemType>CONTAINER</itemType>
+        <rights>
+            <itemRight name="deck-container" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="deck-container" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="deck-container" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="deck-container" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>launcher-deck-container</itemName>
+        <itemType>CONTAINER</itemType>
+        <rights>
+            <itemRight name="launcher-deck-container" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="launcher-deck-container" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="launcher-deck-container" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="launcher-deck-container" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>lightbox-container</itemName>
+        <itemType>CONTAINER</itemType>
+        <rights>
+            <itemRight name="lightbox-container" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="lightbox-container" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="lightbox-container" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="lightbox-container" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>testa</contextItemName>
+        <itemName>link_navrootMainMenu</itemName>
+        <itemType>LINK</itemType>
+        <rights>
+            <itemRight>ADMIN</itemRight>
+            <itemRight>group_admin</itemRight>
+            <itemRight>link_navrootMainMenu</itemRight>
+            <itemRight>false</itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>testa</contextItemName>
+        <itemName>link_undefined_1439839522906</itemName>
+        <itemType>LINK</itemType>
+        <rights>
+            <itemRight>ADMIN</itemRight>
+            <itemRight>group_admin</itemRight>
+            <itemRight>link_undefined_1439839522906</itemRight>
+            <itemRight>false</itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>page-layout-container</itemName>
+        <itemType>CONTAINER</itemType>
+        <rights>
+            <itemRight name="page-layout-container" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="page-layout-container" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="page-layout-container" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="page-layout-container" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>testa</contextItemName>
+        <itemName>page_1439839522905</itemName>
+        <itemType>PAGE</itemType>
+        <rights>
+            <itemRight>ADMIN</itemRight>
+            <itemRight>group_admin</itemRight>
+            <itemRight>page_1439839522905</itemRight>
+            <itemRight>false</itemRight>
+            <propertyRight name="Description" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </propertyRight>
+            <propertyRight name="TemplateName" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </propertyRight>
+            <propertyRight name="behaviors" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </propertyRight>
+            <propertyRight name="bundleName" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </propertyRight>
+            <propertyRight name="client-template" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </propertyRight>
+            <propertyRight name="createdBy" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </propertyRight>
+            <propertyRight name="title" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </propertyRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>panel-container</itemName>
+        <itemType>CONTAINER</itemType>
+        <rights>
+            <itemRight name="panel-container" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="panel-container" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="panel-container" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="panel-container" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>springboard-container</itemName>
+        <itemType>CONTAINER</itemType>
+        <rights>
+            <itemRight name="springboard-container" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="springboard-container" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="springboard-container" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="springboard-container" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>tabs-container</itemName>
+        <itemType>CONTAINER</itemType>
+        <rights>
+            <itemRight name="tabs-container" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="tabs-container" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="tabs-container" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="tabs-container" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>widget-a2a-external-accounts</itemName>
+        <itemType>WIDGET</itemType>
+        <rights>
+            <itemRight name="widget-a2a-external-accounts" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="widget-a2a-external-accounts" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="widget-a2a-external-accounts" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="widget-a2a-external-accounts" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>widget-accounts</itemName>
+        <itemType>WIDGET</itemType>
+        <rights>
+            <itemRight name="widget-accounts" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="widget-accounts" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="widget-accounts" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="widget-accounts" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>widget-accounts-dropdown</itemName>
+        <itemType>WIDGET</itemType>
+        <rights>
+            <itemRight name="widget-accounts-dropdown" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="widget-accounts-dropdown" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="widget-accounts-dropdown" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="widget-accounts-dropdown" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>widget-addressbook</itemName>
+        <itemType>WIDGET</itemType>
+        <rights>
+            <itemRight name="widget-addressbook" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="widget-addressbook" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="widget-addressbook" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="widget-addressbook" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>widget-advanced-content</itemName>
+        <itemType>WIDGET</itemType>
+        <rights>
+            <itemRight name="widget-advanced-content" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="widget-advanced-content" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="widget-advanced-content" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="widget-advanced-content" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>widget-alert-messages</itemName>
+        <itemType>WIDGET</itemType>
+        <rights>
+            <itemRight name="widget-alert-messages" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="widget-alert-messages" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="widget-alert-messages" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="widget-alert-messages" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>widget-authorized-devices</itemName>
+        <itemType>WIDGET</itemType>
+        <rights>
+            <itemRight name="widget-authorized-devices" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="widget-authorized-devices" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="widget-authorized-devices" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="widget-authorized-devices" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>widget-billpay-dashboard</itemName>
+        <itemType>WIDGET</itemType>
+        <rights>
+            <itemRight name="widget-billpay-dashboard" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="widget-billpay-dashboard" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="widget-billpay-dashboard" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="widget-billpay-dashboard" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>widget-budgets</itemName>
+        <itemType>WIDGET</itemType>
+        <rights>
+            <itemRight name="widget-budgets" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="widget-budgets" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="widget-budgets" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="widget-budgets" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>widget-card-details</itemName>
+        <itemType>WIDGET</itemType>
+        <rights>
+            <itemRight name="widget-card-details" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="widget-card-details" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="widget-card-details" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="widget-card-details" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>widget-card-loyalty</itemName>
+        <itemType>WIDGET</itemType>
+        <rights>
+            <itemRight name="widget-card-loyalty" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="widget-card-loyalty" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="widget-card-loyalty" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="widget-card-loyalty" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>widget-card-overview</itemName>
+        <itemType>WIDGET</itemType>
+        <rights>
+            <itemRight name="widget-card-overview" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="widget-card-overview" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="widget-card-overview" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="widget-card-overview" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>widget-category-spendings-chart</itemName>
+        <itemType>WIDGET</itemType>
+        <rights>
+            <itemRight name="widget-category-spendings-chart" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="widget-category-spendings-chart" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="widget-category-spendings-chart" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="widget-category-spendings-chart" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>widget-device-dna</itemName>
+        <itemType>WIDGET</itemType>
+        <rights>
+            <itemRight name="widget-device-dna" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="widget-device-dna" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="widget-device-dna" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="widget-device-dna" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>widget-e-bill-add</itemName>
+        <itemType>WIDGET</itemType>
+        <rights>
+            <itemRight name="widget-e-bill-add" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="widget-e-bill-add" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="widget-e-bill-add" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="widget-e-bill-add" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>widget-e-bill-history</itemName>
+        <itemType>WIDGET</itemType>
+        <rights>
+            <itemRight name="widget-e-bill-history" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="widget-e-bill-history" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="widget-e-bill-history" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="widget-e-bill-history" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>widget-e-bill-inbox</itemName>
+        <itemType>WIDGET</itemType>
+        <rights>
+            <itemRight name="widget-e-bill-inbox" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="widget-e-bill-inbox" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="widget-e-bill-inbox" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="widget-e-bill-inbox" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>widget-estatements</itemName>
+        <itemType>WIDGET</itemType>
+        <rights>
+            <itemRight name="widget-estatements" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="widget-estatements" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="widget-estatements" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="widget-estatements" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>widget-expense-planning</itemName>
+        <itemType>WIDGET</itemType>
+        <rights>
+            <itemRight name="widget-expense-planning" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="widget-expense-planning" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="widget-expense-planning" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="widget-expense-planning" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>widget-external-accounts</itemName>
+        <itemType>WIDGET</itemType>
+        <rights>
+            <itemRight name="widget-external-accounts" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="widget-external-accounts" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="widget-external-accounts" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="widget-external-accounts" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>widget-launchpad-base</itemName>
+        <itemType>WIDGET</itemType>
+        <rights>
+            <itemRight name="widget-launchpad-base" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="widget-launchpad-base" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="widget-launchpad-base" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="widget-launchpad-base" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>widget-login</itemName>
+        <itemType>WIDGET</itemType>
+        <rights>
+            <itemRight name="widget-login" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="widget-login" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="widget-login" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="widget-login" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>widget-login-multifactor</itemName>
+        <itemType>WIDGET</itemType>
+        <rights>
+            <itemRight name="widget-login-multifactor" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="widget-login-multifactor" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="widget-login-multifactor" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="widget-login-multifactor" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>widget-login-multifactor-engage</itemName>
+        <itemType>WIDGET</itemType>
+        <rights>
+            <itemRight name="widget-login-multifactor-engage" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="widget-login-multifactor-engage" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="widget-login-multifactor-engage" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="widget-login-multifactor-engage" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>widget-navbar</itemName>
+        <itemType>WIDGET</itemType>
+        <rights>
+            <itemRight name="widget-navbar" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="widget-navbar" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="widget-navbar" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="widget-navbar" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>widget-navbar-advanced</itemName>
+        <itemType>WIDGET</itemType>
+        <rights>
+            <itemRight name="widget-navbar-advanced" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="widget-navbar-advanced" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="widget-navbar-advanced" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="widget-navbar-advanced" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>widget-navfooter</itemName>
+        <itemType>WIDGET</itemType>
+        <rights>
+            <itemRight name="widget-navfooter" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="widget-navfooter" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="widget-navfooter" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="widget-navfooter" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>widget-new-transfer</itemName>
+        <itemType>WIDGET</itemType>
+        <rights>
+            <itemRight name="widget-new-transfer" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="widget-new-transfer" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="widget-new-transfer" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="widget-new-transfer" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>widget-notifications</itemName>
+        <itemType>WIDGET</itemType>
+        <rights>
+            <itemRight name="widget-notifications" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="widget-notifications" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="widget-notifications" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="widget-notifications" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>widget-p2p-enrollment</itemName>
+        <itemType>WIDGET</itemType>
+        <rights>
+            <itemRight name="widget-p2p-enrollment" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="widget-p2p-enrollment" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="widget-p2p-enrollment" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="widget-p2p-enrollment" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>widget-p2p-preferences</itemName>
+        <itemType>WIDGET</itemType>
+        <rights>
+            <itemRight name="widget-p2p-preferences" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="widget-p2p-preferences" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="widget-p2p-preferences" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="widget-p2p-preferences" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>widget-p2p-tab</itemName>
+        <itemType>WIDGET</itemType>
+        <rights>
+            <itemRight name="widget-p2p-tab" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="widget-p2p-tab" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="widget-p2p-tab" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="widget-p2p-tab" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>widget-p2p-transactions</itemName>
+        <itemType>WIDGET</itemType>
+        <rights>
+            <itemRight name="widget-p2p-transactions" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="widget-p2p-transactions" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="widget-p2p-transactions" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="widget-p2p-transactions" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>widget-places</itemName>
+        <itemType>WIDGET</itemType>
+        <rights>
+            <itemRight name="widget-places" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="widget-places" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="widget-places" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="widget-places" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>widget-profile-contact</itemName>
+        <itemType>WIDGET</itemType>
+        <rights>
+            <itemRight name="widget-profile-contact" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="widget-profile-contact" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="widget-profile-contact" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="widget-profile-contact" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>widget-profile-details</itemName>
+        <itemType>WIDGET</itemType>
+        <rights>
+            <itemRight name="widget-profile-details" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="widget-profile-details" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="widget-profile-details" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="widget-profile-details" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>widget-profile-portfolio</itemName>
+        <itemType>WIDGET</itemType>
+        <rights>
+            <itemRight name="widget-profile-portfolio" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="widget-profile-portfolio" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="widget-profile-portfolio" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="widget-profile-portfolio" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>widget-profile-preferences</itemName>
+        <itemType>WIDGET</itemType>
+        <rights>
+            <itemRight name="widget-profile-preferences" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="widget-profile-preferences" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="widget-profile-preferences" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="widget-profile-preferences" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>widget-profile-summary</itemName>
+        <itemType>WIDGET</itemType>
+        <rights>
+            <itemRight name="widget-profile-summary" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="widget-profile-summary" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="widget-profile-summary" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="widget-profile-summary" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>widget-review-transfers</itemName>
+        <itemType>WIDGET</itemType>
+        <rights>
+            <itemRight name="widget-review-transfers" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="widget-review-transfers" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="widget-review-transfers" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="widget-review-transfers" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>widget-saving-goals</itemName>
+        <itemType>WIDGET</itemType>
+        <rights>
+            <itemRight name="widget-saving-goals" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="widget-saving-goals" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="widget-saving-goals" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="widget-saving-goals" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>widget-secure-messaging</itemName>
+        <itemType>WIDGET</itemType>
+        <rights>
+            <itemRight name="widget-secure-messaging" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="widget-secure-messaging" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="widget-secure-messaging" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="widget-secure-messaging" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>widget-transactions</itemName>
+        <itemType>WIDGET</itemType>
+        <rights>
+            <itemRight name="widget-transactions" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="widget-transactions" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="widget-transactions" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="widget-transactions" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>widget-transactions-chart-donut</itemName>
+        <itemType>WIDGET</itemType>
+        <rights>
+            <itemRight name="widget-transactions-chart-donut" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="widget-transactions-chart-donut" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="widget-transactions-chart-donut" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="widget-transactions-chart-donut" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>widget-transactions-list</itemName>
+        <itemType>WIDGET</itemType>
+        <rights>
+            <itemRight name="widget-transactions-list" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="widget-transactions-list" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="widget-transactions-list" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="widget-transactions-list" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>widget-transactions-new</itemName>
+        <itemType>WIDGET</itemType>
+        <rights>
+            <itemRight name="widget-transactions-new" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="widget-transactions-new" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="widget-transactions-new" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="widget-transactions-new" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>widget-transactions-overview</itemName>
+        <itemType>WIDGET</itemType>
+        <rights>
+            <itemRight name="widget-transactions-overview" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="widget-transactions-overview" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="widget-transactions-overview" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="widget-transactions-overview" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>widget-transactions-search</itemName>
+        <itemType>WIDGET</itemType>
+        <rights>
+            <itemRight name="widget-transactions-search" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="widget-transactions-search" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="widget-transactions-search" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="widget-transactions-search" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>widget-video</itemName>
+        <itemType>WIDGET</itemType>
+        <rights>
+            <itemRight name="widget-video" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="widget-video" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="widget-video" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="widget-video" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+    <bundleRight>
+        <contextItemName>[BBHOST]</contextItemName>
+        <itemName>widgets-catalog</itemName>
+        <itemType>WIDGET</itemType>
+        <rights>
+            <itemRight name="widgets-catalog" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_master page designer</sid>
+            </itemRight>
+            <itemRight name="widgets-catalog" inherited="false">
+                <securityProfile>ADMIN</securityProfile>
+                <sid>group_admin</sid>
+            </itemRight>
+            <itemRight name="widgets-catalog" inherited="false">
+                <securityProfile>CONSUMER</securityProfile>
+                <sid>role_anonymous</sid>
+            </itemRight>
+            <itemRight name="widgets-catalog" inherited="false">
+                <securityProfile>CREATOR</securityProfile>
+                <sid>role_user</sid>
+            </itemRight>
+        </rights>
+    </bundleRight>
+</bundleRights>

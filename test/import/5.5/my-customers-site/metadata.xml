@@ -1,0 +1,7 @@
+<backbaseArchiveDescriptor>
+    <includesContent>false</includesContent>
+    <bbexport>
+        <exportBundle/>
+        <order>bundleId,bundleName,portals,portalPages,portalContainers,portalWidgets,pages,containers,widgets,includes,bundleRights,links,deletedItemRefs,groups,serverPages,serverContainers,serverWidgets,templates,contentItemRefs</order>
+    </bbexport>
+</backbaseArchiveDescriptor>

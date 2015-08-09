@@ -1,0 +1,290 @@
+<pages>
+    <page>
+        <contextItemName>my-customers-site</contextItemName>
+        <extendedItemName>page_1439842445474</extendedItemName>
+        <name>index</name>
+        <parentItemName>my-customers-site</parentItemName>
+        <properties>
+            <property name="bd_seo_canonical">
+                <value type="linkref">5b7a915c-bd6e-4be8-8792-6cae8668f614</value>
+            </property>
+            <property name="behaviors">
+                <value type="string">be.perspective.Manager be.portalClientExt.PortalManagerPreferencesForm</value>
+            </property>
+            <property name="bundleName">
+                <value type="string">dashboard</value>
+            </property>
+            <property label="Client Template" name="client-template">
+                <value type="string">page</value>
+            </property>
+            <property name="createdBy">
+                <value type="string"/>
+            </property>
+            <property name="modifiedBy">
+                <value type="string">admin</value>
+            </property>
+            <property name="title">
+                <value type="string">Default Page</value>
+            </property>
+        </properties>
+        <tags></tags>
+        <type>page</type>
+        <uuid>28aa1797-aa54-4beb-817c-9d519026bb17</uuid>
+    </page>
+    <page>
+        <contextItemName>my-customers-site</contextItemName>
+        <extendedItemName>page_1439842445474</extendedItemName>
+        <name>page_1439842417551</name>
+        <parentItemName>my-customers-site</parentItemName>
+        <properties>
+            <property label="Canonical" name="bd_seo_canonical">
+                <value type="linkref">324cdee3-b258-43f5-9e16-6ad1d89a127c</value>
+            </property>
+            <property name="behaviors">
+                <value type="string">be.perspective.Manager be.portalClientExt.PortalManagerPreferencesForm</value>
+            </property>
+            <property name="bundleName">
+                <value type="string">dashboard</value>
+            </property>
+            <property label="Client Template" name="client-template">
+                <value type="string">page</value>
+            </property>
+            <property name="createdBy">
+                <value type="string">admin</value>
+            </property>
+            <property name="modifiedBy">
+                <value type="string">admin</value>
+            </property>
+            <property name="title">
+                <value type="string">test1</value>
+            </property>
+        </properties>
+        <tags></tags>
+        <type>page</type>
+        <uuid>22427ba3-712e-42a2-85e4-d2fcf8a13581</uuid>
+    </page>
+    <page>
+        <contextItemName>my-customers-site</contextItemName>
+        <extendedItemName>page_1439842445474</extendedItemName>
+        <name>page_1439842476088</name>
+        <parentItemName>my-customers-site</parentItemName>
+        <properties>
+            <property label="Canonical" name="bd_seo_canonical">
+                <value type="linkref">8b215e8f-b741-4bc0-9453-3e83e88ac716</value>
+            </property>
+            <property name="behaviors">
+                <value type="string">be.perspective.Manager be.portalClientExt.PortalManagerPreferencesForm</value>
+            </property>
+            <property name="bundleName">
+                <value type="string">dashboard</value>
+            </property>
+            <property label="Client Template" name="client-template">
+                <value type="string">page</value>
+            </property>
+            <property name="createdBy">
+                <value type="string">admin</value>
+            </property>
+            <property name="modifiedBy">
+                <value type="string"/>
+            </property>
+            <property name="title">
+                <value type="string">t2</value>
+            </property>
+        </properties>
+        <tags></tags>
+        <type>page</type>
+        <uuid>619770cf-c3c8-4b58-8ed4-48b587ba0dbe</uuid>
+    </page>
+    <page>
+        <contextItemName>my-customers-site</contextItemName>
+        <extendedItemName>page_1439842445474</extendedItemName>
+        <name>page_1439842479890</name>
+        <parentItemName>my-customers-site</parentItemName>
+        <properties>
+            <property label="Canonical" name="bd_seo_canonical">
+                <value type="linkref">9b87c1a7-0ea6-4335-9f67-2d8688ecfb14</value>
+            </property>
+            <property name="behaviors">
+                <value type="string">be.perspective.Manager be.portalClientExt.PortalManagerPreferencesForm</value>
+            </property>
+            <property name="bundleName">
+                <value type="string">dashboard</value>
+            </property>
+            <property label="Client Template" name="client-template">
+                <value type="string">page</value>
+            </property>
+            <property name="createdBy">
+                <value type="string">admin</value>
+            </property>
+            <property name="modifiedBy">
+                <value type="string"/>
+            </property>
+            <property name="title">
+                <value type="string">t3</value>
+            </property>
+        </properties>
+        <tags></tags>
+        <type>page</type>
+        <uuid>9a2bf247-02fa-4fcc-8998-5163cb574906</uuid>
+    </page>
+    <page>
+        <contextItemName>my-customers-site</contextItemName>
+        <extendedItemName>page_1439842445474</extendedItemName>
+        <name>page_1439842483230</name>
+        <parentItemName>my-customers-site</parentItemName>
+        <properties>
+            <property label="Canonical" name="bd_seo_canonical">
+                <value type="linkref">d52113c0-f362-4908-9b34-1e735a553e7a</value>
+            </property>
+            <property name="behaviors">
+                <value type="string">be.perspective.Manager be.portalClientExt.PortalManagerPreferencesForm</value>
+            </property>
+            <property name="bundleName">
+                <value type="string">dashboard</value>
+            </property>
+            <property label="Client Template" name="client-template">
+                <value type="string">page</value>
+            </property>
+            <property name="createdBy">
+                <value type="string">admin</value>
+            </property>
+            <property name="modifiedBy">
+                <value type="string"/>
+            </property>
+            <property name="title">
+                <value type="string">t4</value>
+            </property>
+        </properties>
+        <tags></tags>
+        <type>page</type>
+        <uuid>1b75dd79-405d-473e-8e06-ef2a39eaeb8c</uuid>
+    </page>
+    <page>
+        <contextItemName>my-customers-site</contextItemName>
+        <extendedItemName>page_1439842445474</extendedItemName>
+        <name>page_1439842487013</name>
+        <parentItemName>my-customers-site</parentItemName>
+        <properties>
+            <property label="Canonical" name="bd_seo_canonical">
+                <value type="linkref">4f0ff077-1d62-4051-91a6-5ea0fefa6613</value>
+            </property>
+            <property name="behaviors">
+                <value type="string">be.perspective.Manager be.portalClientExt.PortalManagerPreferencesForm</value>
+            </property>
+            <property name="bundleName">
+                <value type="string">dashboard</value>
+            </property>
+            <property label="Client Template" name="client-template">
+                <value type="string">page</value>
+            </property>
+            <property name="createdBy">
+                <value type="string">admin</value>
+            </property>
+            <property name="modifiedBy">
+                <value type="string"/>
+            </property>
+            <property name="title">
+                <value type="string">t5</value>
+            </property>
+        </properties>
+        <tags></tags>
+        <type>page</type>
+        <uuid>3a981799-ef57-410e-87ed-cdb21d87583b</uuid>
+    </page>
+    <page>
+        <contextItemName>my-customers-site</contextItemName>
+        <extendedItemName>page_1439842445474</extendedItemName>
+        <name>page_1439842490525</name>
+        <parentItemName>my-customers-site</parentItemName>
+        <properties>
+            <property label="Canonical" name="bd_seo_canonical">
+                <value type="linkref">9ea8c2e9-7686-49d2-81d5-673c7144dd48</value>
+            </property>
+            <property name="behaviors">
+                <value type="string">be.perspective.Manager be.portalClientExt.PortalManagerPreferencesForm</value>
+            </property>
+            <property name="bundleName">
+                <value type="string">dashboard</value>
+            </property>
+            <property label="Client Template" name="client-template">
+                <value type="string">page</value>
+            </property>
+            <property name="createdBy">
+                <value type="string">admin</value>
+            </property>
+            <property name="modifiedBy">
+                <value type="string"/>
+            </property>
+            <property name="title">
+                <value type="string">t6</value>
+            </property>
+        </properties>
+        <tags></tags>
+        <type>page</type>
+        <uuid>739b2dab-f2f8-47f1-b39a-45c6c0758e82</uuid>
+    </page>
+    <page>
+        <contextItemName>my-customers-site</contextItemName>
+        <extendedItemName>page_1439842445474</extendedItemName>
+        <name>page_1439842496519</name>
+        <parentItemName>my-customers-site</parentItemName>
+        <properties>
+            <property label="Canonical" name="bd_seo_canonical">
+                <value type="linkref">d0381077-a4e5-43fd-bbdb-c7b82450cd03</value>
+            </property>
+            <property name="behaviors">
+                <value type="string">be.perspective.Manager be.portalClientExt.PortalManagerPreferencesForm</value>
+            </property>
+            <property name="bundleName">
+                <value type="string">dashboard</value>
+            </property>
+            <property label="Client Template" name="client-template">
+                <value type="string">page</value>
+            </property>
+            <property name="createdBy">
+                <value type="string">admin</value>
+            </property>
+            <property name="modifiedBy">
+                <value type="string"/>
+            </property>
+            <property name="title">
+                <value type="string">t7</value>
+            </property>
+        </properties>
+        <tags></tags>
+        <type>page</type>
+        <uuid>000a8d54-799b-462a-b142-88605e711e07</uuid>
+    </page>
+    <page>
+        <contextItemName>my-customers-site</contextItemName>
+        <extendedItemName>page_1439842445474</extendedItemName>
+        <name>page_1439842513365</name>
+        <parentItemName>my-customers-site</parentItemName>
+        <properties>
+            <property label="Canonical" name="bd_seo_canonical">
+                <value type="linkref">20b84d81-f9e6-4277-ae67-981b67a69ad8</value>
+            </property>
+            <property name="behaviors">
+                <value type="string">be.perspective.Manager be.portalClientExt.PortalManagerPreferencesForm</value>
+            </property>
+            <property name="bundleName">
+                <value type="string">dashboard</value>
+            </property>
+            <property label="Client Template" name="client-template">
+                <value type="string">page</value>
+            </property>
+            <property name="createdBy">
+                <value type="string">admin</value>
+            </property>
+            <property name="modifiedBy">
+                <value type="string"/>
+            </property>
+            <property name="title">
+                <value type="string">ddd</value>
+            </property>
+        </properties>
+        <tags></tags>
+        <type>page</type>
+        <uuid>f96a28e6-6db9-4f23-9e68-a78764739a3b</uuid>
+    </page>
+</pages>

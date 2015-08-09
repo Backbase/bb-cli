@@ -1,0 +1,46 @@
+<portals>
+    <portal>
+        <contextItemName>[BBHOST]</contextItemName>
+        <name>my-customers-site</name>
+        <properties>
+            <property name="AccessDeniedPage">
+                <value type="string">/login/login.jsp?login_error=accessdenied</value>
+            </property>
+            <property name="AuthenticationFailurePage">
+                <value type="string">/login/login.jsp?login_error=failure</value>
+            </property>
+            <property name="DefaultDevice">
+                <value type="string">mixed</value>
+            </property>
+            <property name="DefaultLandingPage">
+                <value type="string">my-customers-site/index</value>
+            </property>
+            <property name="Description">
+                <value type="String"/>
+            </property>
+            <property name="ErrorPage">
+                <value type="string">/login/error.jsp</value>
+            </property>
+            <property name="LoginPage">
+                <value type="string">/login/login.jsp</value>
+            </property>
+            <property name="LogoutPage">
+                <value type="string">/login/logout.jsp</value>
+            </property>
+            <property name="TargetedDevice">
+                <value type="string">mixed</value>
+            </property>
+            <property name="TemplateName">
+                <value type="String"/>
+            </property>
+            <property name="TypeOfTags">
+                <value type="string">tracking</value>
+            </property>
+            <property name="title">
+                <value type="string">my customers site</value>
+            </property>
+        </properties>
+        <tags></tags>
+        <uuid>3157cbec-1cec-4182-a0ad-1f18b141efb0</uuid>
+    </portal>
+</portals>

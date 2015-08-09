@@ -1,5 +1,6 @@
 {
   "name": "bb-cli",
+  "version": "0.2.0-beta",
   "version": "0.2.0-beta.5",
   "description": "Command line tools for working with Backbase CXP.",
   "author": "Backbase",
@@ -46,6 +47,7 @@
     "q": "^1.1.2",
     "request-promise": "^0.4.3",
     "ronin": "git+https://github.com/operatino/ronin#v0.3.11",
+    "tmp": "0.0.26",
     "watch": "^0.16.0",
     "xml2js": "^0.4.4"
   },
@@ -65,6 +67,7 @@
     "jshint-stylish": "^1.0.1",
     "mocha": "^2.0.1",
     "pre-commit": "^1.0.7",
+    "prettydiff": "^1.12.19",
     "should": "^4.3.0"
   }
 }

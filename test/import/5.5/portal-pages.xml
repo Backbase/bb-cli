@@ -1,0 +1,49 @@
+<portalPages>
+    <page>
+        <contextItemName>testa</contextItemName>
+        <manageable>true</manageable>
+        <name>page_1439839522905</name>
+        <parentItemName>testa</parentItemName>
+        <properties>
+            <property name="Description">
+                <value type="String"/>
+            </property>
+            <property name="TemplateName">
+                <value type="string">LaunchpadPageTemplate</value>
+            </property>
+            <property label="Canonical" name="bd_seo_canonical">
+                <value type="string"/>
+            </property>
+            <property label="Description" name="bd_seo_description">
+                <value type="string"/>
+            </property>
+            <property label="Locale" name="bd_seo_locale">
+                <value type="string"/>
+            </property>
+            <property label="Robots" name="bd_seo_robots">
+                <value type="string"/>
+            </property>
+            <property name="behaviors">
+                <value type="string">be.perspective.Manager be.portalClientExt.PortalManagerPreferencesForm</value>
+            </property>
+            <property name="bundleName">
+                <value type="string">dashboard</value>
+            </property>
+            <property label="Client Template" name="client-template">
+                <value type="string">page</value>
+            </property>
+            <property name="createdBy">
+                <value type="string">admin</value>
+            </property>
+            <property name="enableSEO">
+                <value type="string">false</value>
+            </property>
+            <property name="title">
+                <value type="string">lpm</value>
+            </property>
+        </properties>
+        <tags></tags>
+        <type>page</type>
+        <uuid>aa37f826-d8db-40db-ac54-764bbd043b5d</uuid>
+    </page>
+</portalPages>

@@ -1,0 +1,2183 @@
+<serverWidgets>
+    <widget>
+        <contextItemName>[BBHOST]</contextItemName>
+        <name>mhn</name>
+        <properties>
+            <property name="Description">
+                <value type="String"/>
+            </property>
+            <property name="TemplateName" viewHint="text-input,admin">
+                <value type="string">Standard_Widget</value>
+            </property>
+            <property name="src" viewHint="text-input,admin">
+                <value type="string">$(contextRoot)/static/launchpad/widgets/hn/index.html</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/launchpad/widgets/hn/icon.png</value>
+            </property>
+            <property label="Title" name="title" viewHint="text-input,admin">
+                <value type="string">HNews</value>
+            </property>
+            <property label="Topic category" name="topicCategory" viewHint="select-one,designModeOnly,user">
+                <value type="string">Latest Activity</value>
+            </property>
+            <property label="Widget Chrome" name="widgetChrome" viewHint="select-one,admin,designModeOnly">
+                <value type="string">$(contextRoot)/static/launchpad/universal/chromes/blank/chrome-blank.html</value>
+            </property>
+        </properties>
+        <tags>
+            <tag blacklist="false" type="regular">performance</tag>
+            <tag blacklist="false" type="section">test</tag>
+        </tags>
+        <uuid>05af3379-998c-484c-a433-b4d059032e19</uuid>
+    </widget>
+    <widget>
+        <contextItemName>[BBHOST]</contextItemName>
+        <name>mobile-login</name>
+        <properties>
+            <property name="Description">
+                <value type="String"/>
+            </property>
+            <property name="TemplateName" viewHint="text-input,admin">
+                <value type="string">Standard_Widget</value>
+            </property>
+            <property name="src" viewHint="text-input,admin">
+                <value type="string">$(contextRoot)/static/mobile/widgets/login/index.html</value>
+            </property>
+            <property name="thumbnailUrl" viewHint="text-input,admin">
+                <value type="string">$(contextRoot)/static/mobile/widgets/login/icon.png</value>
+            </property>
+            <property label="Title" name="title" viewHint="text-input,admin">
+                <value type="string">Login Mobile</value>
+            </property>
+            <property label="Widget Chrome" name="widgetChrome" viewHint="text-input,admin">
+                <value type="string">$(contextRoot)/static/launchpad/universal/chromes/blank/chrome-blank.html</value>
+            </property>
+            <property name="widgetClass" viewHint="text-input,admin">
+                <value type="string"/>
+            </property>
+        </properties>
+        <tags>
+            <tag blacklist="false" type="regular">login</tag>
+            <tag blacklist="false" type="section">mobile apps</tag>
+        </tags>
+        <uuid>f8adcf0c-9dc9-4b84-b807-c99beb2d345f</uuid>
+    </widget>
+    <widget>
+        <contextItemName>[BBHOST]</contextItemName>
+        <name>test-widget-0</name>
+        <properties>
+            <property label="Test property" name="Data" viewHint="text,designModeOnly,user">
+                <value type="string">initial value</value>
+            </property>
+            <property name="Description">
+                <value type="string">Theme Switcher Description</value>
+            </property>
+            <property name="TemplateName">
+                <value type="string">Standard_Widget</value>
+            </property>
+            <property label="My location" name="location" viewHint="text,designModeOnly,user">
+                <value type="string"/>
+            </property>
+            <property name="source">
+                <value type="string">youtube</value>
+            </property>
+            <property name="src">
+                <value type="string">$(contextRoot)/static/backbase.com.2012.aurora/widgets/standardExample/index.html</value>
+            </property>
+            <property label="Switch" name="switch" viewHint="checkbox,designModeOnly,user">
+                <value type="string">false</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/mosaic-tools/widgets/bootstrap-showcase/icon.png</value>
+            </property>
+            <property name="title">
+                <value type="string">Theme Example</value>
+            </property>
+            <property label="Temperature scale" name="unit" viewHint="select-one,designModeOnly,user">
+                <value type="string">f</value>
+            </property>
+            <property label="Widget Chrome" name="widgetChrome" viewHint="select-one,user,designModeOnly">
+                <value type="string">$(contextRoot)/static/backbase.com.2012.aurora/html/chromes/widget_default.html</value>
+            </property>
+        </properties>
+        <tags>
+            <tag blacklist="false" type="regular">mosaic</tag>
+            <tag blacklist="false" type="section">mosaic</tag>
+            <tag blacklist="false" type="regular">mosaic-tools</tag>
+        </tags>
+        <uuid>14b650c7-801d-4adf-8b7d-403adb1895d6</uuid>
+    </widget>
+    <widget>
+        <contextItemName>[BBHOST]</contextItemName>
+        <extendedItemName>[test-widget-0]</extendedItemName>
+        <name>test-widget-1</name>
+        <properties></properties>
+        <tags></tags>
+        <uuid>5ceb4782-7889-41a7-a862-2a1788b06e5d</uuid>
+    </widget>
+    <widget>
+        <contextItemName>[BBHOST]</contextItemName>
+        <name>test-widget-2</name>
+        <properties>
+            <property label="Test property" name="Data" viewHint="text,designModeOnly,user">
+                <value type="string">initial value</value>
+            </property>
+            <property name="Description">
+                <value type="string">Theme Switcher Description a</value>
+            </property>
+            <property name="TemplateName">
+                <value type="string">Standard_Widget</value>
+            </property>
+            <property label="My location" name="location" viewHint="text,designModeOnly,user">
+                <value type="string"/>
+            </property>
+            <property label="my src 123" name="source">
+                <value type="string">youtube 123</value>
+            </property>
+            <property name="src">
+                <value type="string">$(contextRoot)/static/backbase.com.2012.aurora/widgets/standardExample/index.html</value>
+            </property>
+            <property label="Switch" name="switch" viewHint="checkbox,designModeOnly,user">
+                <value type="string">false</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/mosaic-tools/widgets/theme-switch/icon.png</value>
+            </property>
+            <property name="title">
+                <value type="string">test-widget-2 (theme switcher)</value>
+            </property>
+            <property label="Temperature scale" name="unit" viewHint="select-one,designModeOnly,user">
+                <value type="string">f</value>
+            </property>
+            <property label="Widget Chrome" name="widgetChrome" viewHint="select-one,user,designModeOnly">
+                <value type="string">$(contextRoot)/static/backbase.com.2012.aurora/html/chromes/widget_default.html</value>
+            </property>
+        </properties>
+        <tags>
+            <tag blacklist="false" type="section">mosaic</tag>
+            <tag blacklist="false" type="regular">mosaic-tools</tag>
+        </tags>
+        <uuid>0d7e0e41-8c39-4698-a557-a20e698bd13c</uuid>
+    </widget>
+    <widget>
+        <contextItemName>[BBHOST]</contextItemName>
+        <name>test2-widget-sc</name>
+        <properties>
+            <property label="Test property" name="Data" viewHint="text,designModeOnly,user">
+                <value type="string">initial value</value>
+            </property>
+            <property name="Description">
+                <value type="string">Theme Switcher Description</value>
+            </property>
+            <property name="TemplateName">
+                <value type="string">Standard_Widget</value>
+            </property>
+            <property label="My location" name="location" viewHint="text,designModeOnly,user">
+                <value type="string"/>
+            </property>
+            <property name="source">
+                <value type="string">youtube</value>
+            </property>
+            <property name="src">
+                <value type="string">$(contextRoot)/static/backbase.com.2012.aurora/widgets/standardExample/index.html</value>
+            </property>
+            <property label="Switch" name="switch" viewHint="checkbox,designModeOnly,user">
+                <value type="string">false</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/mosaic-tools/widgets/theme-switch/icon.png</value>
+            </property>
+            <property name="title">
+                <value type="string">Theme Switcher</value>
+            </property>
+            <property label="Temperature scale" name="unit" viewHint="select-one,designModeOnly,user">
+                <value type="string">f</value>
+            </property>
+            <property label="Widget Chrome" name="widgetChrome" viewHint="select-one,user,designModeOnly">
+                <value type="string">$(contextRoot)/static/backbase.com.2012.aurora/html/chromes/widget_default.html</value>
+            </property>
+        </properties>
+        <tags>
+            <tag blacklist="false" type="regular">mosaic</tag>
+            <tag blacklist="false" type="section">mosaic</tag>
+            <tag blacklist="false" type="regular">mosaic-tools</tag>
+        </tags>
+        <uuid>e877d951-18db-4bae-b3fa-7154416d6e95</uuid>
+    </widget>
+    <widget>
+        <contextItemName>[BBHOST]</contextItemName>
+        <extendedItemName>[widget-launchpad-base]</extendedItemName>
+        <name>widget-a2a-external-accounts</name>
+        <properties>
+            <property label="A2A External Account Data Source" name="externalAccountsDataSrc" viewHint="admin,text-input,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/a2a-transfers/external-accounts/:id/:action</value>
+            </property>
+            <property label="Icon" name="icon" viewHint="text-input,user,designModeOnly">
+                <value type="string">e-bill</value>
+            </property>
+            <property name="src">
+                <value type="string">$(contextRoot)/static/launchpad/widgets/a2a-external-accounts/index.html</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/launchpad/widgets/a2a-external-accounts/icon.png</value>
+            </property>
+            <property label="Title" name="title" viewHint="user,text-input,designModeOnly">
+                <value type="string">A2A External Accounts</value>
+            </property>
+        </properties>
+        <tags>
+            <tag blacklist="false" type="behavior">a2a-external-accounts</tag>
+            <tag blacklist="false" type="section">banking</tag>
+            <tag blacklist="false" type="regular">ebilling</tag>
+        </tags>
+        <uuid>d9dfb8c7-99e5-456b-84d7-bb20af6a886c</uuid>
+    </widget>
+    <widget>
+        <contextItemName>[BBHOST]</contextItemName>
+        <extendedItemName>[widget-launchpad-base]</extendedItemName>
+        <name>widget-accounts</name>
+        <properties>
+            <property label="Accounts Data Source" name="accountsDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/customer-assets</value>
+            </property>
+            <property label="Default balance" name="defaultBalance" viewHint="select-one,designModeOnly,user">
+                <value type="string">current</value>
+            </property>
+            <property label="Groups Data Source" name="groupsDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(contextRoot)/static/launchpad/banking/widgets/accounts/data/groups.json</value>
+            </property>
+            <property label="Icon" name="icon" viewHint="text-input,admin,designModeOnly">
+                <value type="string">accounts</value>
+            </property>
+            <property label="Account holder category" name="showAccountHolderCategory" viewHint="checkbox,admin,designModeOnly">
+                <value type="boolean">false</value>
+            </property>
+            <property label="Account holder name" name="showAccountHolderName" viewHint="checkbox,admin,designModeOnly">
+                <value type="boolean">false</value>
+            </property>
+            <property label="Account type" name="showAccountType" viewHint="checkbox,admin,designModeOnly">
+                <value type="boolean">false</value>
+            </property>
+            <property label="Show Groups Total" name="showGroupTotals" viewHint="checkbox,admin,designModeOnly">
+                <value type="boolean">false</value>
+            </property>
+            <property label="Show Groups" name="showGroups" viewHint="checkbox,admin,designModeOnly">
+                <value type="boolean">true</value>
+            </property>
+            <property name="src">
+                <value type="string">$(contextRoot)/static/launchpad/banking/widgets/accounts/index.html</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/launchpad/banking/widgets/accounts/icon.png</value>
+            </property>
+            <property label="Title" name="title" viewHint="text-input,admin,designModeOnly">
+                <value type="string">Accounts</value>
+            </property>
+        </properties>
+        <tags>
+            <tag blacklist="false" type="behavior">accounts</tag>
+            <tag blacklist="false" type="regular">accounts</tag>
+            <tag blacklist="false" type="section">banking</tag>
+        </tags>
+        <uuid>ec24b419-f805-40da-ab68-b05012d9b516</uuid>
+    </widget>
+    <widget>
+        <contextItemName>[BBHOST]</contextItemName>
+        <extendedItemName>[widget-launchpad-base]</extendedItemName>
+        <name>widget-accounts-dropdown</name>
+        <properties>
+            <property label="Accounts Data Source" name="accountsDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/debit-accounts</value>
+            </property>
+            <property label="Icon" name="icon" viewHint="text-input,admin,designModeOnly">
+                <value type="string">accounts</value>
+            </property>
+            <property label="Default Account" name="initialAccountId" viewHint="text-input,admin,designModeOnly">
+                <value type="string"/>
+            </property>
+            <property label="Locale" name="locale" viewHint="text-input,admin,designModeOnly">
+                <value type="string">EN</value>
+            </property>
+            <property label="Show 'All Accounts' item" name="showAllAccountsItem" viewHint="checkbox,admin,designModeOnly">
+                <value type="boolean">true</value>
+            </property>
+            <property name="src">
+                <value type="string">$(contextRoot)/static/launchpad/banking/widgets/accounts-dropdown/index.html</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/launchpad/banking/widgets/accounts-dropdown/icon.png</value>
+            </property>
+            <property label="Title" name="title" viewHint="text-input,admin,designModeOnly">
+                <value type="string">Accounts Dropdown</value>
+            </property>
+        </properties>
+        <tags>
+            <tag blacklist="false" type="section">banking</tag>
+            <tag blacklist="false" type="behavior">transactions</tag>
+            <tag blacklist="false" type="regular">transactions</tag>
+        </tags>
+        <uuid>76903b11-4a2f-4726-965c-45cc59a1c1cd</uuid>
+    </widget>
+    <widget>
+        <contextItemName>[BBHOST]</contextItemName>
+        <extendedItemName>[widget-launchpad-base]</extendedItemName>
+        <name>widget-addressbook</name>
+        <properties>
+            <property label="Contact Data Source" name="contactDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/party-data-management/counter-party/$(contactId)</value>
+            </property>
+            <property label="Contact Details Data Source" name="contactDetailsDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/party-data-management/counter-party/$(contactId)/details</value>
+            </property>
+            <property label="Contact List Data Source" name="contactListDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/party-data-management/counter-parties</value>
+            </property>
+            <property label="Icon" name="icon" viewHint="text-input,admin,designModeOnly">
+                <value type="string">addressbook</value>
+            </property>
+            <property label="Payment Orders Data Source" name="paymentOrdersDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/payment-orders/:accountIds/:paymentId/:action</value>
+            </property>
+            <property name="src">
+                <value type="string">$(contextRoot)/static/launchpad/banking/widgets/addressbook/index.html</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/launchpad/banking/widgets/addressbook/icon.png</value>
+            </property>
+            <property label="Title" name="title" viewHint="text-input,admin,designModeOnly">
+                <value type="string">Address Book</value>
+            </property>
+        </properties>
+        <tags>
+            <tag blacklist="false" type="behavior">address-book</tag>
+            <tag blacklist="false" type="section">banking</tag>
+            <tag blacklist="false" type="regular">contacts</tag>
+        </tags>
+        <uuid>01ba08ea-cc37-40e7-8e16-45976bb473fd</uuid>
+    </widget>
+    <widget>
+        <contextItemName>[BBHOST]</contextItemName>
+        <extendedItemName>[widget-launchpad-base]</extendedItemName>
+        <name>widget-advanced-content</name>
+        <properties>
+            <property label="Height" name="height" viewHint="admin,designModeOnly">
+                <value type="string"/>
+            </property>
+            <property label="Set Page Background (for applicable templates)" name="setPageBackground" viewHint="checkbox,designModeOnly,admin">
+                <value type="boolean">false</value>
+            </property>
+            <property name="src">
+                <value type="string">$(contextRoot)/static/launchpad/universal/widgets/advanced-content-template/index.html</value>
+            </property>
+            <property label="Content Template" name="templateUrl" viewHint="admin,designModeOnly">
+                <value type="string">$(contextRoot)/static/launchpad/html/content/text-image.html</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/launchpad/universal/widgets/advanced-content-template/icon.png</value>
+            </property>
+            <property label="Title" name="title" viewHint="text-input,user">
+                <value type="string">Content</value>
+            </property>
+        </properties>
+        <tags>
+            <tag blacklist="false" type="regular">content</tag>
+            <tag blacklist="false" type="section">content</tag>
+        </tags>
+        <uuid>dba70d8f-5cca-4136-87b3-e772c36f187c</uuid>
+    </widget>
+    <widget>
+        <contextItemName>[BBHOST]</contextItemName>
+        <extendedItemName>[widget-launchpad-base]</extendedItemName>
+        <name>widget-alert-messages</name>
+        <properties>
+            <property label="Accounts List Endpoint" name="accountsEndpoint" viewHint="text-input,admin,designModeOnly">
+                <value type="string">services/rest/v1/debit-accounts</value>
+            </property>
+            <property label="Single Automation Endpoint" name="automationEndpoint" viewHint="text-input,admin,designModeOnly">
+                <value type="string">services/rest/v1/alert-recipes/</value>
+            </property>
+            <property label="Activate Automation Endpoint" name="automationsActivationEndpoint" viewHint="text-input,admin,designModeOnly">
+                <value type="string">services/rest/v1/alert-recipes/{id}/activation_request</value>
+            </property>
+            <property label="Deactivate Automation Endpoint" name="automationsDeactivationEndpoint" viewHint="text-input,admin,designModeOnly">
+                <value type="string">services/rest/v1/alert-recipes/{id}/deactivation_request</value>
+            </property>
+            <property label="Automations List Endpoint" name="automationsEndpoint" viewHint="text-input,admin,designModeOnly">
+                <value type="string">services/rest/v1/alert-recipes</value>
+            </property>
+            <property label="Icon" name="icon" viewHint="text-input,admin,designModeOnly">
+                <value type="string">rocket</value>
+            </property>
+            <property name="locale">
+                <value type="string">en-US</value>
+            </property>
+            <property label="Recipes List Endpoint" name="recipesEndpoint" viewHint="text-input,admin,designModeOnly">
+                <value type="string">services/rest/v1/alert-recipe-specifications</value>
+            </property>
+            <property name="src">
+                <value type="string">$(contextRoot)/static/launchpad/universal/widgets/alert-messages/index.html</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/launchpad/universal/widgets/alert-messages/icon.png</value>
+            </property>
+            <property label="Title" name="title">
+                <value type="string">Alert Messages</value>
+            </property>
+        </properties>
+        <tags>
+            <tag blacklist="false" type="section">banking</tag>
+            <tag blacklist="false" type="regular">notification</tag>
+        </tags>
+        <uuid>38887a83-1738-4d7c-ab9c-79f17aa7464b</uuid>
+    </widget>
+    <widget>
+        <contextItemName>[BBHOST]</contextItemName>
+        <extendedItemName>[widget-launchpad-base]</extendedItemName>
+        <name>widget-authorized-devices</name>
+        <properties>
+            <property label="Enable to Revoke Device" name="deviceRevokeEnabled" viewHint="checkbox,designModeOnly,admin">
+                <value type="boolean">false</value>
+            </property>
+            <property label="Authorized Devices List" name="devicesEndpoint" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/authorized-devices</value>
+            </property>
+            <property label="Locale" name="locale">
+                <value type="string"/>
+            </property>
+            <property label="Authorized Device Revoke" name="revokeEndpoint" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/authorized-devices/revoke/$(deviceId)</value>
+            </property>
+            <property name="src">
+                <value type="string">$(contextRoot)/static/launchpad/widgets/authorized-devices/index.html</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/launchpad/widgets/authorized-devices/icon.png</value>
+            </property>
+            <property label="Title" name="title" viewHint="text-input,admin,designModeOnly">
+                <value type="string">Authorized devices</value>
+            </property>
+        </properties>
+        <tags>
+            <tag blacklist="false" type="regular">authentication</tag>
+            <tag blacklist="false" type="section">banking</tag>
+        </tags>
+        <uuid>f14bbcf2-221a-444a-ba52-1fd87255b863</uuid>
+    </widget>
+    <widget>
+        <contextItemName>[BBHOST]</contextItemName>
+        <extendedItemName>[widget-launchpad-base]</extendedItemName>
+        <name>widget-billpay-dashboard</name>
+        <properties>
+            <property label="Payee and E-Bills Data Source" name="billPaymentsDataSrc" viewHint="admin,text-input,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/bill-payments</value>
+            </property>
+            <property label="Business calendar Data Source" name="calendarDataSrc" viewHint="admin,text-input,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/calendars</value>
+            </property>
+            <property label="Icon" name="icon" viewHint="text-input,user,designModeOnly">
+                <value type="string">e-bill</value>
+            </property>
+            <property name="src">
+                <value type="string">$(contextRoot)/static/launchpad/widgets/billpay-dashboard/index.html</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/launchpad/widgets/billpay-dashboard/icon.png</value>
+            </property>
+            <property label="Title" name="title" viewHint="user,text-input,designModeOnly">
+                <value type="string">Bill Pay Dashboard</value>
+            </property>
+        </properties>
+        <tags>
+            <tag blacklist="false" type="section">banking</tag>
+            <tag blacklist="false" type="behavior">billpay-dashboard</tag>
+            <tag blacklist="false" type="regular">ebilling</tag>
+        </tags>
+        <uuid>660de8ae-02ac-41f4-943e-d5605a4b925e</uuid>
+    </widget>
+    <widget>
+        <contextItemName>[BBHOST]</contextItemName>
+        <extendedItemName>[widget-launchpad-base]</extendedItemName>
+        <name>widget-budgets</name>
+        <properties>
+            <property label="Accounts Data Source" name="accountsDataSrc" viewHint="admin,text-input,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/debit-accounts</value>
+            </property>
+            <property name="budgetOrder">
+                <value type="string">budgetnew</value>
+            </property>
+            <property label="Budgets Data Source" name="budgetsDataSrc" viewHint="admin,text-input,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/pfm/budgets/:budgetId</value>
+            </property>
+            <property label="Categories Data Source" name="categoriesDataSrc" viewHint="admin,text-input,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/pfm/transaction-categories</value>
+            </property>
+            <property label="Icon" name="icon" viewHint="text-input,user,designModeOnly">
+                <value type="string">budgets</value>
+            </property>
+            <property name="locale">
+                <value type="string">en-US</value>
+            </property>
+            <property name="src">
+                <value type="string">$(contextRoot)/static/launchpad/pfm/widgets/budgets/index.html</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/launchpad/pfm/widgets/budgets/icon.png</value>
+            </property>
+            <property label="Title" name="title" viewHint="user,text-input,designModeOnly">
+                <value type="string">Budgets</value>
+            </property>
+            <property label="Transactions Data Source" name="transactionsDataSrc" viewHint="admin,text-input,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/transactions</value>
+            </property>
+        </properties>
+        <tags>
+            <tag blacklist="false" type="section">banking</tag>
+            <tag blacklist="false" type="regular">pfm</tag>
+        </tags>
+        <uuid>cd2a2320-ad1f-4ef3-8561-f82773026145</uuid>
+    </widget>
+    <widget>
+        <contextItemName>[BBHOST]</contextItemName>
+        <extendedItemName>[widget-launchpad-base]</extendedItemName>
+        <name>widget-card-details</name>
+        <properties>
+            <property label="Data source for Cards data" name="cardDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/cards/:id</value>
+            </property>
+            <property label="Icon" name="icon" viewHint="text-input,admin,designModeOnly">
+                <value type="string">card-details</value>
+            </property>
+            <property name="src">
+                <value type="string">$(contextRoot)/static/launchpad/cards/widgets/card-details/index.html</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/launchpad/cards/widgets/card-details/icon.png</value>
+            </property>
+            <property label="Title" name="title" viewHint="text-input,admin,designModeOnly">
+                <value type="string">Card Details</value>
+            </property>
+        </properties>
+        <tags>
+            <tag blacklist="false" type="section">banking</tag>
+            <tag blacklist="false" type="regular">cards</tag>
+        </tags>
+        <uuid>4067fbfa-6e91-4b73-94f4-713a1de1ff7f</uuid>
+    </widget>
+    <widget>
+        <contextItemName>[BBHOST]</contextItemName>
+        <extendedItemName>[widget-launchpad-base]</extendedItemName>
+        <name>widget-card-loyalty</name>
+        <properties>
+            <property label="Data source for Cards data" name="cardDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/cards/:id/:noun</value>
+            </property>
+            <property label="Icon" name="icon" viewHint="text-input,admin,designModeOnly">
+                <value type="string">card-loyalty</value>
+            </property>
+            <property name="src">
+                <value type="string">$(contextRoot)/static/launchpad/cards/widgets/card-loyalty/index.html</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/launchpad/cards/widgets/card-loyalty/icon.png</value>
+            </property>
+            <property label="Title" name="title" viewHint="text-input,admin,designModeOnly">
+                <value type="string">Card Loyalty</value>
+            </property>
+        </properties>
+        <tags>
+            <tag blacklist="false" type="section">banking</tag>
+            <tag blacklist="false" type="regular">cards</tag>
+        </tags>
+        <uuid>24087448-01b4-46df-bf3c-0d982141336c</uuid>
+    </widget>
+    <widget>
+        <contextItemName>[BBHOST]</contextItemName>
+        <extendedItemName>[widget-launchpad-base]</extendedItemName>
+        <name>widget-card-overview</name>
+        <properties>
+            <property label="Accounts Data Source" name="accountsDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/debit-accounts</value>
+            </property>
+            <property label="Data source for Cards data" name="cardDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/cards/:id/:noun</value>
+            </property>
+            <property label="Icon" name="icon" viewHint="text-input,admin,designModeOnly">
+                <value type="string">account</value>
+            </property>
+            <property name="src">
+                <value type="string">$(contextRoot)/static/launchpad/cards/widgets/card-overview/index.html</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/launchpad/cards/widgets/card-overview/icon.png</value>
+            </property>
+            <property label="Title" name="title" viewHint="text-input,admin,designModeOnly">
+                <value type="string">Card Overview</value>
+            </property>
+        </properties>
+        <tags>
+            <tag blacklist="false" type="section">banking</tag>
+            <tag blacklist="false" type="behavior">card-management</tag>
+            <tag blacklist="false" type="regular">cards</tag>
+        </tags>
+        <uuid>2b7f9407-e8f2-48a5-b557-7ea4abe80b7e</uuid>
+    </widget>
+    <widget>
+        <contextItemName>[BBHOST]</contextItemName>
+        <extendedItemName>[widget-launchpad-base]</extendedItemName>
+        <name>widget-category-spendings-chart</name>
+        <properties>
+            <property label="Transaction Categories Data Source" name="categoriesDataSrc" viewHint="user,text-input,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/pfm/transaction-categories</value>
+            </property>
+            <property label="Category Spendings Data Source" name="categorySpendingDataSrc" viewHint="user,text-input,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/current-accounts/spendings</value>
+            </property>
+            <property label="Icon" name="icon" viewHint="text-input,user,designModeOnly">
+                <value type="string">category-spendings-chart</value>
+            </property>
+            <property label="Locale" name="locale" viewHint="user,text-input,designModeOnly">
+                <value type="string">en-US</value>
+            </property>
+            <property name="src">
+                <value type="string">$(contextRoot)/static/launchpad/pfm/widgets/category-spendings-chart/index.html</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/launchpad/pfm/widgets/category-spendings-chart/icon.png</value>
+            </property>
+            <property label="Title" name="title" viewHint="user,text-input,designModeOnly">
+                <value type="string">Category Spendings Chart</value>
+            </property>
+        </properties>
+        <tags>
+            <tag blacklist="false" type="section">banking</tag>
+            <tag blacklist="false" type="regular">pfm</tag>
+        </tags>
+        <uuid>8f0dc60c-4f0d-48d1-a8e1-3570c2ea8d12</uuid>
+    </widget>
+    <widget>
+        <contextItemName>[BBHOST]</contextItemName>
+        <extendedItemName>[widget-launchpad-base]</extendedItemName>
+        <name>widget-device-dna</name>
+        <properties>
+            <property label="Locale" name="locale">
+                <value type="string"/>
+            </property>
+            <property name="src">
+                <value type="string">$(contextRoot)/static/launchpad/widgets/device-dna/index.html</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/launchpad/widgets/device-dna/icon.png</value>
+            </property>
+            <property label="Title" name="title" viewHint="text-input,admin,designModeOnly">
+                <value type="string">Device DNA</value>
+            </property>
+        </properties>
+        <tags>
+            <tag blacklist="false" type="regular">authentication</tag>
+            <tag blacklist="false" type="section">banking</tag>
+        </tags>
+        <uuid>e01f8a0f-3eda-4847-8e88-93b5374d5cf7</uuid>
+    </widget>
+    <widget>
+        <contextItemName>[BBHOST]</contextItemName>
+        <extendedItemName>[widget-launchpad-base]</extendedItemName>
+        <name>widget-e-bill-add</name>
+        <properties>
+            <property label="Payee and E-Bills Data Source" name="billPaymentsDataSrc" viewHint="admin,text-input,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/bill-payments</value>
+            </property>
+            <property label="Business calendar Data Source" name="calendarDataSrc" viewHint="admin,text-input,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/calendars</value>
+            </property>
+            <property label="Icon" name="icon" viewHint="text-input,user,designModeOnly">
+                <value type="string">e-bill</value>
+            </property>
+            <property name="src">
+                <value type="string">$(contextRoot)/static/launchpad/widgets/ebill-add/index.html</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/launchpad/widgets/ebill-add/icon.png</value>
+            </property>
+            <property label="Title" name="title" viewHint="user,text-input,designModeOnly">
+                <value type="string">EBill - Add</value>
+            </property>
+        </properties>
+        <tags>
+            <tag blacklist="false" type="section">banking</tag>
+            <tag blacklist="false" type="behavior">e-bill</tag>
+            <tag blacklist="false" type="regular">ebilling</tag>
+        </tags>
+        <uuid>9c30d9e6-9d2d-4dea-8a8c-14fc32e176dd</uuid>
+    </widget>
+    <widget>
+        <contextItemName>[BBHOST]</contextItemName>
+        <extendedItemName>[widget-launchpad-base]</extendedItemName>
+        <name>widget-e-bill-history</name>
+        <properties>
+            <property label="Debit-Orders Data Source" name="debitOrdersSrc" viewHint="user,text-input,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/debit-orders</value>
+            </property>
+            <property label="Icon" name="icon" viewHint="text-input,user,designModeOnly">
+                <value type="string">e-bill</value>
+            </property>
+            <property label="Mandates Data Source" name="mandatesSrc" viewHint="user,text-input,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/mandates</value>
+            </property>
+            <property name="src">
+                <value type="string">$(contextRoot)/static/launchpad/widgets/ebill-history/index.html</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/launchpad/widgets/ebill-history/icon.png</value>
+            </property>
+            <property label="Title" name="title" viewHint="user,text-input,designModeOnly">
+                <value type="string">EBill - History</value>
+            </property>
+        </properties>
+        <tags>
+            <tag blacklist="false" type="section">banking</tag>
+            <tag blacklist="false" type="regular">ebilling</tag>
+        </tags>
+        <uuid>d72671a3-6dbe-48f3-8551-47a3c7d78453</uuid>
+    </widget>
+    <widget>
+        <contextItemName>[BBHOST]</contextItemName>
+        <extendedItemName>[widget-launchpad-base]</extendedItemName>
+        <name>widget-e-bill-inbox</name>
+        <properties>
+            <property label="Accounts Data Source" name="accountsDataSrc" viewHint="admin,text-input,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/debit-accounts</value>
+            </property>
+            <property label="Debit-Orders Data Source" name="debitOrdersSrc" viewHint="admin,text-input,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/debit-orders</value>
+            </property>
+            <property label="Icon" name="icon" viewHint="text-input,user,designModeOnly">
+                <value type="string">e-bill</value>
+            </property>
+            <property label="Mandates Data Source" name="mandatesSrc" viewHint="admin,text-input,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/mandates</value>
+            </property>
+            <property name="src">
+                <value type="string">$(contextRoot)/static/launchpad/widgets/ebill-inbox/index.html</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/launchpad/widgets/ebill-inbox/icon.png</value>
+            </property>
+            <property label="Title" name="title" viewHint="user,text-input,designModeOnly">
+                <value type="string">EBill - Inbox</value>
+            </property>
+        </properties>
+        <tags>
+            <tag blacklist="false" type="section">banking</tag>
+            <tag blacklist="false" type="behavior">e-bill</tag>
+            <tag blacklist="false" type="regular">ebilling</tag>
+        </tags>
+        <uuid>1922472b-0460-40fb-adca-ad31505109db</uuid>
+    </widget>
+    <widget>
+        <contextItemName>[BBHOST]</contextItemName>
+        <extendedItemName>[widget-launchpad-base]</extendedItemName>
+        <name>widget-estatements</name>
+        <properties>
+            <property label="Enrollment Data Source" name="estatementEnrollmentEndpoint" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/document-enrollment</value>
+            </property>
+            <property label="List Data Source" name="estatementListEndpoint" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/documents</value>
+            </property>
+            <property label="Icon" name="icon" viewHint="text-input,admin,designModeOnly">
+                <value type="string">estatements</value>
+            </property>
+            <property name="src">
+                <value type="string">$(contextRoot)/static/launchpad/widgets/estatement-list/index.html</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/launchpad/widgets/estatement-list/icon.png</value>
+            </property>
+            <property label="Title" name="title" viewHint="text-input,admin,designModeOnly">
+                <value type="string">Estatements</value>
+            </property>
+        </properties>
+        <tags>
+            <tag blacklist="false" type="section">banking</tag>
+            <tag blacklist="false" type="behavior">estatements</tag>
+            <tag blacklist="false" type="regular">transactions</tag>
+        </tags>
+        <uuid>e8d0d493-77ae-4034-82a8-ee199167fb14</uuid>
+    </widget>
+    <widget>
+        <contextItemName>[BBHOST]</contextItemName>
+        <extendedItemName>[widget-launchpad-base]</extendedItemName>
+        <name>widget-expense-planning</name>
+        <properties>
+            <property label="Expenses Data Source" name="expensesDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/payment-order-executions</value>
+            </property>
+            <property label="Expenses Details Source" name="expensesDetailsDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/payment-orders</value>
+            </property>
+            <property label="Icon" name="icon" viewHint="text-input,admin,designModeOnly">
+                <value type="string">expense-planning</value>
+            </property>
+            <property label="Show Expense Icons" name="showExpenseIcons" viewHint="checkbox,admin,designModeOnly">
+                <value type="boolean">true</value>
+            </property>
+            <property name="src">
+                <value type="string">$(contextRoot)/static/launchpad/banking/widgets/expense-planning/index.html</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/launchpad/banking/widgets/expense-planning/icon.png</value>
+            </property>
+            <property label="Title" name="title" viewHint="text-input,admin,designModeOnly">
+                <value type="string">Expense Planning</value>
+            </property>
+        </properties>
+        <tags>
+            <tag blacklist="false" type="section">banking</tag>
+            <tag blacklist="false" type="regular">calendar</tag>
+        </tags>
+        <uuid>d2fde85d-94e7-4e35-a59c-c465ddb70d81</uuid>
+    </widget>
+    <widget>
+        <contextItemName>[BBHOST]</contextItemName>
+        <extendedItemName>[widget-launchpad-base]</extendedItemName>
+        <name>widget-external-accounts</name>
+        <properties>
+            <property label="Amount of Financial Institutes to Load" name="amountToLoad" viewHint="text-input,admin,designModeOnly">
+                <value type="string">5</value>
+            </property>
+            <property label="Data endpoint for list of financial institutions" name="financialInstitutionsSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/financial-institutions/:search/:id/:credentials</value>
+            </property>
+            <property label="Icon" name="icon" viewHint="text-input,admin,designModeOnly">
+                <value type="string">plus</value>
+            </property>
+            <property label="Data endpoint for FI membership Requests" name="membershipRequestsSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/membership_requests/:id/:credentials</value>
+            </property>
+            <property label="The portal root to display the nav links from" name="navRoot" viewHint="text-input,admin,designModeOnly">
+                <value type="string">navroot_mainmenu</value>
+            </property>
+            <property name="src">
+                <value type="string">$(contextRoot)/static/launchpad/banking/widgets/external-accounts/index.html</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/launchpad/banking/widgets/external-accounts/icon.png</value>
+            </property>
+            <property label="Title" name="title" viewHint="text-input,admin,designModeOnly">
+                <value type="string">External Accounts</value>
+            </property>
+        </properties>
+        <tags>
+            <tag blacklist="false" type="regular">accounts</tag>
+            <tag blacklist="false" type="section">banking</tag>
+            <tag blacklist="false" type="behavior">external-accounts</tag>
+        </tags>
+        <uuid>605eacd3-d54b-4846-bce5-23e6487b7737</uuid>
+    </widget>
+    <widget>
+        <contextItemName>[BBHOST]</contextItemName>
+        <name>widget-launchpad-base</name>
+        <properties>
+            <property name="Description">
+                <value type="String"/>
+            </property>
+            <property name="TemplateName">
+                <value type="string">Standard_Widget</value>
+            </property>
+            <property name="area">
+                <value type="string"/>
+            </property>
+            <property label="Icon Class" name="icon">
+                <value type="string"/>
+            </property>
+            <property label="Locale" name="locale">
+                <value type="string">en</value>
+            </property>
+            <property label="Messages Source" name="messageSrc">
+                <value type="string"/>
+            </property>
+            <property name="noForceChrome">
+                <value type="boolean">false</value>
+            </property>
+            <property name="order">
+                <value type="double">0.0</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/launchpad/universal/widgets/base-widget/icon.png</value>
+            </property>
+            <property label="Title" name="title" viewHint="admin,designModeOnly">
+                <value type="string">Base Widget (Abstract)</value>
+            </property>
+            <property label="Widget Chrome" name="widgetChrome" viewHint="select-one,admin,designModeOnly">
+                <value type="string">$(contextRoot)/static/launchpad/universal/chromes/blank/chrome-blank.html</value>
+            </property>
+        </properties>
+        <uuid>ffd3fd6c-22ef-4e6e-a1fd-807accb2f852</uuid>
+    </widget>
+    <widget>
+        <contextItemName>[BBHOST]</contextItemName>
+        <extendedItemName>[widget-launchpad-base]</extendedItemName>
+        <name>widget-login</name>
+        <properties>
+            <property label="Icon" name="icon" viewHint="admin,designModeOnly">
+                <value type="string">login</value>
+            </property>
+            <property name="src">
+                <value type="string">$(contextRoot)/static/launchpad/universal/widgets/login/index.html</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/launchpad/universal/widgets/login/icon.png</value>
+            </property>
+            <property label="Title" name="title" viewHint="admin,designModeOnly">
+                <value type="string">Login</value>
+            </property>
+        </properties>
+        <tags>
+            <tag blacklist="false" type="regular">authentication</tag>
+            <tag blacklist="false" type="section">banking</tag>
+        </tags>
+        <uuid>d52c6c66-c89f-4909-8717-58ba81bc3696</uuid>
+    </widget>
+    <widget>
+        <contextItemName>[BBHOST]</contextItemName>
+        <extendedItemName>[widget-launchpad-base]</extendedItemName>
+        <name>widget-login-multifactor</name>
+        <properties>
+            <property label="Icon" name="icon" viewHint="text-input,admin,designModeOnly">
+                <value type="string">login</value>
+            </property>
+            <property label="Initiate Session URL" name="initiateEndPoint" viewHint="text-input,admin,designModeOnly">
+                <value type="string">/v1/authentication/session/initiate</value>
+            </property>
+            <property label="Messages Source" name="messageSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(contextRoot)/static/launchpad/modules/config/i18n/common.json</value>
+            </property>
+            <property label="OTP URL" name="otpEndPoint" viewHint="text-input,admin,designModeOnly">
+                <value type="string">/v1/authentication/session/{id}/verifyOTP</value>
+            </property>
+            <property label="Prefix path for Session URL" name="prefixSessionUrl" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest</value>
+            </property>
+            <property label="Reload page on success" name="reloadOnSuccess" viewHint="checkbox,admin,designModeOnly">
+                <value type="boolean">true</value>
+            </property>
+            <property name="src">
+                <value type="string">$(contextRoot)/static/launchpad/widgets/login-multifactor/index.html</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/launchpad/widgets/login-multifactor/icon.png</value>
+            </property>
+            <property label="Title" name="title" viewHint="text-input,admin,designModeOnly">
+                <value type="string">Login - Multifactor</value>
+            </property>
+        </properties>
+        <tags>
+            <tag blacklist="false" type="regular">authentication</tag>
+            <tag blacklist="false" type="section">banking</tag>
+        </tags>
+        <uuid>412cdc4f-549f-45af-8882-fe907b0c9e3f</uuid>
+    </widget>
+    <widget>
+        <contextItemName>[BBHOST]</contextItemName>
+        <extendedItemName>[widget-launchpad-base]</extendedItemName>
+        <name>widget-login-multifactor-engage</name>
+        <properties>
+            <property label="Icon" name="icon" viewHint="text-input,admin,designModeOnly">
+                <value type="string">login</value>
+            </property>
+            <property label="Initiate Session URL" name="initiateEndPoint" viewHint="text-input,admin,designModeOnly">
+                <value type="string">/v1/authentication/session/initiate</value>
+            </property>
+            <property label="Messages Source" name="messageSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(contextRoot)/static/launchpad/modules/config/i18n/common.json</value>
+            </property>
+            <property label="OTP URL" name="otpEndPoint" viewHint="text-input,admin,designModeOnly">
+                <value type="string">/v1/authentication/session/{id}/verifyOTP</value>
+            </property>
+            <property label="Prefix path for Session URL" name="prefixSessionUrl" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest</value>
+            </property>
+            <property label="Reload page on success" name="reloadOnSuccess" viewHint="checkbox,admin,designModeOnly">
+                <value type="boolean">true</value>
+            </property>
+            <property name="src">
+                <value type="string">$(contextRoot)/static/launchpad/widgets/login-multifactor-engage/index.html</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/launchpad/widgets/login-multifactor-engage/icon.png</value>
+            </property>
+            <property label="OTP timer seconds hide (0 to show always)" name="timerHideSeconds" viewHint="text-input,admin,designModeOnly">
+                <value type="string">30</value>
+            </property>
+            <property label="OTP timer seconds" name="timerSeconds" viewHint="text-input,admin,designModeOnly">
+                <value type="string">60</value>
+            </property>
+            <property label="Title" name="title" viewHint="text-input,admin,designModeOnly">
+                <value type="string">Login - Multifactor (Engage)</value>
+            </property>
+        </properties>
+        <tags>
+            <tag blacklist="false" type="regular">authentication</tag>
+            <tag blacklist="false" type="section">banking</tag>
+        </tags>
+        <uuid>8a69ff23-01a9-4462-8afd-59bb8e27a7a8</uuid>
+    </widget>
+    <widget>
+        <contextItemName>[BBHOST]</contextItemName>
+        <extendedItemName>[widget-launchpad-base]</extendedItemName>
+        <name>widget-navbar</name>
+        <properties>
+            <property name="src">
+                <value type="string">$(contextRoot)/static/launchpad/universal/widgets/navbar/index.html</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/launchpad/universal/widgets/navbar/icon.png</value>
+            </property>
+            <property label="Title" name="title">
+                <value type="string">Navigation</value>
+            </property>
+        </properties>
+        <tags>
+            <tag blacklist="false" type="section">navigation</tag>
+            <tag blacklist="false" type="regular">universal</tag>
+        </tags>
+        <uuid>d263a55f-8397-4777-b5e4-a130012fa527</uuid>
+    </widget>
+    <widget>
+        <contextItemName>[BBHOST]</contextItemName>
+        <extendedItemName>[widget-launchpad-base]</extendedItemName>
+        <name>widget-navbar-advanced</name>
+        <properties>
+            <property label="Container type" name="containerType" viewHint="select-one,user,designModeOnly">
+                <value type="string">fixed</value>
+            </property>
+            <property label="Icon for Launcher Menu" name="launcherIcon" viewHint="select-one,manager,designModeOnly">
+                <value type="string">arrow-left</value>
+            </property>
+            <property label="Logo Url" name="logoURL" viewHint="text-input,manager,designModeOnly">
+                <value type="string">$(contextRoot)/static/launchpad/universal/widgets/navbar-advanced/media/backbase-web-logo.png</value>
+            </property>
+            <property label="Mobile Logo Url" name="mobileLogoURL" viewHint="text-input,manager,designModeOnly">
+                <value type="string">$(contextRoot)/static/launchpad/universal/widgets/navbar-advanced/media/backbase-mobile-logo.png</value>
+            </property>
+            <property label="Navigation Depth" name="navDepth" viewHint="select-one,designModeOnly,manager">
+                <value type="long">1</value>
+            </property>
+            <property label="Navigation Level" name="navLevel" viewHint="select-one,designModeOnly,manager">
+                <value type="long">1</value>
+            </property>
+            <property label="Navigation Root Link" name="navRoot" viewHint="text-input,manager,designModeOnly">
+                <value type="linkRef"/>
+            </property>
+            <property label="Show or hide the NavBar" name="navShow" viewHint="checkbox,designModeOnly,manager">
+                <value type="boolean">true</value>
+            </property>
+            <property label="Set the Navbar sticky" name="navSticky" viewHint="checkbox,designModeOnly,manager">
+                <value type="boolean">true</value>
+            </property>
+            <property label="Template" name="navTemplate" viewHint="select-one,select-one,manager,designModeOnly">
+                <value type="string">$(contextRoot)/static/launchpad/html/nav-template/mustache_top_level.html</value>
+            </property>
+            <property label="Navigation menu icon animation hook" name="navigationIconAnimationHook" viewHint="text-input,manager,designModeOnly">
+                <value type="string">arrow</value>
+            </property>
+            <property label="Page Scroll settings" name="scrollSetting" viewHint="select-one,manager,designModeOnly">
+                <value type="string">Normal</value>
+            </property>
+            <property label="Show Notifications badges inside the Launcher Toggle" name="showNotificationsBadge" viewHint="checkbox,manager,designModeOnly">
+                <value type="boolean">false</value>
+            </property>
+            <property label="Show Page Title" name="showPageTitle" viewHint="checkbox,designModeOnly,manager">
+                <value type="boolean">true</value>
+            </property>
+            <property name="src">
+                <value type="string">$(contextRoot)/static/launchpad/universal/widgets/navbar-advanced/index.html</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/launchpad/universal/widgets/navbar-advanced/icon.png</value>
+            </property>
+            <property label="Title" name="title">
+                <value type="string">Navigation - Advanced</value>
+            </property>
+        </properties>
+        <tags>
+            <tag blacklist="false" type="section">navigation</tag>
+            <tag blacklist="false" type="regular">universal</tag>
+        </tags>
+        <uuid>15ad4389-0122-4d47-b018-5a591a628d37</uuid>
+    </widget>
+    <widget>
+        <contextItemName>[BBHOST]</contextItemName>
+        <extendedItemName>[widget-launchpad-base]</extendedItemName>
+        <name>widget-navfooter</name>
+        <properties>
+            <property label="Locale" name="locale">
+                <value type="string"/>
+            </property>
+            <property label="Menu Depth" name="navDepth" viewHint="select-one,designModeOnly,admin">
+                <value type="long">2</value>
+            </property>
+            <property label="Render" name="navLevel" viewHint="select-one,designModeOnly,admin">
+                <value type="long">1</value>
+            </property>
+            <property label="Navigation Source - Link ID" name="navShow" viewHint="text-input,designModeOnly,admin">
+                <value type="uuidRef"/>
+            </property>
+            <property label="Template" name="navTemplate" viewHint="select-one,designModeOnly,admin">
+                <value type="string">$(contextRoot)/static/launchpad/html/nav-footer/mustache_top_level.html</value>
+            </property>
+            <property name="src">
+                <value type="string">$(contextRoot)/static/launchpad/universal/widgets/navfooter/index.html</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/launchpad/universal/widgets/navfooter/icon.png</value>
+            </property>
+            <property label="Title" name="title">
+                <value type="string">Navigation - Footer</value>
+            </property>
+        </properties>
+        <tags>
+            <tag blacklist="false" type="section">navigation</tag>
+            <tag blacklist="false" type="regular">universal</tag>
+        </tags>
+        <uuid>1cd24b1b-fced-4a19-943e-39306f467666</uuid>
+    </widget>
+    <widget>
+        <contextItemName>[BBHOST]</contextItemName>
+        <extendedItemName>[widget-launchpad-base]</extendedItemName>
+        <name>widget-new-transfer</name>
+        <properties>
+            <property label="Accounts Data Source" name="accountsDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/debit-accounts</value>
+            </property>
+            <property label="Top balance" name="accountsTopBalance" viewHint="select-one,admin,designModeOnly">
+                <value type="string">current</value>
+            </property>
+            <property label="Autosave Contacts" name="autosaveContactsPreference" viewHint="checkbox,admin,designModeOnly">
+                <value type="boolean">false</value>
+            </property>
+            <property label="Contact Data Source" name="contactDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/party-data-management/counter-party/$(contactId)</value>
+            </property>
+            <property label="Contact Details Data Source" name="contactDetailsDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/party-data-management/counter-party/$(contactId)/details</value>
+            </property>
+            <property label="Contact List Data Source" name="contactListDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/counterparties</value>
+            </property>
+            <property label="Currency exchange rate data source" name="currencyListEndpoint" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/currency-rates</value>
+            </property>
+            <property label="Default currency data source" name="defaultCurrencyEndpoint" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/currency-rates/default</value>
+            </property>
+            <property label="Disable currency select" name="disableCurrencySelection" viewHint="checkbox,admin,designModeOnly">
+                <value type="boolean">false</value>
+            </property>
+            <property label="Enable Search on IBAN country select" name="enableIbanCountrySearch" viewHint="checkbox,admin,designModeOnly">
+                <value type="boolean">true</value>
+            </property>
+            <property label="Force initial account selection" name="forceAccountSelection" viewHint="checkbox,admin,designModeOnly">
+                <value type="boolean">false</value>
+            </property>
+            <property label="IBAN data source" name="ibanDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/iban</value>
+            </property>
+            <property label="Icon" name="icon" viewHint="text-input,admin,designModeOnly">
+                <value type="string">new-transfer</value>
+            </property>
+            <property label="Locale" name="locale" viewHint="text-input,admin,designModeOnly">
+                <value type="string">en</value>
+            </property>
+            <property label="Messages Source" name="messageSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(contextRoot)/static/launchpad/banking/widgets/new-transfer/data/messages.json</value>
+            </property>
+            <property label="Enrollment Status Endpoint for P2P Service" name="p2pEnrollmentEndpoint" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/p2p-enrollment</value>
+            </property>
+            <property label="Payment Orders Data Source" name="paymentOrdersDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/payment-orders/:accountIds/:paymentId/:action</value>
+            </property>
+            <property name="src">
+                <value type="string">$(contextRoot)/static/launchpad/banking/widgets/new-transfer/index.html</value>
+            </property>
+            <property label="Content Template" name="templateUrl" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(contextRoot)/static/launchpad/html/new-transfer/iceContent.html</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/launchpad/banking/widgets/new-transfer/icon.png</value>
+            </property>
+            <property label="Title" name="title" viewHint="text-input,admin,designModeOnly">
+                <value type="string">New Transfer</value>
+            </property>
+        </properties>
+        <tags>
+            <tag blacklist="false" type="section">banking</tag>
+            <tag blacklist="false" type="behavior">new-transfer</tag>
+            <tag blacklist="false" type="regular">transactions</tag>
+        </tags>
+        <uuid>f31b1cd9-6f2c-4a16-9f9e-888c0df465c0</uuid>
+    </widget>
+    <widget>
+        <contextItemName>[BBHOST]</contextItemName>
+        <extendedItemName>[widget-launchpad-base]</extendedItemName>
+        <name>widget-notifications</name>
+        <properties>
+            <property label="Receive messages from the pubsub channel" name="allowPubsub" viewHint="checkbox,admin,designModeOnly">
+                <value type="boolean">true</value>
+            </property>
+            <property label="Close notification endpoint" name="closeNotificationEndpoint" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/contact-dialogues/messages/$(id)/deactivate</value>
+            </property>
+            <property label="Sticky to navigation bar" name="fixedBar" viewHint="checkbox,admin,designModeOnly">
+                <value type="boolean">true</value>
+            </property>
+            <property label="Message source" name="messageSrc">
+                <value type="string">$(contextRoot)/static/launchpad/modules/config/i18n/common.json</value>
+            </property>
+            <property label="Notifications endpoint" name="notificationsEndpoint" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/contact-dialogues/messages</value>
+            </property>
+            <property label="Poll for new messages every..." name="pollInterval" viewHint="text-input,admin,designModeOnly">
+                <value type="double">10000.0</value>
+            </property>
+            <property name="src">
+                <value type="string">$(contextRoot)/static/launchpad/universal/widgets/notifications/index.html</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/launchpad/universal/widgets/notifications/icon.png</value>
+            </property>
+            <property label="Title" name="title" viewHint="designModeOnly,admin">
+                <value type="string">Notifications</value>
+            </property>
+        </properties>
+        <tags>
+            <tag blacklist="false" type="section">banking</tag>
+            <tag blacklist="false" type="regular">notification</tag>
+        </tags>
+        <uuid>96c12818-4e9f-4a14-a9a0-eb5783cbb98d</uuid>
+    </widget>
+    <widget>
+        <contextItemName>[BBHOST]</contextItemName>
+        <extendedItemName>[widget-launchpad-base]</extendedItemName>
+        <name>widget-p2p-enrollment</name>
+        <properties>
+            <property label="Accounts Data Source" name="accountsDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/debit-accounts</value>
+            </property>
+            <property label="Email Limit" name="emailLimit" viewHint="text-input,admin,designModeOnly">
+                <value type="string">7</value>
+            </property>
+            <property label="Icon" name="icon" viewHint="text-input,admin,designModeOnly">
+                <value type="string">p2p</value>
+            </property>
+            <property label="Enrollment Status Endpoint for P2P Service" name="p2pEnrollmentEndpoint" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/p2p-enrollment</value>
+            </property>
+            <property label="Places Data Source" name="saveUrl" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/party-data-management/locations</value>
+            </property>
+            <property name="src">
+                <value type="string">$(contextRoot)/static/launchpad/p2p/widgets/p2p-enrollment/index.html</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/launchpad/p2p/widgets/p2p-enrollment/icon.png</value>
+            </property>
+            <property label="Title" name="title" viewHint="text-input,admin,designModeOnly">
+                <value type="string">Send to Friend - Sign Up</value>
+            </property>
+        </properties>
+        <tags>
+            <tag blacklist="false" type="section">banking</tag>
+            <tag blacklist="false" type="regular">p2p</tag>
+            <tag blacklist="false" type="behavior">p2p-enrollment</tag>
+        </tags>
+        <uuid>b79ffbcc-7f6f-44dd-b343-2dcc34f33a05</uuid>
+    </widget>
+    <widget>
+        <contextItemName>[BBHOST]</contextItemName>
+        <extendedItemName>[widget-launchpad-base]</extendedItemName>
+        <name>widget-p2p-preferences</name>
+        <properties>
+            <property label="Accounts Data Source" name="accountsDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/debit-accounts</value>
+            </property>
+            <property label="Allow multiple emails" name="allowMultipleEmails" viewHint="checkbox,admin,designModeOnly">
+                <value type="boolean">false</value>
+            </property>
+            <property label="Email Limit" name="emailLimit" viewHint="text-input,admin,designModeOnly">
+                <value type="string">7</value>
+            </property>
+            <property label="Icon" name="icon" viewHint="text-input,admin,designModeOnly">
+                <value type="string">p2p</value>
+            </property>
+            <property label="Enrollment Status Endpoint for P2P Service" name="p2pEnrollmentEndpoint" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/p2p-enrollment</value>
+            </property>
+            <property name="src">
+                <value type="string">$(contextRoot)/static/launchpad/p2p/widgets/p2p-preferences/index.html</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/launchpad/p2p/widgets/p2p-preferences/icon.png</value>
+            </property>
+            <property label="Title" name="title" viewHint="text-input,admin,designModeOnly">
+                <value type="string">Send to Friend - Preferences</value>
+            </property>
+        </properties>
+        <tags>
+            <tag blacklist="false" type="section">banking</tag>
+            <tag blacklist="false" type="regular">p2p</tag>
+            <tag blacklist="false" type="behavior">p2p-preferences</tag>
+        </tags>
+        <uuid>8ed548c2-dcbf-4885-9257-9d5627d81a4c</uuid>
+    </widget>
+    <widget>
+        <contextItemName>[BBHOST]</contextItemName>
+        <extendedItemName>[widget-launchpad-base]</extendedItemName>
+        <name>widget-p2p-tab</name>
+        <properties>
+            <property label="Icon" name="icon" viewHint="text-input,admin,designModeOnly">
+                <value type="string">p2p</value>
+            </property>
+            <property label="Enrollment Status Endpoint for P2P Service" name="p2pEnrollmentEndpoint" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/p2p-enrollment</value>
+            </property>
+            <property name="src">
+                <value type="string">$(contextRoot)/static/launchpad/p2p/widgets/p2p-tab/index.html</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/launchpad/p2p/widgets/p2p-tab/icon.png</value>
+            </property>
+            <property label="Title" name="title" viewHint="text-input,admin,designModeOnly">
+                <value type="string">Send to Friend</value>
+            </property>
+        </properties>
+        <tags>
+            <tag blacklist="false" type="section">banking</tag>
+            <tag blacklist="false" type="regular">p2p</tag>
+        </tags>
+        <uuid>5c10f782-7bf0-4fb4-866d-12f90750720a</uuid>
+    </widget>
+    <widget>
+        <contextItemName>[BBHOST]</contextItemName>
+        <extendedItemName>[widget-launchpad-base]</extendedItemName>
+        <name>widget-p2p-transactions</name>
+        <properties>
+            <property label="Icon" name="icon" viewHint="text-input,admin,designModeOnly">
+                <value type="string">p2p</value>
+            </property>
+            <property label="Enrollment Status Endpoint for P2P Service" name="p2pEnrollmentEndpoint" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/p2p-enrollment</value>
+            </property>
+            <property name="src">
+                <value type="string">$(contextRoot)/static/launchpad/p2p/widgets/p2p-transactions/index.html</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/launchpad/p2p/widgets/p2p-transactions/icon.png</value>
+            </property>
+            <property label="Title" name="title" viewHint="text-input,admin,designModeOnly">
+                <value type="string">Send to Friend - Transactions</value>
+            </property>
+            <property label="Transactions Data Source" name="transactionsDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/p2p-payments</value>
+            </property>
+        </properties>
+        <tags>
+            <tag blacklist="false" type="section">banking</tag>
+            <tag blacklist="false" type="regular">p2p</tag>
+            <tag blacklist="false" type="behavior">p2p-transactions</tag>
+        </tags>
+        <uuid>d08dceba-1d52-4373-a01b-c994c78ed087</uuid>
+    </widget>
+    <widget>
+        <contextItemName>[BBHOST]</contextItemName>
+        <extendedItemName>[widget-launchpad-base]</extendedItemName>
+        <name>widget-places</name>
+        <properties>
+            <property label="Initialize on user's position" name="currentPosition" viewHint="checkbox,admin,designModeOnly">
+                <value type="boolean">false</value>
+            </property>
+            <property label="Api Url for directions" name="directionApiUrl" viewHint="text-input,admin,designModeOnly">
+                <value type="string">https://maps.google.com/maps</value>
+            </property>
+            <property label="Filter drop-down Data Source" name="filterDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/places/options</value>
+            </property>
+            <property label="Icon" name="icon" viewHint="text-input,admin,designModeOnly">
+                <value type="string">places</value>
+            </property>
+            <property label="Latitude" name="latitude" viewHint="text-input,admin,designModeOnly">
+                <value type="double">40.722823</value>
+            </property>
+            <property label="Longitude" name="longitude" viewHint="text-input,admin,designModeOnly">
+                <value type="double">-74.003692</value>
+            </property>
+            <property label="Max Zoom" name="maxZoomOut" viewHint="text-input,admin,designModeOnly">
+                <value type="double">10.0</value>
+            </property>
+            <property label="Show pan control on map" name="panControl" viewHint="checkbox,admin,designModeOnly">
+                <value type="boolean">true</value>
+            </property>
+            <property label="Places Data Source" name="placesDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/places</value>
+            </property>
+            <property label="Radius" name="placesFilterRadius" viewHint="text-input,admin,designModeOnly">
+                <value type="double">50.0</value>
+            </property>
+            <property label="Amount of Places returned for each page" name="placesPageSize" viewHint="text-input,admin,designModeOnly">
+                <value type="double">20.0</value>
+            </property>
+            <property label="Show POI on map" name="showPOI" viewHint="checkbox,admin,designModeOnly">
+                <value type="boolean">false</value>
+            </property>
+            <property name="src">
+                <value type="string">$(contextRoot)/static/launchpad/universal/widgets/places/index.html</value>
+            </property>
+            <property label="Api Url for static map" name="staticMapApiUrl" viewHint="text-input,admin,designModeOnly">
+                <value type="string">http://maps.googleapis.com/maps/api/staticmap</value>
+            </property>
+            <property label="Size of map thumbnail" name="staticMapThumbSize" viewHint="text-input,admin,designModeOnly">
+                <value type="string">300x100</value>
+            </property>
+            <property label="Default zoom value for static map" name="staticMapZoom" viewHint="text-input,admin,designModeOnly">
+                <value type="double">16.0</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/launchpad/universal/widgets/places/icon.png</value>
+            </property>
+            <property label="Title" name="title" viewHint="admin,designModeOnly">
+                <value type="string">Places</value>
+            </property>
+            <property label="Zoom" name="zoom" viewHint="text-input,admin,designModeOnly">
+                <value type="double">12.0</value>
+            </property>
+        </properties>
+        <tags>
+            <tag blacklist="false" type="section">banking</tag>
+            <tag blacklist="false" type="regular">location</tag>
+            <tag blacklist="false" type="behavior">places</tag>
+        </tags>
+        <uuid>670066d4-89a6-48b3-bf71-06f1d1f39001</uuid>
+    </widget>
+    <widget>
+        <contextItemName>[BBHOST]</contextItemName>
+        <extendedItemName>[widget-launchpad-base]</extendedItemName>
+        <name>widget-profile-contact</name>
+        <properties>
+            <property label="Contact Store URL" name="saveUrl" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/party-data-management/locations</value>
+            </property>
+            <property name="src">
+                <value type="string">$(contextRoot)/static/launchpad/universal/widgets/profile-contact/index.html</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/launchpad/universal/widgets/profile-contact/icon.png</value>
+            </property>
+            <property label="Title" name="title" viewHint="text-input,admin,designModeOnly">
+                <value type="string">Profile - Contact</value>
+            </property>
+        </properties>
+        <tags>
+            <tag blacklist="false" type="section">banking</tag>
+            <tag blacklist="false" type="regular">profile</tag>
+        </tags>
+        <uuid>572c1a9e-9c57-487e-a0c0-8abf3489c4a6</uuid>
+    </widget>
+    <widget>
+        <contextItemName>[BBHOST]</contextItemName>
+        <extendedItemName>[widget-launchpad-base]</extendedItemName>
+        <name>widget-profile-details</name>
+        <properties>
+            <property label="Message source" name="messageSrc" viewHint="admin,designModeOnly">
+                <value type="string">$(contextRoot)/static/launchpad/modules/config/i18n/common.json</value>
+            </property>
+            <property name="src">
+                <value type="string">$(contextRoot)/static/launchpad/universal/widgets/profile-details/index.html</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/launchpad/universal/widgets/profile-details/icon.png</value>
+            </property>
+            <property label="Title" name="title" viewHint="admin,designModeOnly">
+                <value type="string">Profile - Details</value>
+            </property>
+        </properties>
+        <tags>
+            <tag blacklist="false" type="section">banking</tag>
+            <tag blacklist="false" type="behavior">profile</tag>
+            <tag blacklist="false" type="regular">profile</tag>
+        </tags>
+        <uuid>c4b64cc9-e7de-47b9-a27d-e0ad1aa62e5e</uuid>
+    </widget>
+    <widget>
+        <contextItemName>[BBHOST]</contextItemName>
+        <extendedItemName>[widget-launchpad-base]</extendedItemName>
+        <name>widget-profile-portfolio</name>
+        <properties>
+            <property name="data-source" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/customer-product-coverage/arrangements</value>
+            </property>
+            <property name="src">
+                <value type="string">$(contextRoot)/static/launchpad/universal/widgets/profile-portfolio/index.html</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/launchpad/universal/widgets/profile-portfolio/icon.png</value>
+            </property>
+            <property label="Title" name="title" viewHint="text-input,admin,designModeOnly">
+                <value type="string">Profile - Portfolio</value>
+            </property>
+        </properties>
+        <tags>
+            <tag blacklist="false" type="regular">accounts</tag>
+            <tag blacklist="false" type="section">banking</tag>
+        </tags>
+        <uuid>f3aa46b1-0a70-4318-ad71-bae750d14a0d</uuid>
+    </widget>
+    <widget>
+        <contextItemName>[BBHOST]</contextItemName>
+        <extendedItemName>[widget-launchpad-base]</extendedItemName>
+        <name>widget-profile-preferences</name>
+        <properties>
+            <property label="Accounts Data Source" name="accountsDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/debit-accounts</value>
+            </property>
+            <property label="Preferences Service" name="preferenceService" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/party-data-management/preferences</value>
+            </property>
+            <property name="src">
+                <value type="string">$(contextRoot)/static/launchpad/universal/widgets/profile-preferences/index.html</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/launchpad/universal/widgets/profile-preferences/icon.png</value>
+            </property>
+            <property label="Title" name="title" viewHint="admin,designModeOnly">
+                <value type="string">Profile - Preferences</value>
+            </property>
+        </properties>
+        <tags>
+            <tag blacklist="false" type="section">banking</tag>
+            <tag blacklist="false" type="regular">profile</tag>
+        </tags>
+        <uuid>2dc1f7e2-2eab-4a87-a28d-27fba3a9b562</uuid>
+    </widget>
+    <widget>
+        <contextItemName>[BBHOST]</contextItemName>
+        <extendedItemName>[widget-launchpad-base]</extendedItemName>
+        <name>widget-profile-summary</name>
+        <properties>
+            <property label="Preferences Service" name="preferenceService" viewHint="admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/party-data-management/preferences</value>
+            </property>
+            <property label="Profile Url" name="profileLink" viewHint="admin,designModeOnly">
+                <value type="string"/>
+            </property>
+            <property name="src">
+                <value type="string">$(contextRoot)/static/launchpad/universal/widgets/profile-summary/index.html</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/launchpad/universal/widgets/profile-summary/icon.png</value>
+            </property>
+            <property label="Title" name="title" viewHint="admin,designModeOnly">
+                <value type="string">Profile - Summary</value>
+            </property>
+        </properties>
+        <tags>
+            <tag blacklist="false" type="section">banking</tag>
+            <tag blacklist="false" type="regular">profile</tag>
+        </tags>
+        <uuid>a9b56fc9-2bc1-4d01-8868-78e389b91f40</uuid>
+    </widget>
+    <widget>
+        <contextItemName>[BBHOST]</contextItemName>
+        <extendedItemName>[widget-launchpad-base]</extendedItemName>
+        <name>widget-review-transfers</name>
+        <properties>
+            <property label="Accounts Data Source" name="accountsDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/debit-accounts</value>
+            </property>
+            <property label="Icon" name="icon" viewHint="text-input,admin,designModeOnly">
+                <value type="string">review-transfers</value>
+            </property>
+            <property label="Enrollment Status Endpoint for P2P Service" name="p2pEnrollmentEndpoint" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/p2p-enrollment</value>
+            </property>
+            <property label="Payment Orders Data Source" name="paymentOrdersDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/payment-orders/:accountIds/:paymentId/:action</value>
+            </property>
+            <property name="src">
+                <value type="string">$(contextRoot)/static/launchpad/banking/widgets/review-transfers/index.html</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/launchpad/banking/widgets/review-transfers/icon.png</value>
+            </property>
+            <property label="Title" name="title" viewHint="text-input,admin,designModeOnly">
+                <value type="string">Review Transfers</value>
+            </property>
+        </properties>
+        <tags>
+            <tag blacklist="false" type="section">banking</tag>
+            <tag blacklist="false" type="behavior">review-transfers</tag>
+            <tag blacklist="false" type="regular">transactions</tag>
+        </tags>
+        <uuid>16e10cb8-596c-493a-8391-b5f2c7d8f0b9</uuid>
+    </widget>
+    <widget>
+        <contextItemName>[BBHOST]</contextItemName>
+        <extendedItemName>[widget-launchpad-base]</extendedItemName>
+        <name>widget-saving-goals</name>
+        <properties>
+            <property label="Icon" name="icon" viewHint="text-input,user,designModeOnly">
+                <value type="string">saving-goals</value>
+            </property>
+            <property label="Locale" name="locale" viewHint="user,text-input,designModeOnly">
+                <value type="string">en-US</value>
+            </property>
+            <property name="messageSrc">
+                <value type="string">$(contextRoot)/static/launchpad/pfm/widgets/saving-goals/data/messages.json</value>
+            </property>
+            <property label="Mininum duration in months" name="minMonths" viewHint="admin,text-input,designModeOnly">
+                <value type="string">3</value>
+            </property>
+            <property label="Saving Accounts Data Src" name="savingAccountsDataSrc" viewHint="admin,text-input,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/saving-accounts</value>
+            </property>
+            <property label="Saving Goals Data Src" name="savingGoalsDataSrc" viewHint="admin,text-input,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/pfm/saving-goals/:savingId</value>
+            </property>
+            <property label="Show Account Select" name="showAccountSelect" viewHint="checkbox,designModeOnly,admin">
+                <value type="boolean">true</value>
+            </property>
+            <property name="src">
+                <value type="string">$(contextRoot)/static/launchpad/pfm/widgets/saving-goals/index.html</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/launchpad/pfm/widgets/saving-goals/icon.png</value>
+            </property>
+            <property label="Title" name="title" viewHint="user,text-input,designModeOnly">
+                <value type="string">Saving Goals</value>
+            </property>
+        </properties>
+        <tags>
+            <tag blacklist="false" type="section">banking</tag>
+            <tag blacklist="false" type="regular">pfm</tag>
+        </tags>
+        <uuid>df691f0c-84a8-4dd9-a6cb-35ddeaffd38d</uuid>
+    </widget>
+    <widget>
+        <contextItemName>[BBHOST]</contextItemName>
+        <extendedItemName>[widget-launchpad-base]</extendedItemName>
+        <name>widget-secure-messaging</name>
+        <properties>
+            <property label="Categories" name="categoryList" viewHint="admin,text-input,designModeOnly">
+                <value type="string">Personal</value>
+            </property>
+            <property label="Icon" name="icon" viewHint="text-input,user,designModeOnly">
+                <value type="string">secure-messaging</value>
+            </property>
+            <property label="Letter Data Source" name="letterSrc" viewHint="admin,text-input,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/messaging/letters/:letterId/:action</value>
+            </property>
+            <property name="locale" viewHint="user,text-input,designModeOnly">
+                <value type="string">en-US</value>
+            </property>
+            <property label="Recipients Data Source" name="recipientsSrc" viewHint="admin,text-input,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/messaging/recipients</value>
+            </property>
+            <property name="src">
+                <value type="string">$(contextRoot)/static/launchpad/messaging/widgets/secure-messaging/index.html</value>
+            </property>
+            <property label="Message Thread Data Source" name="threadSrc" viewHint="admin,text-input,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/messaging/threads/:threadId/:itemType/:itemId/:action</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/launchpad/messaging/widgets/secure-messaging/icon.png</value>
+            </property>
+            <property label="Title" name="title" viewHint="user,text-input,designModeOnly">
+                <value type="string">Message Centre</value>
+            </property>
+        </properties>
+        <tags>
+            <tag blacklist="false" type="section">banking</tag>
+            <tag blacklist="false" type="regular">notification</tag>
+        </tags>
+        <uuid>4d98c9f7-b298-40d1-bb6e-fd49c18433cb</uuid>
+    </widget>
+    <widget>
+        <contextItemName>[BBHOST]</contextItemName>
+        <extendedItemName>[widget-launchpad-base]</extendedItemName>
+        <name>widget-transactions</name>
+        <properties>
+            <property label="Accounts Chart Data Source" name="accountBalanceChartDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/current-accounts/$(accountId)/balance</value>
+            </property>
+            <property label="Funds on Hold" name="accountHolds" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/account-holds?accountIds=$(accountIds)</value>
+            </property>
+            <property label="Accounts Data Source" name="accountsDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/debit-accounts</value>
+            </property>
+            <property label="Top balance" name="accountsTopBalance" viewHint="select-one,designModeOnly,user">
+                <value type="string">current</value>
+            </property>
+            <property label="Transaction Categories Data Source" name="categoriesDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/pfm/transaction-categories</value>
+            </property>
+            <property label="Category Data Source" name="categoryDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/pfm/transaction-categories</value>
+            </property>
+            <property label="Category Spendings Data Source" name="categorySpendingDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/current-accounts/spendings</value>
+            </property>
+            <property label="Contacts Data Source" name="contactsDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/party-data-management/counter-parties</value>
+            </property>
+            <property label="Hide Transaction Details in list" name="hideTransactionDetails" viewHint="checkbox,admin,designModeOnly">
+                <value type="boolean">false</value>
+            </property>
+            <property label="Icon" name="icon" viewHint="text-input,admin,designModeOnly">
+                <value type="string">transactions</value>
+            </property>
+            <property label="Messages Source" name="messageSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(contextRoot)/static/launchpad/modules/config/i18n/common.json</value>
+            </property>
+            <property label="Preference Service" name="preferenceService" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/party-data-management/preferences</value>
+            </property>
+            <property label="Show Account Select" name="showAccountSelect" viewHint="checkbox,admin,designModeOnly">
+                <value type="boolean">true</value>
+            </property>
+            <property label="Show Charts" name="showCharts" viewHint="checkbox,admin,designModeOnly">
+                <value type="boolean">true</value>
+            </property>
+            <property label="Show Dates for All Transactions" name="showDatesAllTransactions" viewHint="checkbox,admin,designModeOnly">
+                <value type="boolean">false</value>
+            </property>
+            <property label="Show Transaction Icons" name="showTransactionIcons" viewHint="checkbox,admin,designModeOnly">
+                <value type="boolean">true</value>
+            </property>
+            <property name="src">
+                <value type="string">$(contextRoot)/static/launchpad/banking/widgets/transactions/index.html</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/launchpad/banking/widgets/transactions/icon.png</value>
+            </property>
+            <property label="Title" name="title" viewHint="text-input,admin,designModeOnly">
+                <value type="string">Transactions</value>
+            </property>
+            <property label="Transactions Data Source" name="transactionDetailsDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/current-accounts/transaction/$(transactionId)/details</value>
+            </property>
+            <property label="Transactions Chart Data Source" name="transactionsChartDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/current-accounts/$(accountId)/turnover</value>
+            </property>
+            <property label="Transactions Data Source" name="transactionsDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/current-accounts/$(accountId)/transactions</value>
+            </property>
+            <property label="Transactions Per Page" name="transactionsPageSize" viewHint="text-input,admin,designModeOnly">
+                <value type="string">20</value>
+            </property>
+        </properties>
+        <tags>
+            <tag blacklist="false" type="section">banking</tag>
+            <tag blacklist="false" type="behavior">transactions</tag>
+            <tag blacklist="false" type="regular">transactions</tag>
+        </tags>
+        <uuid>cab463e0-a4f4-46a7-9a6a-fc680b3cd113</uuid>
+    </widget>
+    <widget>
+        <contextItemName>[BBHOST]</contextItemName>
+        <extendedItemName>[widget-launchpad-base]</extendedItemName>
+        <name>widget-transactions-chart-donut</name>
+        <properties>
+            <property label="Transaction Categories Data Source" name="categoriesDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/pfm/transaction-categories</value>
+            </property>
+            <property label="Category Spendings Data Source" name="categorySpendingDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/current-accounts/spendings</value>
+            </property>
+            <property label="Icon" name="icon" viewHint="text-input,admin,designModeOnly">
+                <value type="string">transactions</value>
+            </property>
+            <property label="Messages Source" name="messageSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(contextRoot)/static/launchpad/modules/config/i18n/common.json</value>
+            </property>
+            <property name="src">
+                <value type="string">$(contextRoot)/static/launchpad/banking/widgets/transactions-chart-donut/index.html</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/launchpad/banking/widgets/transactions-chart-donut/icon.png</value>
+            </property>
+            <property label="Title" name="title" viewHint="text-input,admin,designModeOnly">
+                <value type="string">Transactions Donut Chart</value>
+            </property>
+        </properties>
+        <tags>
+            <tag blacklist="false" type="section">banking</tag>
+            <tag blacklist="false" type="behavior">transactions</tag>
+            <tag blacklist="false" type="regular">transactions</tag>
+        </tags>
+        <uuid>1ed9c82c-2b6a-4b5e-9def-ea95dbf2b0c3</uuid>
+    </widget>
+    <widget>
+        <contextItemName>[BBHOST]</contextItemName>
+        <extendedItemName>[widget-launchpad-base]</extendedItemName>
+        <name>widget-transactions-chart-transactions</name>
+        <properties>
+            <property label="Accounts Chart Data Source" name="accountBalanceChartDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v2/current-accounts/$(accountId)/balance</value>
+            </property>
+            <property label="Accounts Data Source" name="accountsDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/debit-accounts</value>
+            </property>
+            <property label="Accounts Chart Data Source (All accounts)" name="allAccountsBalanceChartDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/current-accounts/balances</value>
+            </property>
+            <property label="Transactions Chart Data Source (All accounts)" name="allTransactionsChartDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/current-accounts/turnovers</value>
+            </property>
+            <property label="Icon" name="icon" viewHint="text-input,admin,designModeOnly">
+                <value type="string">transactions</value>
+            </property>
+            <property label="Messages Source" name="messageSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(contextRoot)/static/launchpad/modules/config/i18n/common.json</value>
+            </property>
+            <property name="src">
+                <value type="string">$(contextRoot)/static/launchpad/banking/widgets/transactions-chart-transactions/index.html</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/launchpad/banking/widgets/transactions-chart-transactions/icon.png</value>
+            </property>
+            <property label="Title" name="title" viewHint="text-input,admin,designModeOnly">
+                <value type="string">Transactions Charts</value>
+            </property>
+            <property label="Transactions Chart Data Source" name="transactionsChartDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v2/current-accounts/$(accountId)/turnover</value>
+            </property>
+        </properties>
+        <tags>
+            <tag blacklist="false" type="section">banking</tag>
+            <tag blacklist="false" type="behavior">transactions</tag>
+            <tag blacklist="false" type="regular">transactions</tag>
+        </tags>
+        <uuid>e30a702e-235f-4b09-acc3-d8af40a43e7a</uuid>
+    </widget>
+    <widget>
+        <contextItemName>[BBHOST]</contextItemName>
+        <extendedItemName>[widget-launchpad-base]</extendedItemName>
+        <name>widget-transactions-list</name>
+        <properties>
+            <property label="Accounts Data Source" name="accountsDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/debit-accounts</value>
+            </property>
+            <property label="Transaction Categories Data Source" name="categoriesDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/pfm/transaction-categories</value>
+            </property>
+            <property label="Category Data Source" name="categoryDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/pfm/transaction-categories</value>
+            </property>
+            <property label="Hide Transaction Details in list" name="hideTransactionDetails" viewHint="checkbox,admin,designModeOnly">
+                <value type="boolean">false</value>
+            </property>
+            <property label="Icon" name="icon" viewHint="text-input,admin,designModeOnly">
+                <value type="string">transactions</value>
+            </property>
+            <property label="Messages Source" name="messageSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(contextRoot)/static/launchpad/modules/config/i18n/common.json</value>
+            </property>
+            <property label="Preference Service" name="preferenceService" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/party-data-management/preferences</value>
+            </property>
+            <property label="Show Dates for All Transactions" name="showDatesAllTransactions" viewHint="checkbox,admin,designModeOnly">
+                <value type="boolean">false</value>
+            </property>
+            <property label="Show Transaction Icons" name="showTransactionIcons" viewHint="checkbox,admin,designModeOnly">
+                <value type="boolean">true</value>
+            </property>
+            <property name="src">
+                <value type="string">$(contextRoot)/static/launchpad/banking/widgets/transactions-list/index.html</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/launchpad/banking/widgets/transactions-list/icon.png</value>
+            </property>
+            <property label="Title" name="title" viewHint="text-input,admin,designModeOnly">
+                <value type="string">Transactions List</value>
+            </property>
+            <property label="Transactions Data Source" name="transactionDetailsDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/current-accounts/transaction/$(transactionId)/details</value>
+            </property>
+            <property label="Transactions Data Source" name="transactionsDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/current-accounts/$(accountId)/transactions</value>
+            </property>
+            <property label="Transactions Per Page" name="transactionsPageSize" viewHint="text-input,admin,designModeOnly">
+                <value type="string">20</value>
+            </property>
+        </properties>
+        <tags>
+            <tag blacklist="false" type="section">banking</tag>
+            <tag blacklist="false" type="behavior">transactions</tag>
+            <tag blacklist="false" type="regular">transactions</tag>
+        </tags>
+        <uuid>fb2a12ef-b260-446a-969d-af27eefd2f50</uuid>
+    </widget>
+    <widget>
+        <contextItemName>[BBHOST]</contextItemName>
+        <extendedItemName>[widget-launchpad-base]</extendedItemName>
+        <name>widget-transactions-new</name>
+        <properties>
+            <property label="Accounts Chart Data Source" name="accountBalanceChartDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/current-accounts/$(accountId)/balance</value>
+            </property>
+            <property label="Accounts Data Source" name="accountsDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/debit-accounts</value>
+            </property>
+            <property label="Top balance" name="accountsTopBalance" viewHint="select-one,designModeOnly,user">
+                <value type="string">current</value>
+            </property>
+            <property label="Transaction Categories Data Source" name="categoriesDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/pfm/transaction-categories</value>
+            </property>
+            <property label="Category Data Source" name="categoryDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/pfm/transaction-categories</value>
+            </property>
+            <property label="Category Spendings Data Source" name="categorySpendingDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/current-accounts/spendings</value>
+            </property>
+            <property label="Contacts Data Source" name="contactsDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/party-data-management/counter-parties</value>
+            </property>
+            <property label="Hide Transaction Details in list" name="hideTransactionDetails" viewHint="checkbox,admin,designModeOnly">
+                <value type="boolean">false</value>
+            </property>
+            <property label="Icon" name="icon" viewHint="text-input,admin,designModeOnly">
+                <value type="string">transactions</value>
+            </property>
+            <property label="Messages Source" name="messageSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(contextRoot)/static/launchpad/modules/config/i18n/common.json</value>
+            </property>
+            <property label="Preference Service" name="preferenceService" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/party-data-management/preferences</value>
+            </property>
+            <property label="Show Account Select" name="showAccountSelect" viewHint="checkbox,admin,designModeOnly">
+                <value type="boolean">true</value>
+            </property>
+            <property label="Show Charts" name="showCharts" viewHint="checkbox,admin,designModeOnly">
+                <value type="boolean">true</value>
+            </property>
+            <property label="Show Dates for All Transactions" name="showDatesAllTransactions" viewHint="checkbox,admin,designModeOnly">
+                <value type="boolean">false</value>
+            </property>
+            <property label="Show Transaction Icons" name="showTransactionIcons" viewHint="checkbox,admin,designModeOnly">
+                <value type="boolean">true</value>
+            </property>
+            <property name="src">
+                <value type="string">$(contextRoot)/static/launchpad/banking/widgets/transactions-new/index.html</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/launchpad/banking/widgets/transactions-new/icon.png</value>
+            </property>
+            <property label="Title" name="title" viewHint="text-input,admin,designModeOnly">
+                <value type="string">Transactions New</value>
+            </property>
+            <property label="Transactions Data Source" name="transactionDetailsDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/current-accounts/transaction/$(transactionId)/details</value>
+            </property>
+            <property label="Transactions Chart Data Source" name="transactionsChartDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/current-accounts/$(accountId)/turnover</value>
+            </property>
+            <property label="Transactions Data Source" name="transactionsDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/current-accounts/$(accountId)/transactions</value>
+            </property>
+            <property label="Transactions Per Page" name="transactionsPageSize" viewHint="text-input,admin,designModeOnly">
+                <value type="string">20</value>
+            </property>
+        </properties>
+        <tags>
+            <tag blacklist="false" type="section">banking</tag>
+            <tag blacklist="false" type="behavior">transactions</tag>
+            <tag blacklist="false" type="regular">transactions</tag>
+        </tags>
+        <uuid>6f6f3481-0f74-4449-ad25-9fbc22cd10fb</uuid>
+    </widget>
+    <widget>
+        <contextItemName>[BBHOST]</contextItemName>
+        <extendedItemName>[widget-launchpad-base]</extendedItemName>
+        <name>widget-transactions-overview</name>
+        <properties>
+            <property label="Accounts Chart Data Source" name="accountBalanceChartDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/current-accounts/$(accountId)/balance</value>
+            </property>
+            <property label="Funds on Hold" name="accountHolds" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/account-holds?accountIds=$(accountIds)</value>
+            </property>
+            <property label="Accounts Data Source" name="accountsDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/debit-accounts</value>
+            </property>
+            <property label="Transaction Categories Data Source" name="categoriesDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/pfm/transaction-categories</value>
+            </property>
+            <property label="Category Data Source" name="categoryDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/pfm/transaction-categories</value>
+            </property>
+            <property label="Category Spendings Data Source" name="categorySpendingDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/current-accounts/spendings</value>
+            </property>
+            <property label="Contacts Data Source" name="contactsDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/party-data-management/counter-parties</value>
+            </property>
+            <property label="Hide Transaction Details in list" name="hideTransactionDetails" viewHint="checkbox,admin,designModeOnly">
+                <value type="boolean">false</value>
+            </property>
+            <property label="Icon" name="icon" viewHint="text-input,admin,designModeOnly">
+                <value type="string">transactions</value>
+            </property>
+            <property label="Messages Source" name="messageSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(contextRoot)/static/launchpad/modules/config/i18n/common.json</value>
+            </property>
+            <property label="Preference Service" name="preferenceService" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/party-data-management/preferences</value>
+            </property>
+            <property label="Show Account Select" name="showAccountSelect" viewHint="checkbox,admin,designModeOnly">
+                <value type="boolean">true</value>
+            </property>
+            <property label="Show Charts" name="showCharts" viewHint="checkbox,admin,designModeOnly">
+                <value type="boolean">true</value>
+            </property>
+            <property label="Show Dates for All Transactions" name="showDatesAllTransactions" viewHint="checkbox,admin,designModeOnly">
+                <value type="boolean">false</value>
+            </property>
+            <property label="Show Transaction Icons" name="showTransactionIcons" viewHint="checkbox,admin,designModeOnly">
+                <value type="boolean">true</value>
+            </property>
+            <property name="src">
+                <value type="string">$(contextRoot)/static/launchpad/banking/widgets/transactions-overview/index.html</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/launchpad/banking/widgets/transactions-overview/icon.png</value>
+            </property>
+            <property label="Title" name="title" viewHint="text-input,admin,designModeOnly">
+                <value type="string">Transactions Overview</value>
+            </property>
+            <property label="Transactions Data Source" name="transactionDetailsDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/current-accounts/transaction/$(transactionId)/details</value>
+            </property>
+            <property label="Transactions Chart Data Source" name="transactionsChartDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/current-accounts/$(accountId)/turnover</value>
+            </property>
+            <property label="Transactions Data Source" name="transactionsDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/transactions?accountIds=$(accountId)</value>
+            </property>
+            <property label="Transactions Per Page" name="transactionsPageSize" viewHint="text-input,admin,designModeOnly">
+                <value type="string">20</value>
+            </property>
+        </properties>
+        <tags>
+            <tag blacklist="false" type="section">banking</tag>
+            <tag blacklist="false" type="behavior">transactions</tag>
+            <tag blacklist="false" type="regular">transactions</tag>
+        </tags>
+        <uuid>ee4ac005-3200-4790-8f8b-ce43e51baf9d</uuid>
+    </widget>
+    <widget>
+        <contextItemName>[BBHOST]</contextItemName>
+        <extendedItemName>[widget-launchpad-base]</extendedItemName>
+        <name>widget-transactions-search</name>
+        <properties>
+            <property label="Accounts Data Source" name="accountsDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/debit-accounts</value>
+            </property>
+            <property label="Category Data Source" name="categoryDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/pfm/transaction-categories</value>
+            </property>
+            <property label="Contacts Data Source" name="contactsDataSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(servicesPath)/services/rest/v1/party-data-management/counter-parties</value>
+            </property>
+            <property label="Icon" name="icon" viewHint="text-input,admin,designModeOnly">
+                <value type="string">transactions</value>
+            </property>
+            <property label="Messages Source" name="messageSrc" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(contextRoot)/static/launchpad/modules/config/i18n/common.json</value>
+            </property>
+            <property name="src">
+                <value type="string">$(contextRoot)/static/launchpad/banking/widgets/transactions-search/index.html</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/launchpad/banking/widgets/transactions-search/icon.png</value>
+            </property>
+            <property label="Title" name="title" viewHint="text-input,admin,designModeOnly">
+                <value type="string">Transactions Search</value>
+            </property>
+        </properties>
+        <tags>
+            <tag blacklist="false" type="section">banking</tag>
+            <tag blacklist="false" type="behavior">transactions</tag>
+            <tag blacklist="false" type="regular">transactions</tag>
+        </tags>
+        <uuid>2eb26e17-c1cd-4f5a-9adc-a408a6dea6b5</uuid>
+    </widget>
+    <widget>
+        <contextItemName>[BBHOST]</contextItemName>
+        <extendedItemName>[widget-launchpad-base]</extendedItemName>
+        <name>widget-video</name>
+        <properties>
+            <property name="TemplateName">
+                <value type="string">Standard_Widget</value>
+            </property>
+            <property label="Original Height" name="height" viewHint="text-input,admin,designModeOnly">
+                <value type="string"/>
+            </property>
+            <property label="Source" name="source" viewHint="select-one,admin,designModeOnly">
+                <value type="string">youtube</value>
+            </property>
+            <property name="src">
+                <value type="string">$(contextRoot)/static/launchpad/universal/widgets/video/index.html</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/launchpad/universal/widgets/video/icon.png</value>
+            </property>
+            <property label="Title" name="title" viewHint="text-input,admin,designModeOnly">
+                <value type="string">Video</value>
+            </property>
+            <property label="Video ID" name="videoId" viewHint="text-input,admin,designModeOnly">
+                <value type="string"/>
+            </property>
+            <property label="Original Width" name="width" viewHint="text-input,admin,designModeOnly">
+                <value type="string"/>
+            </property>
+        </properties>
+        <tags>
+            <tag blacklist="false" type="section">content</tag>
+            <tag blacklist="false" type="regular">video</tag>
+        </tags>
+        <uuid>a3003f48-e9db-4b9e-a7b8-1854209cd2e9</uuid>
+    </widget>
+    <widget>
+        <contextItemName>[BBHOST]</contextItemName>
+        <extendedItemName>[widget-launchpad-base]</extendedItemName>
+        <name>widgets-catalog</name>
+        <properties>
+            <property label="Filter By Tag" name="filterByTag" viewHint="text-input,admin,designModeOnly">
+                <value type="string"/>
+            </property>
+            <property label="Widget Icon" name="icon">
+                <value type="string">$(contextRoot)/static/launchpad/universal/widgets/widgets-catalog/icon.png</value>
+            </property>
+            <property label="Locale" name="locale">
+                <value type="string"/>
+            </property>
+            <property name="src">
+                <value type="string">$(contextRoot)/static/launchpad/universal/widgets/widgets-catalog/index.html</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/launchpad/universal/widgets/widgets-catalog/icon.png</value>
+            </property>
+            <property label="Title" name="title" viewHint="text-input,admin,designModeOnly">
+                <value type="string">Catalog</value>
+            </property>
+        </properties>
+        <tags>
+            <tag blacklist="false" type="section">apps</tag>
+            <tag blacklist="false" type="regular">catalog</tag>
+        </tags>
+        <uuid>b4a2b228-f14e-407a-b306-c1a8aa90c2b4</uuid>
+    </widget>
+</serverWidgets>

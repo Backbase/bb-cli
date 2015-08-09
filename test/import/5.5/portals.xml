@@ -1,0 +1,49 @@
+<portals>
+    <portal>
+        <contextItemName>[BBHOST]</contextItemName>
+        <name>testa</name>
+        <properties>
+            <property name="AccessDeniedPage">
+                <value type="string">/login/login.jsp?login_error=accessdenied</value>
+            </property>
+            <property name="AuthenticationFailurePage">
+                <value type="string">/login/login.jsp?login_error=failure</value>
+            </property>
+            <property name="DefaultDevice">
+                <value type="string">mixed</value>
+            </property>
+            <property name="DefaultLandingPage">
+                <value type="string">testa/index</value>
+            </property>
+            <property name="Description">
+                <value type="String"/>
+            </property>
+            <property name="ErrorPage">
+                <value type="string">/login/error.jsp</value>
+            </property>
+            <property name="LoginPage">
+                <value type="string">/login/login.jsp</value>
+            </property>
+            <property name="LogoutPage">
+                <value type="string">/login/logout.jsp</value>
+            </property>
+            <property name="TargetedDevice">
+                <value type="string">mixed</value>
+            </property>
+            <property name="TemplateName">
+                <value type="String"/>
+            </property>
+            <property name="TypeOfTags">
+                <value type="string">tracking</value>
+            </property>
+            <property name="newboool">
+                <value type="boolean">false</value>
+            </property>
+            <property name="title">
+                <value type="string">testa portal</value>
+            </property>
+        </properties>
+        <tags></tags>
+        <uuid>3b00abad-a448-4ee7-a5e5-b2b7d521c6bb</uuid>
+    </portal>
+</portals>

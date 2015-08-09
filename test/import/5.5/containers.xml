@@ -1,0 +1,24 @@
+<containers>
+    <container>
+        <contextItemName>testa</contextItemName>
+        <extendedItemName>column-layout</extendedItemName>
+        <name>column-layout-8706593</name>
+        <parentItemName>container_1895cedf-fc6a-43eb-aef9-b382652ab42d</parentItemName>
+        <properties>
+            <property name="area" manageable="true">
+                <value type="string">0</value>
+            </property>
+        </properties>
+        <tags></tags>
+        <uuid>5531ec1d-c467-4d74-9492-8d79f409a9f8</uuid>
+    </container>
+    <container>
+        <contextItemName>testa</contextItemName>
+        <extendedItemName>Manageable_Area_1439839522962</extendedItemName>
+        <name>container_1895cedf-fc6a-43eb-aef9-b382652ab42d</name>
+        <parentItemName>index</parentItemName>
+        <properties></properties>
+        <tags></tags>
+        <uuid>720f6975-52c2-41f9-8ca4-eb3aa923e0a5</uuid>
+    </container>
+</containers>

@@ -1,0 +1,28 @@
+<widgets>
+    <widget>
+        <contextItemName>testa</contextItemName>
+        <extendedItemName>widget-saving-goals</extendedItemName>
+        <name>widget-saving-goals-7908308</name>
+        <parentItemName>column-layout-8706593</parentItemName>
+        <properties>
+            <property name="area" manageable="true">
+                <value type="string">1</value>
+            </property>
+        </properties>
+        <tags></tags>
+        <uuid>8bc59818-32ee-4aab-98f2-c14432536ba5</uuid>
+    </widget>
+    <widget>
+        <contextItemName>testa</contextItemName>
+        <extendedItemName>widget-video</extendedItemName>
+        <name>widget-video-1062496</name>
+        <parentItemName>column-layout-8706593</parentItemName>
+        <properties>
+            <property name="area" manageable="true">
+                <value type="string">0</value>
+            </property>
+        </properties>
+        <tags></tags>
+        <uuid>8dcdfbc3-101c-4eea-b533-264ef1d5dfb4</uuid>
+    </widget>
+</widgets>

@@ -1,0 +1,34 @@
+<pages>
+    <page>
+        <contextItemName>testa</contextItemName>
+        <extendedItemName>page_1439839522905</extendedItemName>
+        <name>index</name>
+        <parentItemName>testa</parentItemName>
+        <properties>
+            <property name="bd_seo_canonical">
+                <value type="linkRef">8ee61163-c6f0-4d45-96ad-8a0bee58edc4</value>
+            </property>
+            <property name="behaviors">
+                <value type="string">be.perspective.Manager be.portalClientExt.PortalManagerPreferencesForm</value>
+            </property>
+            <property name="bundleName">
+                <value type="string">dashboard</value>
+            </property>
+            <property label="Client Template" name="client-template">
+                <value type="string">page</value>
+            </property>
+            <property name="createdBy">
+                <value type="string"/>
+            </property>
+            <property name="modifiedBy">
+                <value type="string">admin</value>
+            </property>
+            <property name="title">
+                <value type="string">Default Page</value>
+            </property>
+        </properties>
+        <tags></tags>
+        <type>page</type>
+        <uuid>64904e25-5e01-4b8f-9664-cc8f1a352976</uuid>
+    </page>
+</pages>

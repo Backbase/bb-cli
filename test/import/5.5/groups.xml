@@ -1,0 +1,30 @@
+<groups>
+    <group>
+        <id>1</id>
+        <name>admin</name>
+        <description>Admin Group</description>
+        <role>ADMIN</role>
+    </group>
+    <group>
+        <id>4</id>
+        <name>manager</name>
+        <role>MANAGER</role>
+    </group>
+    <group>
+        <id>5</id>
+        <name>master page designer</name>
+        <role>MANAGER</role>
+    </group>
+    <group>
+        <id>2</id>
+        <name>sys2sys</name>
+        <description>Sys2Sys</description>
+        <role>SYS2SYS</role>
+    </group>
+    <group>
+        <id>3</id>
+        <name>user</name>
+        <description>Normal users group</description>
+        <role>USER</role>
+    </group>
+</groups>
