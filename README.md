@@ -1,10 +1,12 @@
 Backbase CLI tools
 ===================
 
-[![Npm Version](https://badge.fury.io/js/bb-cli.svg)](https://www.npmjs.com/package/bb-cli)
-[![Build Status](https://travis-ci.org/Backbase/bb-cli.svg)](https://travis-ci.org/Backbase/bb-cli)
+[![Npm Version](https://badge.fury.io/js/bb-cli-nightly.svg)](https://www.npmjs.com/package/bb-cli-nightly)
+[![Build Status](https://travis-ci.org/Backbase/bb-cli.svg?branch=nightly)](https://travis-ci.org/Backbase/bb-cli)
 
-Command line tools for working with [Backbase CXP](http://backbase.com).
+**Early preview, nightly version. Unstable.**
+
+[Nightly] Command line tools for working with [Backbase CXP](http://backbase.com).
 
 Scaffold new components, navigate through archetypes and work with REST API helpers using clean, automated workflow.
 
@@ -12,7 +14,7 @@ Scaffold new components, navigate through archetypes and work with REST API help
 ## Install
 
 ```shell
-npm i bb-cli --global
+npm i bb-cli-nightly --global
 ```
 
 ### Requirements
