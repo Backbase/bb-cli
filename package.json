@@ -1,6 +1,6 @@
 {
   "name": "bb-cli-nightly",
-  "version": "0.2.0-aplha.2",
+  "version": "0.2.0-beta.1",
   "description": "[Nightly] Command line tools for working with Backbase CXP.",
   "author": "Backbase",
   "licenses": [
