@@ -267,7 +267,7 @@ function makeModelAndZip(dirPath, bjson, exclude) {
                         $viewHint: 'designModeOnly',
                         value: {
                             $type: 'string',
-                            _: bjson.version
+                            _: bjson.version || ''
                         }
                     },
                     {
