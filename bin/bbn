@@ -3,7 +3,8 @@
 var ronin = require('ronin');
 var path = require('path');
 var chalk = require('chalk');
-var program = ronin(path.join(__dirname, '..'));
+var dirname = __dirname.substr(0, 1).toUpperCase() + __dirname.substr(1);
+var program = ronin(path.join(dirname, '..'));
 var util = require('../lib/util');
 var fs = require('fs');
 
