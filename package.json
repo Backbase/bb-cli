@@ -1,6 +1,6 @@
 {
   "name": "bb-cli-nightly",
-  "version": "0.2.0-beta.2",
+  "version": "0.2.0-beta.3",
   "description": "[Nightly] Command line tools for working with Backbase CXP.",
   "author": "Backbase",
   "licenses": [
@@ -44,7 +44,7 @@
     "lodash": "^3.2.0",
     "lodash-contrib": "^241.4.14",
     "map-stream": "0.0.5",
-    "mosaic-rest-js": "^0.3.1",
+    "mosaic-rest-js": "^0.3.2",
     "mvn-credentials": "^0.2.0",
     "node-fs-extra": "^0.8.1",
     "q": "^1.1.2",
