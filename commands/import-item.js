@@ -71,6 +71,9 @@ function run() {
     .then(function(zip) {
         return bbrest.importItem().file(zip.path).post()
         .then(function(r) {
+            if (r.error) {
+                throw new Error('Rest API Error: ' + r.statusInfo);
+            }
             var body = jxon.stringToJs(_.unescape(r.body)).import;
             if (body.level === 'ERROR') throw new Error(body.message);
             zip.clean();
