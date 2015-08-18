@@ -1,17 +1,9 @@
 var chalk = require('chalk');
 var util = require('../lib/util');
 var config = require('../lib/config');
-var clui = require('clui');
 var _ = require('lodash');
-var loading = new clui.Spinner('Please wait...');
 var Q = require('q');
 var fs = require('fs-extra-promise');
-var readFile = Q.denodeify(fs.readFile);
-var writeFile = Q.denodeify(fs.writeFile);
-var move = Q.denodeify(fs.move);
-var remove = Q.denodeify(fs.remove);
-var readDir = Q.denodeify(fs.readdir);
-var lstat = Q.denodeify(fs.lstat);
 var path = require('path');
 var formattor = require('formattor');
 
@@ -50,7 +42,8 @@ module.exports = Command.extend({
 
     run: function () {
 
-        loading.start();
+        util.spin.message('Loading...');
+        util.spin.start();
         return config.getCommon(this.options)
         .then(function(r) {
             bbrest = r.bbrest;
@@ -59,7 +52,7 @@ module.exports = Command.extend({
 
             if (!cfg.target) return error(new Error('Target is not defined.'));
 
-            return lstat(cfg.target)
+            return fs.lstatAsync(cfg.target)
             .then(function(stats) {
                 if (stats.isDirectory()) {
                     return importDir();
@@ -91,20 +84,20 @@ module.exports = Command.extend({
 });
 
 function error(err) {
-    loading.stop();
+    util.spin.stop();
     util.err(chalk.red('bb import: ') + (err.message || err.error));
 }
 function ok(r) {
-    loading.stop();
+    util.spin.stop();
     util.ok('Importing ' + chalk.green(cfg.target) + '. Done.');
     return r;
 }
 
 function importDir() {
-    return readFile(path.resolve(cfg.target, 'metadata.xml'))
+    return fs.readFileAsync(path.resolve(cfg.target, 'metadata.xml'))
     .then(function(r) {
         var mj = jxon.stringToJs(r.toString());
-        return readDir(cfg.target)
+        return fs.readdirAsync(cfg.target)
         .then(function(d) {
             var xmls = {};
             var all = [];
@@ -113,7 +106,7 @@ function importDir() {
                 var pth = path.parse(v);
                 if (pth.ext === '.xml') {
                     if (pth.name !== 'metadata') {
-                        all.push(readFile(path.resolve(cfg.target, v)).then(function(s) {
+                        all.push(fs.readFileAsync(path.resolve(cfg.target, v)).then(function(s) {
                             xmls[_.camelCase(pth.name)] = s.toString();
                         }));
                     }
@@ -137,18 +130,18 @@ function importDir() {
                     return packAll(mj, finalXml, noneXmlFiles)
                     .then(function(zip) {
                         var pth = path.resolve(path.parse(cfg.target).dir, '_$import-temp$_.zip');
-                        return writeFile(pth, zip)
+                        return fs.writeFileAsync(pth, zip)
                         .then(function() {
                             if (cfg.save) {
-                                return move(pth, path.resolve(cfg.save), {clobber: true})
+                                return fs.moveAsync(pth, path.resolve(cfg.save), {clobber: true})
                                 .then(function() {
                                     return {error: false};
                                 });
                             }
                             return bbrest.import().file(pth).post();
                         })
-                        .fin(function() {
-                            if (!cfg.save) remove(pth);
+                        .finally(function() {
+                            if (!cfg.save) fs.removeAsync(pth);
                         });
                     });
                 } else {
@@ -170,7 +163,7 @@ function packAll(metadata, xml, other) {
     zip.file('metadata.xml', '<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>' + jxon.jsToString(metadata));
     zip.file('content/portalserver.xml', '<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>' + xml);
     _.each(other, function(v) {
-        all.push(readFile(v).then(function(fdata) {
+        all.push(fs.readFileAsync(v).then(function(fdata) {
             var pth = path.parse(v);
             zip.file('content/' + pth.base, fdata);
         }));
@@ -178,6 +171,6 @@ function packAll(metadata, xml, other) {
 
     return Q.all(all)
     .then(function() {
-        return zip.generate({type: 'nodebuffer'});
+        return zip.generate({type: 'nodebuffer', compression: 'DEFLATE'});
     });
 }

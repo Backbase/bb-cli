@@ -1,9 +1,7 @@
 var chalk = require('chalk');
 var util = require('../lib/util');
 var config = require('../lib/config');
-var clui = require('clui');
 var _ = require('lodash');
-var loading = new clui.Spinner('Please wait...');
 var jxon = require('jxon');
 var watch = require('watch');
 
@@ -40,7 +38,7 @@ module.exports = Command.extend({
 
     run: function () {
 
-        loading.start();
+        util.spin.start();
         return config.getCommon(this.options)
         .then(function(r) {
             bbrest = r.bbrest;
@@ -106,11 +104,11 @@ function onWatch(fileName, curStat, prevStat) {
 }
 
 function error(err) {
-    loading.stop();
+    util.spin.stop();
     util.err(chalk.red('bb import-item: ') + (err.message || err.error));
 }
 function ok(r) {
-    loading.stop();
+    util.spin.stop();
     util.ok('Importing ' + chalk.green(cfg.target) + '. Done.');
     return r;
 }

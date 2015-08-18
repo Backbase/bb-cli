@@ -2,17 +2,9 @@ var chalk = require('chalk');
 var util = require('../lib/util');
 var config = require('../lib/config');
 var formattor = require('formattor');
-var clui = require('clui');
 var _ = require('lodash');
-var loading = new clui.Spinner('Please wait...');
 var Q = require('q');
 var fs = require('fs-extra-promise');
-var readFile = Q.denodeify(fs.readFile);
-var writeFile = Q.denodeify(fs.writeFile);
-var remove = Q.denodeify(fs.remove);
-var move = Q.denodeify(fs.move);
-var mkdirp = Q.denodeify(fs.mkdirp);
-var exists = Q.denodeify(fs.exists);
 var path = require('path');
 var extract = require('extract-zip');
 var inquirer = require("inquirer");
@@ -120,7 +112,7 @@ module.exports = Command.extend({
                             break;
                     }
 
-                    loading.start();
+                    util.spin.start();
                     if (action === 'post') {
                         runOrchestratorExport(jx);
                     } else {
@@ -151,9 +143,9 @@ function checkSave() {
         else cfg.save = name.join('.');
     }
 
-    return exists(cfg.save)
+    return fs.existsAsync(cfg.save)
     .catch(function() {
-        if (cfg.force) return remove(cfg.save);
+        if (cfg.force) return fs.removeAsync(cfg.save);
         throw new Error(chalk.gray(cfg.save) + ' exists. Use --force(-f) flag to overwrite it.');
     });
 }
@@ -204,21 +196,21 @@ function runOrchestratorExport(jx) {
                     var exDir = path.parse(id).name;
                     var exPath = path.resolve(cfg.save, exDir);
                     var xmlPath = path.resolve(exPath, 'portalserver.xml');
-                    return readFile(xmlPath)
+                    return fs.readFileAsync(xmlPath)
                     .then(function(x) {
                         return handlePortalXml(x.toString(), path.resolve(cfg.save, 'metadata.xml'))
                         .then(function(contentRepoId) {
                             var content = (cfg.type === 'portal') ? 'contentservices.zip' : 'resource.zip';
                             var moves = [
-                                move(path.resolve(exPath, content), path.resolve(cfg.save, content))
+                                fs.moveAsync(path.resolve(exPath, content), path.resolve(cfg.save, content))
                             ];
                             if (contentRepoId) {
                                 var repoZip = contentRepoId + '.zip';
-                                moves.push(move(path.resolve(exPath, repoZip), path.resolve(cfg.save, repoZip)));
+                                moves.push(fs.moveAsync(path.resolve(exPath, repoZip), path.resolve(cfg.save, repoZip)));
                             }
                             return Q.all(moves)
-                            .fin(function() {
-                                return remove(exPath)
+                            .finally(function() {
+                                return fs.removeAsync(exPath)
                                 .then(ok);
                             })
                             .catch(function() {
@@ -235,11 +227,11 @@ function runOrchestratorExport(jx) {
 }
 
 function error(err) {
-    loading.stop();
+    util.spin.stop();
     util.err(chalk.red('bb export: ') + (err.message || err.error));
 }
 function ok(r) {
-    loading.stop();
+    util.spin.stop();
     util.ok('Writing to ' + chalk.green(cfg.save) + '. Done.');
     return r;
 }
@@ -256,14 +248,14 @@ function handlePortalXml(x, metaFile) {
         });
     } else {
         if (cfg.pretty) x = formattor(jxon.jsToString(jx), {method: 'xml'});
-        return writeFile(cfg.save, x);
+        return fs.writeFileAsync(cfg.save, x);
     }
 }
 
 function unzip(src, dir) {
     var defer = Q.defer();
 
-    return remove(dir)
+    return fs.removeAsync(dir)
     .then(function() {
         extract(src, {dir: dir}, function(err) {
             if (err) defer.reject(err);
@@ -276,9 +268,9 @@ function unzip(src, dir) {
 }
 
 function getMeta(metaPath) {
-    return readFile(metaPath)
+    return fs.readFileAsync(metaPath)
     .then(function(ms) {
-        return remove(metaPath)
+        return fs.removeAsync(metaPath)
         .then(function() {
             return jxon.stringToJs(ms.toString());
         });
@@ -321,10 +313,10 @@ function chunkXml(jx, metaFile) {
 // saves files to destination folder when they are chunks
 function saveFile(fileName, x) {
     if (cfg.pretty) x = formattor(x, {method: 'xml'});
-    return writeFile(fileName, x)
+    return fs.writeFileAsync(fileName, x)
     .catch(function(err) {
         if (err.code === 'ENOENT') {
-            return mkdirp(cfg.save)
+            return fs.mkdirpAsync(cfg.save)
             .then(function() {
                 return saveFile(fileName, x);
             });

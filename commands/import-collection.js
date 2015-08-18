@@ -5,11 +5,6 @@ var config = require('../lib/config');
 var path = require('path');
 var Q = require('q');
 var fs = require('fs-extra-promise');
-var readDir = Q.denodeify(fs.readdir);
-var lstat = Q.denodeify(fs.lstat);
-var readFile = Q.denodeify(fs.readFile);
-var writeFile = Q.denodeify(fs.writeFile);
-var remove = Q.denodeify(fs.remove);
 var path = require('path');
 var zipDir = require('../lib/zipDir');
 var formattor = require('formattor');
@@ -112,7 +107,7 @@ module.exports = Command.extend({
 
 
 function parseDir(dirPath, exclude) {
-    return readDir(dirPath)
+    return fs.readdirAsync(dirPath)
     .then(function(files) {
         return parseFiles(dirPath, files, exclude);
     })
@@ -154,7 +149,7 @@ function parseFiles(dirPath, files, exclude) {
 
 function doLstat(filePath) {
     var fileName = path.parse(filePath).base;
-    return lstat(filePath)
+    return fs.lstatAsync(filePath)
     .then(function(stat) {
         if (stat.isFile()) {
             if (fileName === 'model.xml') return {model: filePath};
@@ -195,7 +190,7 @@ function importQueue() {
 }
 
 function readBowerJson(dir) {
-    return readFile(path.resolve(dir.path, 'bower.json'))
+    return fs.readFileAsync(path.resolve(dir.path, 'bower.json'))
     .then(function(s) {
         var bjson = JSON.parse(s.toString());
         dir.json = bjson;
@@ -288,11 +283,11 @@ function makeModelAndZip(dirPath, bjson, exclude) {
     jx = formattor(jx, {method: 'xml'});
     // console.log(chalk.red(bjson.name + ' xml: \n') + jx);
     var filePath = path.resolve(dirPath, 'model.xml');
-    return writeFile(filePath, jx)
+    return fs.writeFileAsync(filePath, jx)
     .then(function() {
         return zipPackage(dirPath, exclude)
         .then(function() {
-            remove(filePath);
+            fs.removeAsync(filePath);
         });
     })
     .catch(function(err) {
@@ -320,13 +315,13 @@ function removeQueue() {
 
 function getModelName(repoName) {
     var modelPath = path.resolve(bowerDir, repoName, 'model.xml');
-    return readFile(modelPath)
+    return fs.readFileAsync(modelPath)
     .then(function(s) {
         var jx = jxon.stringToJs(s.toString());
         var key = _.keys(jx.catalog)[0];
         return jx.catalog[key].name;
     })
-    .catch(function(err) {
+    .catch(function() {
         return repoName;
     });
 }

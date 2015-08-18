@@ -1,10 +1,7 @@
 var restUtils = require('../lib/restUtils');
 var Command = require('ronin').Command;
 var Q = require('q');
-var fs = require('fs');
-var readFile = Q.denodeify(fs.readFile);
-var writeFile = Q.denodeify(fs.writeFile);
-var readDir = Q.denodeify(fs.readdir);
+var fs = require('fs-extra-promise');
 var _ = require('lodash');
 var inquirer = require('inquirer');
 var config = require('../lib/config');
@@ -42,7 +39,7 @@ module.exports = Command.extend({
     run: function () {
         return config.getCommon(this.options)
         .then(function(r) {
-            return readDir(process.cwd())
+            return fs.readdirAsync(process.cwd())
                 .then(function(files) {
                     return init(r, files);
                 });
@@ -69,7 +66,7 @@ function init(r, files) {
         if (cfg.cli.save) return saveFile(cfg.cli.file || 'model.xml', cfg.cli.save);
         // otherwise read bower
         else if (files.indexOf('bower.json') !== -1) {
-            return readFile('bower.json')
+            return fs.readFileAsync('bower.json')
             .then(function(result) {
                 return saveFile(cfg.cli.file || 'model.xml', JSON.parse(result).name);
             })
@@ -155,7 +152,7 @@ function submitFile(xmlFileName) {
 }
 
 function getLocal(fName) {
-    return readFile(fName)
+    return fs.readFileAsync(fName)
     .then(function(s) {
         try {
             return jxon.stringToJs(s.toString());
@@ -239,7 +236,7 @@ function writeModelFile(fname, itemName, widgetTry) {
         //     console.log(xml);
         //     return true;
         // }
-        return writeFile(fname, xml)
+        return fs.writeFileAsync(fname, xml)
         .then(function() {
             console.log(chalk.green(fname) + ' saved.');
         });
