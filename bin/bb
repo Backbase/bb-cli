@@ -18,11 +18,10 @@ program.set({
         util.backbase();
 
         var title = chalk.bold;
-        var r = '\n  ' + title('NIGHTLY BETA VERSION');
-        r += '\n\n  ' + title('Version') + ': ' + version;
+        var r = '  ' + title('Version') + ': ' + version;
         r += '\n\n  ' + title('Usage') + ': bb <command> [OPTIONS]';
-        r += '\n\n  ' + title('Commands') + ': achetype (arch), export, import, generate, rest, sync, ln, install.';
-
+        r += '\n\n  ' + title('Commands') + ': achetype (arch), export, import, import-item, import-collection, generate, rest, sync, ln, install.';
+        r += '\n\n';
         return r;
     }
 });
