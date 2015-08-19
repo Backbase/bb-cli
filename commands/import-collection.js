@@ -189,7 +189,6 @@ function importQueue() {
     currentlyImporting = qu.zip.dirName;
     return bbrest.importItem().file(qu.zip.path).post()
     .then(function(r) {
-        qu.zip.clean();
         var body = jxon.stringToJs(_.unescape(r.body)).import;
         if (body.level === 'ERROR') {
             console.log(chalk.yellow(qu.zip.dirName) + ' ' + body.message);
