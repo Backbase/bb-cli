@@ -54,19 +54,19 @@ module.exports = Command.extend({
             cfg = r.config.cli;
             bowerDir = BowerConfig.create(cfg.target).load().toObject().directory;
 
-            // return parseDir(path.resolve(cfg.target), exclude)
-            // return orderDeps(path.resolve(cfg.target, '../../'))
+            // read bower.json of each component
             return getBowers(path.resolve(cfg.target), exclude)
-            .then(function(r) {
+            .then(function(bowers) {
                 var all = [];
                 console.log('reading bower components...');
-                _.each(r.dirs, function(dir) {
+                _.each(bowers.dirs, function(dir) {
                     queue.push({name: dir.name});
                     // if (path.parse(dirPath).base !== bjson.name) console.log(path.parse(dirPath).base, bjson.name);
                     all.push(parseDir(dir.path, exclude));
                 });
+                // get file list of each component dir
                 return Q.all(all)
-                .then(function(rall) {
+                .then(function(dirResult) {
                     all = [];
                     if (cfg.remove) {
                         console.log('removing...');
@@ -74,29 +74,40 @@ module.exports = Command.extend({
                         return removeQueue();
                     }
                     console.log('creating zips...');
-                    _.each(rall, function(rv) {
-                        if (!rv) return;
-                        if (!rv.model) {
-                            var json = _.where(r.dirs, {name: rv.name})[0].json;
-                            if (!json) console.log(rv);
-                            if (cfg.auto) all.push(makeModelAndZip(rv.path, json, exclude));
-                            else console.log(chalk.gray(path.parse(rv.path).base) + ' model.xml not found');
+                    _.each(dirResult, function(dir) {
+                        if (!dir) return;
+                        // if there is no model.xml in component dir..
+                        if (!dir.model) {
+                            // ... get bower.json object...
+                            var json = _.where(bowers.dirs, {name: dir.name})[0].json;
+                            if (!json) console.log(dir);
+                            // ...autocreate and zip all
+                            if (cfg.auto) all.push(makeModelAndZip(dir.path, json, exclude));
+                            else console.log(chalk.gray(path.parse(dir.path).base) + ' model.xml not found');
                         } else {
-                            all.push(zipPackage(rv.path, exclude));
+                            all.push(zipPackage(dir.path, exclude));
                         }
                     });
+                    // zip all dirs
                     return Q.all(all)
                     .then(function() {
                         console.log('importing...');
                         return importQueue()
-                        .then(function(r) {
+                        .then(function(cleanTemp) {
+                            cleanTemp();
                             ok(r);
                         });
                     });
                 });
             })
             .catch(function(err) {
-                error(err);
+                if (err.error) {
+                    error(new Error(err.statusInfo));
+                } else if (err.code === 'ENOENT') {
+                    error(new Error('Can not open file ' + chalk.yellow(err.path.substr(path.resolve(cfg.target).length))));
+                } else {
+                    error(err);
+                }
             });
 
         });
@@ -186,6 +197,7 @@ function importQueue() {
             console.log(chalk.green(qu.zip.dirName) + ' ' + body.message);
         }
         if (queue.length) return importQueue();
+        return qu.zip.clean;
     });
 }
 
@@ -199,6 +211,8 @@ function readBowerJson(dir) {
 
 }
 
+// reads all bower component dirs
+// returns collection with path, name and bower.json content of each
 function getBowers(startPath, exclude) {
     var mainPath = path.resolve(startPath, bowerDir);
     return parseDir(mainPath, exclude)
@@ -254,31 +268,35 @@ function makeModelAndZip(dirPath, bjson, exclude) {
                             $type: 'string',
                             _: _.startCase(bjson.name)
                         }
-                    },
-                    {
-                        $name: 'version',
-                        $label: 'Version',
-                        $readonly: 'true',
-                        $viewHint: 'designModeOnly',
-                        value: {
-                            $type: 'string',
-                            _: bjson.version || ''
-                        }
-                    },
-                    {
-                        $name: 'description',
-                        $label: 'Description',
-                        $readonly: 'true',
-                        $viewHint: 'designModeOnly',
-                        value: {
-                            $type: 'string',
-                            _: bjson.description || ''
-                        }
                     }]
                 }
             }
         }
     };
+    if (bjson.version) {
+        jx.catalog.feature.properties.property.push({
+            $name: 'version',
+            $label: 'Version',
+            $readonly: 'true',
+            $viewHint: 'designModeOnly',
+            value: {
+                $type: 'string',
+                _: bjson.version
+            }
+        });
+    }
+    if (bjson.description) {
+        jx.catalog.feature.properties.property.push({
+            $name: 'description',
+            $label: 'Description',
+            $readonly: 'true',
+            $viewHint: 'designModeOnly',
+            value: {
+                $type: 'string',
+                _: bjson.description
+            }
+        });
+    }
     jx = '<?xml version="1.0" encoding="UTF-8"?>' + jxon.jsToString(jx);
     jx = formattor(jx, {method: 'xml'});
     // console.log(chalk.red(bjson.name + ' xml: \n') + jx);
