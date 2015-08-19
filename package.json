@@ -54,6 +54,7 @@
     "q": "^1.1.2",
     "request-promise": "^0.4.3",
     "ronin": "git+https://github.com/operatino/ronin#v0.3.11",
+    "through2": "^2.0.0",
     "update-notifier": "^0.5.0",
     "watch": "^0.16.0",
     "xml2js": "^0.4.4"
