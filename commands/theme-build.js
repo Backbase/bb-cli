@@ -14,6 +14,7 @@ var mqRemove = require('gulp-mq-remove');
 var rework = require('gulp-rework');
 var debug = require('gulp-debug');
 var minifyCss = require('gulp-minify-css');
+var chalk = require('chalk');
 
 module.exports = Command.extend({
     help: function () {
@@ -21,11 +22,11 @@ module.exports = Command.extend({
         var d = chalk.gray;
         var r = '\n  ' + title('Usage') + ': bb ' + this.name + ' [OPTIONS]';
         r += '\n\n\t Builds a theme. Requires a bower.json file in the directory ';
-        r += 'with a "main" pointing to the base less file';
-        r += '      -t,  --target <string>\t\t\t\t\t Path to directory to build.\n';
-        r += '      -e,  --edition <string>\t\t\t\t\t Pass edition var to less.\n';
-        r += '      -b,  --base-path <string>\t\t\t\t\t Pass base-path var to less.\n';
-        r += '      -s   --sourcemasp <string>\t\t\t\t\t Whether to generate source maps.\n';
+        r += 'with a "main" pointing to the base less file\n\n';
+        r += '      -t,  --target <string>\t\t\t\t Path to directory to build.\n';
+        r += '      -e,  --edition <string>\t\t\t\t Pass edition var to less.\n';
+        r += '      -b,  --base-path <string>\t\t\t\t Pass base-path var to less.\n';
+        r += '      -s   --sourcemasp <string>\t\t\t Whether to generate source maps.\n';
         return r;
     },
 
