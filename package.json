@@ -32,6 +32,7 @@
     "glob": "~5.0.3",
     "gulp": "^3.8.8",
     "gulp-conflict": "^0.2.0",
+    "gulp-debug": "^2.1.0",
     "gulp-filter": "^1.0.2",
     "gulp-if": "^1.2.5",
     "gulp-less": "^3.0.3",
@@ -53,6 +54,7 @@
     "q": "^1.1.2",
     "request-promise": "^0.4.3",
     "ronin": "git+https://github.com/operatino/ronin#v0.3.11",
+    "through2": "^2.0.0",
     "update-notifier": "^0.5.0",
     "watch": "^0.16.0",
     "xml2js": "^0.4.4"
