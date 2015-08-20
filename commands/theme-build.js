@@ -20,7 +20,6 @@ var through = require('through2');
 module.exports = Command.extend({
     help: function () {
         var title = chalk.bold;
-        var d = chalk.gray;
         var r = '\n  ' + title('Usage') + ': bb ' + this.name + ' [OPTIONS]';
         r += '\n\n\t Builds a theme. Requires a bower.json file in the directory ';
         r += 'with a "main" pointing to the base less file\n\n';
@@ -46,10 +45,10 @@ module.exports = Command.extend({
         opts.dist = opts.dist || 'dist';
 
         var bowerFiles = opts.target + '/**/bower.json';
-        var ignore = [ opts.target + '/**/bower_components/**', opts.target + '/**/node_modules/**' ];
+        var ignore = [opts.target + '/**/bower_components/**', opts.target + '/**/node_modules/**'];
 
         // Find bower.json files, as entry for themes.
-        return glob(bowerFiles, { ignore: ignore })
+        return glob(bowerFiles, {ignore: ignore})
         .then(util.partial(buildAll, util, opts))
         .catch(function(err) {
             console.log(err);
@@ -72,7 +71,7 @@ function buildTheme(bowerJson, opts) {
 
     // Normalise main to an array.
     if (!util.isArray(entry)) {
-        entry = [ entry ];
+        entry = [entry];
     }
 
     // Prefix with target.
@@ -90,7 +89,7 @@ function buildTheme(bowerJson, opts) {
     // Run.
     return compile(entry, opts)
         .then(doReworkIe)
-        .then(doCompress)
+        .then(doCompress);
 }
 
 function compile(entry, opts) {
@@ -103,13 +102,13 @@ function compile(entry, opts) {
         ))
         .pipe(debug({title: 'compiling'}))
         .pipe(less({
-            'modifyVars': util.merge({}, { // use opts if defined.
-                'edition': opts.edition,
+            modifyVars: util.merge({}, { // use opts if defined.
+                edition: opts.edition,
                 'base-path': opts['base-path']
             })
         }))
         .pipe(rename(function(path) {
-            path.dirname = distDirname(path.dirname, opts.dist)
+            path.dirname = distDirname(path.dirname, opts.dist);
             path.basename = 'base';
         }))
         .pipe(gulpif(function() { return !!opts.sourcemaps; },
@@ -138,18 +137,18 @@ function distDirname(dirname, dist) {
 
 function reworkIe(files, target) {
     // Helper function to rework CSS for IE8.
-    function reworkIe8(ast, reworkInstance) {
+    function reworkIe8(ast) {
         // Push custom rule for IE8 to prevent responsiveness.
         ast.rules.push({
-            'type': 'rule',
-            'selectors': ['.container-fluid'],
-            'declarations': [
+            type: 'rule',
+            selectors: ['.container-fluid'],
+            declarations: [
                 {
-                    'type': 'declaration',
-                    'property': 'min-width',
-                    'value': '1024px'
-                    }
-                ]
+                    type: 'declaration',
+                    property: 'min-width',
+                    value: '1024px'
+                }
+            ]
         });
     }
 
@@ -162,7 +161,7 @@ function reworkIe(files, target) {
             suffix: '.ie',
             extname: '.css'
         }))
-        .pipe(mqRemove({width:'1024px'}))
+        .pipe(mqRemove({width: '1024px'}))
         .pipe(rework(reworkIe8))
         .pipe(debug({title: 'writing'}))
         // Save files for promise resolve.
@@ -182,7 +181,7 @@ function reworkIe(files, target) {
 function compress(entry, target) {
     var deferred = Q.defer();
 
-    gulp.src(entry, {base:target})
+    gulp.src(entry, {base: target})
         .pipe(debug({title: 'compressing'}))
         .pipe(minifyCss({keepBreaks: true}))
         .pipe(rename({
