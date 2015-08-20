@@ -136,7 +136,7 @@ function distDirname(dirname, dist) {
     return dirname.replace('styles', path.join(dist, 'styles'));
 }
 
-function reworkIe(entry, target) {
+function reworkIe(files, target) {
     // Helper function to rework CSS for IE8.
     function reworkIe8(ast, reworkInstance) {
         // Push custom rule for IE8 to prevent responsiveness.
@@ -155,9 +155,8 @@ function reworkIe(entry, target) {
 
     // Create .ie.css for ie8 support (TODO: drop ie8 support).
     var deferred = Q.defer();
-    var files = [];
 
-    gulp.src(entry, {base: target})
+    gulp.src(files, {base: target})
         .pipe(debug({title: 'reworking'}))
         .pipe(rename({
             suffix: '.ie',
