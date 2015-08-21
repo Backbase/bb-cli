@@ -37,7 +37,8 @@ module.exports = Command.extend({
 
     options: {
         target: {type: 'string', alias: 't', default: './'},
-        watch: {type: 'boolean', alias: 'w'}
+        watch: {type: 'boolean', alias: 'w'},
+        auto: {type: 'boolean', alias: 'a'}
     },
 
     run: function () {
@@ -101,7 +102,6 @@ function prepareModel() {
     .then(getVersionFromBower)
     .catch(function(err) {
         if (err.code === 'ENOENT' && cfg.auto) {
-            model.createFeature();
             return getVersionFromBower();
         }
         throw err;
@@ -113,6 +113,7 @@ function getVersionFromBower() {
     return fs.readFileAsync(path.resolve(cfg.target, 'bower.json'))
     .then(function(bjson) {
         bjson = JSON.parse(bjson.toString());
+        if (cfg.auto && model.isEmpty()) model.createFeature(bjson.name);
         if (bjson.version) model.addProperty('version', bjson.version);
     });
 }
