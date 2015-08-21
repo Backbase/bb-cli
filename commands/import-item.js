@@ -13,7 +13,7 @@ var zipDir = require('../lib/zipDir');
 var Command = require('ronin').Command;
 var exclude = ['.git', '.gitignore', 'bower_components', 'node_modules'];
 
-var bbrest, jxon, cfg, model;
+var bbrest, jxon, cfg, model, name, version
 
 module.exports = Command.extend({
     help: function () {
@@ -24,6 +24,7 @@ module.exports = Command.extend({
         r += '\n\n  ' + title('Options') + ': -short, --name <type> ' + d('default') + ' description\n';
         r += '      -t,  --target <string>\t\t' + '\t\tDir to import.\n';
         r += '      -w,  --watch <boolean>\t\t' + '\t\tWatch for file changes in the current dir and autosubmit.\n\n';
+        r += '      -a,  --auto <boolean>\t\t' + '\t\tAuto create model.xml if doesn\'t exist.\n\n';
 
         r += '      -H,  --host <string>\t\t' + d('localhost') + '\tThe host name of the server running portal foundation.\n';
         r += '      -P,  --port <number>\t\t' + d('7777') + '\t\tThe port of the server running portal foundation.\n';
@@ -69,14 +70,14 @@ module.exports = Command.extend({
 
 function run() {
     return prepareModel()
-    .then(function(mxml) {
+    .then(function() {
+        name = model.getName() + ' v' + model.getProperty('version');
         var replacements = {
-            'model.xml': mxml
+            'model.xml': model.getXml()
         };
         console.log('Creating zip...');
         return zipDir(cfg.target, exclude, replacements)
         .then(function(zip) {
-            console.log('Created. Importing...');
             return bbrest.importItem().file(zip.path).post()
             .then(function(r) {
                 if (r.error) {
@@ -97,18 +98,23 @@ function run() {
 function prepareModel() {
     console.log('Reading model.xml...');
     return model.read(path.resolve(cfg.target, 'model.xml'))
-    .then(function(mx) {
-        console.log('Reading bower.json...');
-        return fs.readFileAsync(path.resolve(cfg.target, 'bower.json'))
-        .then(function(bjson) {
-            bjson = JSON.parse(bjson.toString());
-            if (bjson.version) model.addProperty('version', bjson.version);
-            return model.getXml();
-        })
-        .catch(function() {
-            return model.getXml();
-        });
+    .then(getVersionFromBower)
+    .catch(function(err) {
+        if (err.code === 'ENOENT' && cfg.auto) {
+            model.createFeature();
+            return getVersionFromBower();
+        }
+        throw err;
     });
+}
+
+function getVersionFromBower() {
+    console.log('Reading bower.json...');
+    return fs.readFileAsync(path.resolve(cfg.target, 'bower.json'))
+    .then(function(bjson) {
+        bjson = JSON.parse(bjson.toString());
+        if (bjson.version) model.addProperty('version', bjson.version);
+    })
 }
 
 function onWatch(fileName, curStat, prevStat) {
@@ -135,6 +141,6 @@ function error(err) {
     util.err(chalk.red('bb import-item: ') + (err.message || err.error));
 }
 function ok(r) {
-    util.ok('Importing ' + chalk.green(cfg.target) + '. Done.');
+    util.ok('Importing ' + chalk.yellow(name) + ' from ' + chalk.green(cfg.target) + '. Done.');
     return r;
 }
