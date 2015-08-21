@@ -26,7 +26,7 @@ module.exports = Command.extend({
         r += '      -t,  --target <string>\t\t\t\t Path to directory to build.\n';
         r += '      -e,  --edition <string>\t\t\t\t Pass edition var to less.\n';
         r += '      -b,  --base-path <string>\t\t\t\t Pass base-path var to less.\n';
-        r += '      -s   --sourcemasp <string>\t\t\t Whether to generate source maps.\n';
+        r += '      -s   --sourcemaps <string>\t\t\t Whether to generate source maps.\n';
         return r;
     },
 
