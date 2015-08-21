@@ -1,16 +1,19 @@
 var chalk = require('chalk');
 var util = require('../lib/util');
 var config = require('../lib/config');
+var modelXml = require('../lib/modelXml');
+var fs = require('fs-extra-promise');
 var _ = require('lodash');
 var jxon = require('jxon');
 var watch = require('watch');
+var path = require('path');
 
 var zipDir = require('../lib/zipDir');
 
 var Command = require('ronin').Command;
 var exclude = ['.git', '.gitignore', 'bower_components', 'node_modules'];
 
-var bbrest, jxon, cfg;
+var bbrest, jxon, cfg, model;
 
 module.exports = Command.extend({
     help: function () {
@@ -38,12 +41,12 @@ module.exports = Command.extend({
 
     run: function () {
 
-        util.spin.start();
         return config.getCommon(this.options)
         .then(function(r) {
             bbrest = r.bbrest;
             jxon = r.jxon;
             cfg = r.config.cli;
+            model = modelXml(jxon);
 
             if (cfg.watch) {
                 watch.watchTree(cfg.target, {
@@ -65,20 +68,45 @@ module.exports = Command.extend({
 });
 
 function run() {
-    return zipDir(cfg.target, exclude)
-    .then(function(zip) {
-        return bbrest.importItem().file(zip.path).post()
-        .then(function(r) {
-            if (r.error) {
-                throw new Error('Rest API Error: ' + r.statusInfo);
-            }
-            var body = jxon.stringToJs(_.unescape(r.body)).import;
-            if (body.level === 'ERROR') throw new Error(body.message);
-            zip.clean();
-            ok(r);
+    return prepareModel()
+    .then(function(mxml) {
+        var replacements = {
+            'model.xml': mxml
+        };
+        console.log('Creating zip...');
+        return zipDir(cfg.target, exclude, replacements)
+        .then(function(zip) {
+            console.log('Created. Importing...');
+            return bbrest.importItem().file(zip.path).post()
+            .then(function(r) {
+                if (r.error) {
+                    throw new Error('Rest API Error: ' + r.statusInfo);
+                }
+                var body = jxon.stringToJs(_.unescape(r.body)).import;
+                if (body.level === 'ERROR') throw new Error(body.message);
+                zip.clean();
+                ok(r);
+            });
+        });
+    })
+    .catch(function(err) {
+        error(err);
+    });
+}
+
+function prepareModel() {
+    console.log('Reading model.xml...');
+    return model.read(path.resolve(cfg.target, 'model.xml'))
+    .then(function(mx) {
+        console.log('Reading bower.json...');
+        return fs.readFileAsync(path.resolve(cfg.target, 'bower.json'))
+        .then(function(bjson) {
+            bjson = JSON.parse(bjson.toString());
+            if (bjson.version) model.addProperty('version', bjson.version);
+            return model.getXml();
         })
-        .catch(function(err) {
-            error(err);
+        .catch(function() {
+            return model.getXml();
         });
     });
 }
@@ -104,11 +132,9 @@ function onWatch(fileName, curStat, prevStat) {
 }
 
 function error(err) {
-    util.spin.stop();
     util.err(chalk.red('bb import-item: ') + (err.message || err.error));
 }
 function ok(r) {
-    util.spin.stop();
     util.ok('Importing ' + chalk.green(cfg.target) + '. Done.');
     return r;
 }
