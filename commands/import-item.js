@@ -13,7 +13,7 @@ var zipDir = require('../lib/zipDir');
 var Command = require('ronin').Command;
 var exclude = ['.git', '.gitignore', 'bower_components', 'node_modules'];
 
-var bbrest, jxon, cfg, model, name, version
+var bbrest, jxon, cfg, model, name;
 
 module.exports = Command.extend({
     help: function () {
@@ -114,7 +114,7 @@ function getVersionFromBower() {
     .then(function(bjson) {
         bjson = JSON.parse(bjson.toString());
         if (bjson.version) model.addProperty('version', bjson.version);
-    })
+    });
 }
 
 function onWatch(fileName, curStat, prevStat) {
