@@ -36,7 +36,7 @@ npm install --global bb-cli@nightly
 
 ## Commands
 
-Each command have it's own help section `bb COMMAND -h`, filled with all information about arguments, default values and examples.
+Each command has its own help section `bb COMMAND -h`, containing information about arguments, default values and examples.
 
 Global help is also available:
 
@@ -46,13 +46,13 @@ bb -h
 
 ### <a name="archetype"></a>Archetype
 
-By typing a simple command you can now check out a new `mvn archetype` by executing the command:
+You can check out a new `mvn archetype` by executing the command:
 
 ```
 bb archetype
 ```
 
-Or use it's short version:
+Or use its short version:
 
 ```
 bb arch
@@ -64,7 +64,7 @@ Read more about Archetype API [here](/docs/archetype.md).
 
 Scaffold new widgets, containers and other Backbase CXP components.
 
-In directory where you run the command, tool will generate starting template for chosen item.
+The tool generates the starting template for the chosen item in the directory where you run the command.
 
 ```
 bb generate widget
@@ -76,7 +76,7 @@ bb generate container
 
 ##### Launchpad 0.12 Generators
 
-For Launchpad 0.12 development, please use the following commands:
+For Launchpad 0.12 development, use the following commands:
 
 ```
 bb generate lp12-widget
@@ -94,9 +94,9 @@ Read more about generate API [here](/docs/generate.md).
 bb export [OPTIONS]
 ```
 
-Exports portal. Chunk option will divide export into separate xml files grouped by item type.
+Exports portal. The chunk option exports to separate xml files grouped by item type.
 It will also pretty print xml files and sort items and properties alphabetically on name.
-`bb rest` options for defining host, port, contaxt, username and password also work. Or you can define those properties inside .bbrc file.
+`bb rest` options for defining host, port, context, username and password also work. You can define those properties inside the .bbrc file.
 
 ##### Options
 
@@ -113,32 +113,32 @@ It will also pretty print xml files and sort items and properties alphabetically
 
 ##### Examples
 
-Outputs prettified, sorted xml file.
+Outputs prettified, sorted xml file:
 ```
 bb export
 ```
 
-Saves export to myPortal.xml
+Saves export to myPortal.xml:
 ```
 bb export --save myPortal.xml
 ```
 
-Chunks export to myPortal dir
+Chunks export to myPortal dir:
 ```
 bb export --portal my-portal --save myPortal -k
 ```
 
-Saves export including content to retail.zip
+Saves export, including content, to retail.zip:
 ```
 bb export --type portal --save retail.zip
 ```
 
-Chunks full export into retail dir
+Chunks full export into retail dir:
 ```
 bb export --type portal --portal retail-banking --save retail -k
 ```
 
-Chunks widget-accounts export to accounts dir
+Chunks widget-accounts export to accounts dir:
 ```
 bb export -s accounts --type widget --name widget-accounts -k
 ```
@@ -159,13 +159,13 @@ Imports portal exported by export tool. It supports importing of chunked exports
 
 ##### Examples
 
-Imports portal from myPortal.xml
+Imports portal from myPortal.xml:
 
 ```
 bb import --target myPortal.xml
 ```
 
-Imports bb export chunked portal from chunked dir
+Imports a portal exported with bb export and the chunk option from the dir chunked:
 
 ```
 bb import --target chunked
@@ -177,18 +177,17 @@ bb import --target chunked
 bb import-collection [OPTIONS]
 ```
 
-Imports collection of items to the portal.
-This tool will get information from the bower and zip every component, then upload it via REST API(import package) to the server.  
+Imports a collection of items into the portal.
+This tool gets information from the bower and zip for every component, then uploads it via REST API (import package) to the server.  
 
-All components should contain `model.xml` files. In case that they don't, tool will ignore them.
-If `--auto` option is set, component will be installed to the portal as feature.
+All components should contain `model.xml` files. Any component without a `model.xml` file is ignored, unless the  `--auto` option is set, in which case the component will be installed to the portal as a feature. 
 
-Version property is automatically added to each item.
+The version property is automatically added to each item.
 
-`bb rest` options for defining host, port, contaxt, username and password also work.
-Or you can define those properties inside `.bbrc` file.
+`bb rest` options for defining host, port, context, username and password also work.
+Or you can define those properties inside a `.bbrc` file.
 
-#### Requirements
+##### Requirements
 
 Backbase CXP v5.6  
 [Bower](http://bower.io')
@@ -209,8 +208,8 @@ Backbase CXP v5.6
 
 ##### Examples
 
-Imports collection from the current directory.
-Every component without `model.xml` file will be installed as feature.
+Imports a collection from the current directory.
+Every component without a `model.xml` file will be installed as a feature.
 
 ```
 bower install
@@ -224,7 +223,7 @@ bb import-item [OPTIONS]
 ```
 
 Imports item to the portal.
-This tool will zip targeted directory, then upload it via REST API(import package) to the server.  
+This tool zips the targeted directory, then uploads it to the server via REST API(import package).  
 
 Target directory should contain `model.xml` file.
 If `--watch` option is set, component will be installed to the portal as feature.
@@ -240,7 +239,7 @@ Backbase CXP v5.6
 ##### Options
 
 ```
-  -t,  --target <string>                  Dir to import.
+  -t,  --target <string>        Current directory            Dir to import.
   -w,  --watch <boolean>                   Watch for file changes and autosubmit.
 
   -H,  --host <string>		localhost	  The host name of the server.
@@ -253,7 +252,7 @@ Backbase CXP v5.6
 
 ##### Examples
 
-Imports directory as item to the portal. Then it watches for file changes and re-imports whenever a file is changed.
+Imports current directory as item to the portal. Then it watches for file changes and re-imports whenever a file is changed.
 
 ```
 bb import-item --watch
@@ -262,10 +261,10 @@ bb import-item --watch
 ### <a name="sync"></a>Sync
 
 Syncs local XML model with remote.
-Run it in the component folder to sync with CXP. It parser the first `*.xml` file or defined one from `--file` argument.
-In case that xml file does not exist, it can create one by saving the response from the REST API call.
-This call will be made on server catalog for the item defined by `--save` parameter.
-In case that `--save` is undefined, it will search for `bower.json` file and use the name of the package as item name (handy for LP widgets).
+Run it in the component folder to sync with CXP. It parses the first `*.xml` file or the one defined with the `--file` argument.
+If that xml file does not exist, one is created by saving the response from the REST API call.
+This call is made on server catalog for the item defined by the `--save` parameter.
+If `--save` is undefined, it will search for the `bower.json` file and use the name of the package as item name (handy for LP widgets).
 
 ```
 bb sync [OPTIONS]	 Syncs local XML model with remote.
@@ -278,14 +277,14 @@ bb sync [OPTIONS]	 Syncs local XML model with remote.
 
       -f,  --file (string)	    first xml file		 A file to target.
       -c,  --context (string)	portalserver		 Portal server context (for other options use `.bbrc`).
-      -s,  --save (string)	            			 Name of the server item which model should be exported to a file.
+      -s,  --save (string)	            			 Name of the server item for which the model is to be exported to a file.
       -y,  --yes (boolean)	            			 Disables dialogs.
       -v,  --verbose		    false   			 Prints detailed output.
 ```
 
 ### <a name="rest"></a>Rest
 
-Command line version of Backbase [Rest API library](https://github.com/Backbase/mosaic-rest-js) for low level and precise tasks.
+Command line version of Backbase [Rest API library](https://github.com/Backbase/mosaic-rest-js) for low-level and precise tasks.
 
 ```
 bb rest [OPTIONS]
@@ -301,7 +300,7 @@ bb rest [OPTIONS]
 -c,  --context <string>		    portalserver	The application context of the portal foundation.
 -u,  --username <string>		admin   		Username.
 -w,  --password <string>		admin	    	Password.
--p,  --portal <string   >				        Name of the portal on the server to target.
+-p,  --portal <string>				        Name of the portal on the server to target.
 -t,  --target <string>		    server		    Context target: server, portal, catalog, portalCatalog, page, container, widget, link, template, user, group, audit or cache.
 -T,  --target-arg <string/json>			        Target arguments. When there are more arguments, pass JSON array.
 -m,  --method <string>		    get		        HTTP method to use: get, post, put or delete.
@@ -318,7 +317,7 @@ bb rest [OPTIONS]
 
 Symlinks source directory to defined target.
 
-Use this command to symlink clone of your widget/module working repo to the working portal.
+Use this command to symlink a clone of your widget/module working repo to the working portal.
 
 ```
 bb ln --source /component/path --target /path/to/portalserver/static/dir/
@@ -336,7 +335,7 @@ If `--lp-portal` path is set, target will be:
 
 `{cxp portal path}/src/main/webapp/static/launchpad/{bundle}/widgets/{package name}`
 
-As LP convention, if package name starts with `widget-` it will be stripped out when creating a symlink.
+Following the LP convention, if the package name starts with `widget-` it will be stripped out when creating a symlink.
 
 If `--portal` path is set, target will be:
 
@@ -365,7 +364,7 @@ bb install [OPTIONS]
 bb install <bower-endpoint> [<bower-endpoint> ..] [OPTIONS]
 ```
 
-Wraps a `bower install` and applies additional options like `requirejs-conf` generation and server catalog update.
+Wraps a `bower install` and applies additional options such as `requirejs-conf` generation and server catalog update.
 
 ##### Options
 
@@ -373,10 +372,10 @@ Wraps a `bower install` and applies additional options like `requirejs-conf` gen
     -C,  --catalog <boolean>		false			    Upload components to CXP via REST after install.
     -v,  --verbose <boolean>		false			    Enable verbose logging mode.
          --base-url <string>        path/to/bower_comp	Web path to bower components directory (also configurable from .bbrc).
-         --require-confs <string>				        Coma seperated list of relative paths to existing require configuration (also configurable from .bbrc).
+         --require-confs <string>				        Comma-separated list of relative paths to existing require configuration (also configurable from .bbrc).
 ```
 
-Also accepts `bower install` arguments like --save, -save-dev, --production, check `bower install -h`.
+Also accepts `bower install` arguments such as --save, -save-dev, --production, check `bower install -h`.
 
 ##### Examples
 
@@ -388,9 +387,9 @@ bb install todo-widget -C --save
 
 ## <a name="configuration"></a>Configuration
 
-All REST based commands support `.bbrc` configuration. Running the command in the folder with `.bbrc` file or in one of the child folders with defined configuration, CLI will use it to override default options.
+All REST-based commands support a `.bbrc` configuration file. The `.bbrc` file is looked for first in the current directory, and then recursively in parent directories. The first `.bbrc` file encountered is used. This allows the default configuration to be overridden.
 
-Example of `.bbrc` (must contain valid JSON) contents:
+Example of `.bbrc` (must contain valid JSON) content:
 
 ```json
 {
@@ -401,9 +400,9 @@ Example of `.bbrc` (must contain valid JSON) contents:
 }
 ```
 
-### Usage example
+### Example
 
-If CXP based project has custom configuration for context or admin credentials, put custom `.bbrc` into the root folder, so CLI could use custom defaults.
+If a CXP-based project has a custom configuration for context or admin credentials, put a custom `.bbrc` in the root folder, so CLI can use custom defaults.
 
 ```
 /project
@@ -412,7 +411,7 @@ If CXP based project has custom configuration for context or admin credentials, 
     some.xml
 ```
 
-Where `.bbrc` file contains this conf:
+Where the `.bbrc` file contains this conf:
 
 ```
 {
@@ -422,7 +421,7 @@ Where `.bbrc` file contains this conf:
 }
 ```
 
-Now running `bb import` from `/project/config` dir, CLI will use defined REST configuration with overriden `context` and user credentials.
+When running `bb import` from `/project/config` dir, CLI will use the defined REST configuration with overriden `context` and user credentials.
 
 ## API docs
 
