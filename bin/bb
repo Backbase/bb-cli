@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+Object.assign = Object.assign || require('object-assign'); // fixes https://github.com/vdemedes/ronin/issues/19
 var ronin = require('ronin');
 var path = require('path');
 var chalk = require('chalk');

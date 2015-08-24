@@ -7,7 +7,7 @@ var Q = require('q');
 var fs = require('fs-extra-promise');
 var path = require('path');
 var extract = require('extract-zip');
-var inquirer = require("inquirer");
+var inquirePortal = require('../lib/inquirePortal');
 var os = require('os');
 
 var Command = require('ronin').Command;
@@ -154,27 +154,7 @@ function getPortal() {
     if (bbrest.config.portal) return Q(bbrest.config.portal);
 
     if (cfg.type === 'widget' || cfg.type === 'container') return Q('');
-
-    return bbrest.server().get()
-    .then(function(v) {
-        v = jxon.stringToJs(_.unescape(v.body));
-
-        if (v.portals.portal instanceof Array) {
-            var portals = _.pluck(v.portals.portal, 'name');
-            var defer = Q.defer();
-            inquirer.prompt([{
-                message: 'Choose the portal you want to export',
-                name: 'name',
-                type: 'list',
-                choices: portals
-            }], function (answers) {
-                defer.resolve(answers.name);
-            });
-            return defer.promise;
-        }
-        return Q(v.portals.portal.name);
-
-    });
+    return inquirePortal(bbrest, jxon);
 }
 
 function runOrchestratorExport(jx) {
@@ -360,10 +340,14 @@ function sortItem(item, key) {
         item = cleanItem(item, key);
         //item = sanitizeItem(item);
     } else if (item.rights && item.rights.itemRight) {
-        item.rights.itemRight = _.sortBy(item.rights.itemRight, '$name');
-        item.rights.propertyRight = _.sortBy(item.rights.propertyRight, '$name');
+        if (item.rights.itemRight instanceof Array) {
+            item.rights.itemRight = _.sortBy(item.rights.itemRight, '$name');
+        }
+        if (item.rights.propertyRight instanceof Array) {
+            item.rights.propertyRight = _.sortBy(item.rights.propertyRight, '$name');
+        }
     }
-    if (item.tags && item.tags.tag) {
+    if (item.tags && item.tags.tag && item.tags.tag instanceof Array) {
         item.tags.tag = _.sortByAll(item.tags.tag, ['_', '$type', '$blacklist']);
     }
     return item;
