@@ -360,10 +360,14 @@ function sortItem(item, key) {
         item = cleanItem(item, key);
         //item = sanitizeItem(item);
     } else if (item.rights && item.rights.itemRight) {
-        item.rights.itemRight = _.sortBy(item.rights.itemRight, '$name');
-        item.rights.propertyRight = _.sortBy(item.rights.propertyRight, '$name');
+        if (item.rights.itemRight instanceof Array) {
+            item.rights.itemRight = _.sortBy(item.rights.itemRight, '$name');
+        }
+        if (item.rights.propertyRight instanceof Array) {
+            item.rights.propertyRight = _.sortBy(item.rights.propertyRight, '$name');
+        }
     }
-    if (item.tags && item.tags.tag) {
+    if (item.tags && item.tags.tag && item.tags.tag instanceof Array) {
         item.tags.tag = _.sortByAll(item.tags.tag, ['_', '$type', '$blacklist']);
     }
     return item;
