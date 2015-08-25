@@ -96,7 +96,7 @@ module.exports = Command.extend({
                 });
             })
             .catch(function(err) {
-                error(err);
+                    error(err);
             });
 
         });
@@ -186,6 +186,7 @@ function importQueue() {
             console.log(chalk.green(qu.zip.dirName) + ' ' + body.message);
         }
         if (queue.length) return importQueue();
+        return qu.zip.clean;
     });
 }
 
@@ -199,6 +200,8 @@ function readBowerJson(dir) {
 
 }
 
+// reads all bower component dirs
+// returns collection with path, name and bower.json content of each
 function getBowers(startPath, exclude) {
     var mainPath = path.resolve(startPath, bowerDir);
     return parseDir(mainPath, exclude)
@@ -254,31 +257,35 @@ function makeModelAndZip(dirPath, bjson, exclude) {
                             $type: 'string',
                             _: _.startCase(bjson.name)
                         }
-                    },
-                    {
-                        $name: 'version',
-                        $label: 'Version',
-                        $readonly: 'true',
-                        $viewHint: 'designModeOnly',
-                        value: {
-                            $type: 'string',
-                            _: bjson.version || ''
-                        }
-                    },
-                    {
-                        $name: 'description',
-                        $label: 'Description',
-                        $readonly: 'true',
-                        $viewHint: 'designModeOnly',
-                        value: {
-                            $type: 'string',
-                            _: bjson.description || ''
-                        }
                     }]
                 }
             }
         }
     };
+    if (bjson.version) {
+        jx.catalog.feature.properties.property.push({
+            $name: 'version',
+            $label: 'Version',
+            $readonly: 'true',
+            $viewHint: 'designModeOnly',
+            value: {
+                $type: 'string',
+                _: bjson.version
+            }
+        });
+    }
+    if (bjson.description) {
+        jx.catalog.feature.properties.property.push({
+            $name: 'description',
+            $label: 'Description',
+            $readonly: 'true',
+            $viewHint: 'designModeOnly',
+            value: {
+                $type: 'string',
+                _: bjson.description
+            }
+        });
+    }
     jx = '<?xml version="1.0" encoding="UTF-8"?>' + jxon.jsToString(jx);
     jx = formattor(jx, {method: 'xml'});
     // console.log(chalk.red(bjson.name + ' xml: \n') + jx);

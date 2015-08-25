@@ -1,7 +1,6 @@
 {
   "name": "bb-cli",
-  "version": "0.2.0-beta",
-  "version": "0.2.0-beta.5",
+  "version": "0.2.0-beta.7",
   "description": "Command line tools for working with Backbase CXP.",
   "author": "Backbase",
   "licenses": [
@@ -47,7 +46,7 @@
     "q": "^1.1.2",
     "request-promise": "^0.4.3",
     "ronin": "git+https://github.com/operatino/ronin#v0.3.11",
-    "tmp": "0.0.26",
+    "update-notifier": "^0.5.0",
     "watch": "^0.16.0",
     "xml2js": "^0.4.4"
   },
