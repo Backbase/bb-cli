@@ -52,17 +52,16 @@ module.exports = Command.extend({
             return parseCollection(cfg.target, exclude, cfg.auto, r.jxon)
             .then(createAllZips)
             .then(importAll)
-            .then(ok)
-            .catch(function(err) {
-                if (err.error) {
-                    error(new Error(err.statusInfo));
-                } else if (err.code === 'ENOENT') {
-                    error(new Error('Can not open file ' + chalk.yellow(err.path.substr(path.resolve(cfg.target).length))));
-                } else {
-                    error(err);
-                }
-            });
-
+            .then(ok);
+        })
+        .catch(function(err) {
+            if (err.error) {
+                error(new Error(err.statusInfo));
+            } else if (err.code === 'ENOENT') {
+                error(new Error('Can not open file ' + chalk.yellow(err.path.substr(path.resolve(cfg.target).length))));
+            } else {
+                error(err);
+            }
         });
 
     }
