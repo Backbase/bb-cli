@@ -61,22 +61,22 @@ module.exports = Command.extend({
 
             if (cfg.target === undefined) throw new Error('Target path is missing. Use --target');
 
-            return getPortal()
-            .then(function(portal) {
-                bbrest.config.portal = portal;
+            console.log('Extracting zip...');
+            return unzip(cfg.target)
+            .then(function(path) {
+                unzipPath = path;
+                console.log('Parsing export data...');
+                return fs.readJsonAsync(path + 'page-export.json')
+                .then(function(data) {
+                    return checkCatalogItems(data.catalog)
+                    .then(function() {
 
-                return unzip(cfg.target)
-                .then(function(path) {
-                    unzipPath = path;
-                    return fs.readJsonAsync(path + 'page-export.json')
-                    .then(function(data) {
-                        return checkCatalogItems(data.catalog)
+                        return importContainers(data.container)
                         .then(function() {
-                            return importPage(data.page);
-
-                            return importContainers(data.container)
+                            return importWidgets(data.widget)
                             .then(function() {
-                                return importWidgets(data.widget);
+                                return importPage(data);
+                                
                             });
                         });
                     });
@@ -93,10 +93,10 @@ module.exports = Command.extend({
     }
 });
 
-function getPortal() {
-    if (bbrest.config.portal) return Q(bbrest.config.portal);
-    return inquirePortal(bbrest, jxon);
-}
+// function getPortal() {
+//     if (bbrest.config.portal) return Q(bbrest.config.portal);
+//     return inquirePortal(bbrest, jxon);
+// }
 
 function checkCatalogItems(data) {
     var all = [];
@@ -104,30 +104,53 @@ function checkCatalogItems(data) {
     for (var itemName in data) {
         cnt++;
         all.push(
-            bbrest.catalog().get(itemName)
-            .then(function(res) {
-                return !res.error;
-            })
+            bbrest.catalog(itemName).get()
         );
     };
     console.log('Checking for ' + cnt + ' extended items...');
-    return Q.all(all);
+    return Q.all(all)
+    .then(function(results) {
+        var errors = false;
+        _.each(results, function(res) {
+            if (res.error) {
+                console.log(res.error);
+                errors = true;
+            }
+        });
+        if (errors) {
+            //throw new Error('Problem checking for catalog items');
+        }
+    });
 }
-function importPage(page) {
+function importPage(obj) {
     console.log('Importing page...');
-    console.log(page);
-    return putOrPost('page', page);
+    return putOrPost('container', obj.manageable[0])
+    .then(function() {
+        return putOrPost('page', obj.page)
+        .then(function() {
+            if (obj.link) return putOrPost('link', obj.link);
+        });
+    });
 }
 
 function importContainers(conts) {
     console.log('Importing ' + conts.length + ' containers...');
     var all = [];
     _.each(conts, function(cont) {
-        all.push(
-            putOrPost('container', cont)
-        );
+        all.push({
+            type: 'container',
+            jx: cont
+        });
     });
-    return Q(all);
+    return waterfall(all);
+}
+
+function waterfall(all) {
+    var obj = all.shift();
+    return putOrPost(obj.type, obj.jx)
+    .then(function() {
+        if (all.length) return waterfall(all);
+    });
 }
 
 function putOrPost(type, jx) {
@@ -154,14 +177,15 @@ function importWidgets(widgs) {
     console.log('Importing ' + widgs.length + ' widgets...');
     var all = [];
     _.each(widgs, function(widg) {
-        all.push(
-            putOrPost('widget', widg)
-        );
+        all.push({
+            type: 'widget',
+            jx: widg
+        });
         // if (widg.referencedContentItems) {
         //     // console.log(widg.referencedContentItems);
         // }
     });
-    return Q(all);
+    return waterfall(all);
 }
 
 function error(err) {

@@ -23,6 +23,7 @@ module.exports = Command.extend({
         r += '\n\n  ' + title('Options') + ': -short, --name <type> ' + d('default') + ' description';
         r += '\n\t  All `bb rest` options for configuring portal, context, username etc are valid.\n\n';
         r += '      -s,  --save <string>\t\t\t' + d('portal-name.ext') + '\tFile to save the export to.\n';
+        r += '      -n,  --name <string>\t\t\t\tName of the page to export.\n';
         r += '      -f,  --force <boolean>\t\t\t' + d('false') + '\t\tForce overwrite.\n\n';
 
         r += '           --host <string>\t\t\t' + d('localhost') + '\tThe host name of the server running portal foundation.\n';
