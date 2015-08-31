@@ -77,7 +77,7 @@ function createAllZips(result) {
     var replacements;
     _.each(result, function(comp) {
         if (!comp.model.isEmpty()) {
-            comp.model.addProperty('version', comp.version);
+            if (comp.version) comp.model.addProperty('version', comp.version);
             replacements = {
                 'model.xml': comp.model.getXml()
             };
