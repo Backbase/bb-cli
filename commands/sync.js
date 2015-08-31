@@ -1,15 +1,12 @@
 var restUtils = require('../lib/restUtils');
 var Command = require('ronin').Command;
 var Q = require('q');
-var fs = require('fs');
-var readFile = Q.denodeify(fs.readFile);
-var writeFile = Q.denodeify(fs.writeFile);
-var readDir = Q.denodeify(fs.readdir);
+var fs = require('fs-extra-promise');
 var _ = require('lodash');
 var inquirer = require('inquirer');
 var config = require('../lib/config');
 var chalk = require('chalk');
-var formattor = require('formattor');
+var parseRawModel = require('../lib/parseRawModel');
 var bbrest, jxon, cfg;
 
 module.exports = Command.extend({
@@ -21,10 +18,11 @@ module.exports = Command.extend({
         r += '\n\n  ' + title('Options') + ': -short, --name <type> ' + d('default') + ' description\n\n';
         r += '      -f,  --file <string>\t' + d('first xml file') + '\t\t A file to target.\n';
         r += '      -c,  --context <string>\t' + d('portalserver') + '\t\t Portal server context (for other options use `.bbrc`).\n';
-        r += '      -s,  --save <string>\t' + d('') + '\t\t\t Name of the server item which model should be exported to a file.\n';
-        r += '      -y,  --yes <string>\t' + d('') + '\t\t\t Disable interactive mode, answer all questions with yes.\n';
+        r += '      -s,  --save <string>\t' + d('') + '\t\t\t Name of the item which model should be exported to a file.\n';
+        r += '      -y,  --yes <boolean>\t' + d('false') + '\t\t\t Disable interactive mode, answer all questions with yes.\n';
+        r += '      -e,  --edge <boolean>\t' + d('false') + '\t\t\t Convert model.xml to 5.6 format.\n';
         //r += '      -w,  --watch <boolean>\t' + d('false') + '\t\t\t Enables watching for file change.\n';
-        r += '      -v,  --verbose\t\t' + d('false') + '\t\t\t Prints detailed output.\n';
+        r += '      -v,  --verbose <boolean>\t' + d('false') + '\t\t\t Prints detailed output.\n';
         return r;
     },
 
@@ -33,6 +31,7 @@ module.exports = Command.extend({
         context: {type: 'context', alias: 'c'},
         save: {type: 'string', alias: 's'},
         yes: {type: 'boolean', alias: 'y'},
+        edge: {type: 'boolean', alias: 'e'},
         //watch: {type: 'boolean', alias: 'w'},
         verbose: {type: 'boolean', alias: 'v'}
     },
@@ -40,26 +39,19 @@ module.exports = Command.extend({
     run: function () {
         return config.getCommon(this.options)
         .then(function(r) {
-            return readDir(process.cwd())
+            return fs.readdirAsync(process.cwd())
                 .then(function(files) {
                     return init(r, files);
                 });
         })
-        .fail(function(e) {
-            console.log(chalk.red('bb prop error: '), e);
+        .catch(function(e) {
+            console.log(chalk.red('bb sync error: '), e);
             console.log(e.stack);
         });
     }
 });
 
 
-var propsToKeep = {
-    name: true,
-    contextItemName: true,
-    extendedItemName: true,
-    properties: true,
-    tags: true
-};
 function init(r, files) {
     bbrest = r.bbrest;
     jxon = r.jxon;
@@ -74,7 +66,7 @@ function init(r, files) {
         if (cfg.cli.save) return saveFile(cfg.cli.file || 'model.xml', cfg.cli.save);
         // otherwise read bower
         else if (files.indexOf('bower.json') !== -1) {
-            return readFile('bower.json')
+            return fs.readFileAsync('bower.json')
             .then(function(result) {
                 return saveFile(cfg.cli.file || 'model.xml', JSON.parse(result).name);
             })
@@ -160,7 +152,7 @@ function submitFile(xmlFileName) {
 }
 
 function getLocal(fName) {
-    return readFile(fName)
+    return fs.readFileAsync(fName)
     .then(function(s) {
         try {
             return jxon.stringToJs(s.toString());
@@ -229,21 +221,28 @@ function compare(localProps, serverProps, wname) {
     }
 }
 
-function writeModelFile(fname, itemName) {
+function writeModelFile(fname, itemName, widgetTry) {
     return bbrest.catalog(itemName).get()
     .then(function(res) {
-        var jx = jxon.stringToJs(_.unescape(res.body));
-        delete (jx.catalog.$totalSize);
-        for (var k in jx.catalog.widget) if (!propsToKeep[k]) delete (jx.catalog.widget[k]);
-        jx = '<?xml version="1.0" encoding="UTF-8"?>' + jxon.jsToString(jx);
-        jx = formattor(jx, {method: 'xml'});
-        return writeFile(fname, jx)
+        if (res.error) {
+            if (!widgetTry && res.error.indexOf('not found for context') !== -1) {
+                return writeModelFile(fname, itemName.replace('widget-', ''), true);
+            } else {
+                throw new Error(res.error);
+            }
+        }
+        var xml = parseRawModel(_.unescape(res.body), cfg.cli.edge, widgetTry);
+        // if (cfg.cli.edge) {
+        //     console.log(xml);
+        //     return true;
+        // }
+        return fs.writeFileAsync(fname, xml)
         .then(function() {
-            console.log(fname + ' saved.');
+            console.log(chalk.green(fname) + ' saved.');
         });
     })
     .catch(function(e) {
-        console.log(e);
+        console.log(chalk.red('bb sync'), e.toString());
     });
 }
 

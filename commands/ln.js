@@ -1,11 +1,6 @@
 var Command = require('ronin').Command;
-var Q = require('q');
-var fs = require('fs-extra');
+var fs = require('fs-extra-promise');
 var path = require('path');
-var readFile = Q.denodeify(fs.readFile);
-var readDir = Q.denodeify(fs.readdir);
-var remove = Q.denodeify(fs.remove);
-var lstat = Q.denodeify(fs.lstat);
 var utils = require('../lib/util');
 var createLink = require('../lib/createLink');
 var chalk = require('chalk');
@@ -103,11 +98,11 @@ function doLink(src, target, opts) {
 }
 
 function doUnlink(target) {
-    return lstat(target)
+    return fs.lstatAsync(target)
         .then(function(stats) {
             if (stats.isSymbolicLink()) {
                 console.log('Removing ' + chalk.gray(target));
-                return remove(target)
+                return fs.removeAsync(target)
                 .then(function() {
                     utils.ok('Done.');
                 });
@@ -123,11 +118,11 @@ function doUnlink(target) {
 
 // if target exists fails, if forced removes it
 function removeTarget(target, opts) {
-    return lstat(target)
+    return fs.lstatAsync(target)
     .then(function() {
         if (!opts.force) throw new Error('Target ' + chalk.gray(target) + ' exists. Use ' + chalk.bold('--force') + ' flag to remove it before linking.');
         console.log('Removing ' + chalk.gray(target));
-        return remove(target);
+        return fs.removeAsync(target);
     })
     .catch(function(e) {
         if (e.code === 'ENOENT') return true;
@@ -141,7 +136,7 @@ function error(err) {
 
 // returns manifest data from bower.json or package.json from the given dir
 function getManifest(dir) {
-    return readDir(dir)
+    return fs.readdirAsync(dir)
     .then(function(files) {
         var ind, pack;
         if (((ind = files.indexOf('bower.json')) !== -1) || (ind = files.indexOf('package.json')) !== -1) {
@@ -149,7 +144,7 @@ function getManifest(dir) {
         } else {
             throw new Error('No bower.json or package.json found on target path: ' + chalk.green(dir));
         }
-        return readFile(pack)
+        return fs.readFileAsync(pack)
         .then(function(str) {
             return JSON.parse(str.toString());
         })

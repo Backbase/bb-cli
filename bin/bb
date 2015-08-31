@@ -1,13 +1,14 @@
 #!/usr/bin/env node
 
+Object.assign = Object.assign || require('object-assign'); // fixes https://github.com/vdemedes/ronin/issues/19
 var ronin = require('ronin');
 var path = require('path');
 var chalk = require('chalk');
-var program = ronin(path.join(__dirname, '..'));
+var dirname = __dirname.substr(0, 1).toUpperCase() + __dirname.substr(1);
+var program = ronin(path.join(dirname, '..'));
 var util = require('../lib/util');
-var fs = require('fs');
-
-var version = JSON.parse(fs.readFileSync(path.join(__dirname, '../package.json'))).version;
+var pkg = require('../package.json');
+var updateNotifier = require('update-notifier');
 
 // Changing the limit for listeners, since we work ofter with remote calls
 require('events').EventEmitter.prototype._maxListeners = 100;
@@ -17,10 +18,10 @@ program.set({
         util.backbase();
 
         var title = chalk.bold;
-        var r = '\n  ' + title('Version') + ': ' + version;
+        var r = '  ' + title('Version') + ': ' + pkg.version;
         r += '\n\n  ' + title('Usage') + ': bb <command> [OPTIONS]';
-        r += '\n\n  ' + title('Commands') + ': achetype (arch), export, import, generate, rest, sync, ln, install.';
-
+        r += '\n\n  ' + title('Commands') + ': achetype (arch), export, import, import-item, import-collection, generate, rest, sync, ln, install.';
+        r += '\n\n';
         return r;
     }
 });
@@ -33,3 +34,11 @@ program.autoupdate(function () {
         util.err(e.stack);
     }
 });
+
+var notifier = updateNotifier({
+    pkg: pkg
+    // updateCheckInterval: 1000 * 60 * 60 * 24 * 7 // 1 week 
+});
+
+notifier.notify();
+
