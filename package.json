@@ -49,7 +49,6 @@
     "map-stream": "0.0.5",
     "node-fs-extra": "^0.8.1",
     "mosaic-rest-js": "^0.3.3",
-    "mvn-credentials": "^0.3.0",
     "object-assign": "^3.0.0",
     "promised-temp": "^0.1.0",
     "q": "^1.1.2",
