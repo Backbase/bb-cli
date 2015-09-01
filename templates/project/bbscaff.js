@@ -24,7 +24,7 @@ module.exports = function(bbscaff){
             name: 'launchpad-edition',
             message: 'launchpad-edition',
             type: 'list',
-            choices: ['banking', 'universal']
+            choices: ['retail', 'universal']
         }
 
 
