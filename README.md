@@ -10,7 +10,6 @@ Scaffold new components, navigate through archetypes and work with REST API help
 
 ## Table of contents
 
-- [Archetype](#archetype)
 - [Generate](#generate)
 - [Export](#export)
 - [Import](#import)
@@ -41,22 +40,6 @@ Global help is also available:
 bb -h
 ```
 
-### <a name="archetype"></a>Archetype
-
-You can check out a new `mvn archetype` by executing the command:
-
-```
-bb archetype
-```
-
-Or use its short version:
-
-```
-bb arch
-```
-
-Read more about Archetype API [here](/docs/archetype.md).
-
 ### <a name="generate"></a>Generate
 
 Scaffold new widgets, containers and other Backbase CXP components.
@@ -69,6 +52,10 @@ bb generate widget
 
 ```
 bb generate container
+```
+
+```
+bb generate project
 ```
 
 ##### Launchpad 0.12 Generators
@@ -175,9 +162,9 @@ bb import-collection [OPTIONS]
 ```
 
 Imports a collection of items into the portal.
-This tool gets information from the bower and zip for every component, then uploads it via REST API (import package) to the server.  
+This tool gets information from the bower and zip for every component, then uploads it via REST API (import package) to the server.
 
-All components should contain `model.xml` files. Any component without a `model.xml` file is ignored, unless the  `--auto` option is set, in which case the component will be installed to the portal as a feature. 
+All components should contain `model.xml` files. Any component without a `model.xml` file is ignored, unless the  `--auto` option is set, in which case the component will be installed to the portal as a feature.
 
 The version property is automatically added to each item.
 
@@ -186,7 +173,7 @@ Or you can define those properties inside a `.bbrc` file.
 
 ##### Requirements
 
-Backbase CXP v5.6  
+Backbase CXP v5.6
 [Bower](http://bower.io')
 
 ##### Options
@@ -220,7 +207,7 @@ bb import-item [OPTIONS]
 ```
 
 Imports item to the portal.
-This tool zips the targeted directory, then uploads it to the server via REST API(import package).  
+This tool zips the targeted directory, then uploads it to the server via REST API(import package).
 
 Target directory should contain `model.xml` file.
 If `--watch` option is set, component will be installed to the portal as feature.
@@ -231,7 +218,7 @@ Or you can define those properties inside `.bbrc` file.
 
 #### Requirements
 
-Backbase CXP v5.6  
+Backbase CXP v5.6
 
 ##### Options
 
