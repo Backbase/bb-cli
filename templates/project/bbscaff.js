@@ -11,7 +11,7 @@ module.exports = function(bbscaff){
             name: 'artifactId',
             message: 'artifactId',
             'default': function(answers){
-                return answers.groupId.split('.').pop()
+                return answers.groupId.split('.').pop();
             }
         },
         {
@@ -30,9 +30,9 @@ module.exports = function(bbscaff){
 
     ], function(answers){
         bbscaff.archetype(answers, {
-            'archetypeArtifactId': 'launchpad-archetype-CXP5.6',
-            'archetypeGroupId': 'com.backbase.launchpad',
-            'archetypeVersion': '1.0.0-RC'
+            archetypeArtifactId: 'launchpad-archetype-CXP5.6',
+            archetypeGroupId: 'com.backbase.launchpad',
+            archetypeVersion: '1.0.0-RC'
         }, function(){
             console.log('You can now $ cd ' + answers.artifactId);
         });
