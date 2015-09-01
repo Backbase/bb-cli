@@ -29,11 +29,11 @@ Prompt necessary questions to inject data in your templates. Please see [Inquire
 
 ``` js
 bbscaff.prompt([{
-		name: 'name',
-		message: 'Name'
-	}], function(answers){
+        name: 'name',
+        message: 'Name'
+    }], function(answers){
 
-	})
+    })
 })
 ```
 
@@ -45,6 +45,22 @@ If you want to rename files, just put the variable in the name of your file betw
 
 ``` js
 bbscaff.generate(answers, answers.widget_name, function(){})
+```
+
+--------------------
+
+##### bbscaff.archetype(answers, options, callback)
+Uses Maven Archetype to generate files. It will convert answers into Maven arguments. For example if `answers = {groupId: 'com.mycompany.project'}` it will use `-DgroupId=com.mycompany.project` when generating the archetype.
+
+
+``` js
+bbscaff.archetype(answers, {
+    archetypeArtifactId: 'launchpad-archetype-CXP5.6',
+    archetypeGroupId: 'com.backbase.launchpad',
+    archetypeVersion: '1.0.0-RC'
+}, function(){
+    console.log('my callback')
+})
 ```
 
 --------------------
@@ -69,8 +85,8 @@ Used to make requests to the portalserver REST Api. It handles authentication an
 
 ``` js
 fs.readFile('file.xml'), "utf8", function(err, content){
-	if(err) return;
-	bbscaff.request({url: 'http://localhost:7777/portalserver/catalog', body: content}, function(err, httpResponse, body){})
+    if(err) return;
+    bbscaff.request({url: 'http://localhost:7777/portalserver/catalog', body: content}, function(err, httpResponse, body){})
 })
 ```
 
@@ -78,13 +94,13 @@ fs.readFile('file.xml'), "utf8", function(err, content){
 
 ``` js
 module.exports = function(bbscaff){
-	bbscaff.prompt([
-		{
-			name: 'name',
-			message: 'Name'
-		}
-	], function(answers){
-		bbscaff.generate(answers, answers.name)
-	})
+    bbscaff.prompt([
+        {
+            name: 'name',
+            message: 'Name'
+        }
+    ], function(answers){
+        bbscaff.generate(answers, answers.name)
+    })
 }
 ```
