@@ -417,9 +417,14 @@ Where the `.bbrc` file contains this conf:
 
 ```
 {
-"context": "/",
-"username": "me",
-"password": "it's me"
+  "scheme": "http",
+  "host": "localhost",
+  "port": "7777",
+  "context": "portalserver",
+  "username": "me",
+  "password": "it's me",
+  "portal": "myportal",
+  "path": "/path/to/the/portalserver"
 }
 ```
 
