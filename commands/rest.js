@@ -14,6 +14,7 @@ module.exports = Command.extend({
         var r = '\n  ' + title('Usage') + ': bb ' + this.name + ' [OPTIONS]';
         r += '\n\t Command line version of Backbase Rest API library. https://github.com/Backbase/mosaic-rest-js';
         r += '\n\n  ' + title('Options') + ': -short, --name <type> ' + d('default') + ' description\n\n';
+        r += '      -S,  --scheme <string>\t\t' + d('http') + '\t\tThe scheme of the rest api call.\n';
         r += '      -H,  --host <string>\t\t' + d('localhost') + '\tThe host name of the server running portal foundation.\n';
         r += '      -P,  --port <number>\t\t' + d('7777') + '\t\tThe port of the server running portal foundation.\n';
         r += '      -c,  --context <string>\t\t' + d('portalserver') + '\tThe application context of the portal foundation.\n';
@@ -30,6 +31,7 @@ module.exports = Command.extend({
         r += '      -x,  --empty-cache\t\t\t\tShortcut to empty all server caches.\n';
         r += '      -v,  --verbose\t\t\t\t\tPrints detailed output.\n';
         r += '      -s,  --save <string>\t\t\t\tSaves response into file.\n';
+        r += '      -i,  --info\t\t\t\t\tDisplays REST API call information.\n';
         r += '\n  ' + title('Examples') + ':\n\n';
         r += '      bb rest\t\t\t\t\t\tReturns portals defined on the server.\n';
         r += '      bb rest -t catalog -T zak -m delete\t\tDeletes item zak from the server.\n';
@@ -38,6 +40,7 @@ module.exports = Command.extend({
     },
 
     options: {
+        scheme: {type: 'string', alias: 'S'},
         host: {type: 'string', alias: 'H'},
         port: {type: 'string', alias: 'P'},
         context: {type: 'string', alias: 'c'},
@@ -54,7 +57,8 @@ module.exports = Command.extend({
         'empty-cache': {type: 'boolean', alias: 'x'},
         verbose: {type: 'boolean', alias: 'v'},
         json: {type: 'boolean', alias: 'j'},
-        save: {type: 'string', alias: 's'}
+        save: {type: 'string', alias: 's'},
+        info: {type: 'boolean', alias: 'i'}
     },
 
     run: function () {
@@ -64,6 +68,9 @@ module.exports = Command.extend({
             bbrest = r.bbrest;
 
             cfg = r.config.cli;
+
+            if (cfg.info) logInfo(bbrest.config);
+
             cfg.targetArg = tryParseJSON(cfg.targetArg) || [cfg.targetArg];
             cfg.file = tryParseJSON(cfg.file) || cfg.file;
             cfg.query = tryParseJSON(cfg.query);
@@ -106,8 +113,9 @@ function sendRequest(creq) {
         cfg = creq || cfg;
 
         if (cfg.portal) bbrest.config.portal = cfg.portal;
-        if (['server', 'user', 'group', 'audit', 'cache', 'catalog', 'template'].indexOf(cfg.target) === -1 && !bbrest.config.portal)
+        if (['server', 'user', 'group', 'audit', 'cache', 'catalog', 'template'].indexOf(cfg.target) === -1 && !bbrest.config.portal) {
             throw new Error('portal is not defined');
+        }
         var r = bbrest[cfg.target];
 
         if (cfg.rights) {
@@ -132,4 +140,36 @@ function sendRequest(creq) {
             });
         });
     }
+}
+
+function logInfo(restConfig, indent) {
+    indent = indent || '';
+    var out = [];
+    var later = [];
+    var lengthMax = 0;
+    _.each(restConfig, function(val, key) {
+        if (typeof val === 'object') {
+            if (!(val instanceof Array) && val !== null) {
+                later.push([key, val]);
+                return;
+            }
+        } else if (typeof val === 'function') {
+            val = '[Function]';
+        }
+        if (lengthMax < key.length) lengthMax = key.length;
+        out.push([indent, key, '  ', chalk.gray(val)]);
+    });
+    _.each(out, function(log) {
+        log[2] = getSpaces(lengthMax - log[1].length);
+        console.log.apply(this, log);
+    });
+    _.each(later, function(larr) {
+        console.log(indent, chalk.underline(larr[0]));
+        logInfo(larr[1], indent + '  ');
+    });
+}
+function getSpaces(len) {
+    var out = '';
+    for (var i = 0; i < len; i++) out += ' ';
+    return out;
 }
