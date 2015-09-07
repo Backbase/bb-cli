@@ -7,6 +7,8 @@ var _ = require('lodash');
 var jxon = require('jxon');
 var watch = require('watch');
 var path = require('path');
+var Q = require('q');
+var inquirer = require('inquirer');
 
 var zipDir = require('../lib/zipDir');
 
@@ -101,8 +103,24 @@ function prepareModel() {
     return model.read(path.resolve(cfg.target, 'model.xml'))
     .then(getVersionFromBower)
     .catch(function(err) {
-        if (err.code === 'ENOENT' && cfg.auto) {
-            return getVersionFromBower();
+        if (err.code === 'ENOENT') {
+            if (cfg.auto) {
+                return getVersionFromBower();
+            } else {
+                var defer = Q.defer();
+                inquirer.prompt([{
+                    message: "'model.xml' does not exist. Auto submit one?",
+                    name: 'saveModel',
+                    type: 'confirm'
+                }], function(prm) {
+                    if (prm.saveModel) defer.resolve();
+                    else defer.reject();
+                });
+                return defer.promise
+                .then(function() {
+                    return getVersionFromBower();
+                });
+            }
         }
         throw err;
     });
