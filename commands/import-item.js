@@ -26,6 +26,7 @@ module.exports = Command.extend({
         r += '\n\n  ' + title('Options') + ': -short, --name <type> ' + d('default') + ' description\n';
         r += '      -t,  --target <string>\t\t' + '\t\tDir to import.\n';
         r += '      -w,  --watch <boolean>\t\t' + '\t\tWatch for file changes in the current dir and autosubmit.\n';
+        r += '      -l,  --collection <boolean>\t\t' + '\t\tWatch collection directory tree for changes.\n';
         r += '      -a,  --auto <boolean>\t\t' + '\t\tAuto create model.xml if doesn\'t exist.\n';
         r += '      -n,  --name <boolean>\t\t' + '\t\tName of the feature to auto create before reading bower.json\n';
         r += '      -v,  --version <boolean>\t\t' + '\t\tVersion of the feature to auto create before reading bower.json\n';
@@ -43,6 +44,7 @@ module.exports = Command.extend({
     options: {
         target: {type: 'string', alias: 't', default: './'},
         watch: {type: 'boolean', alias: 'w'},
+        collection: {type: 'boolean', alias: 'l'},
         auto: {type: 'boolean', alias: 'a'},
         name: {type: 'string', alias: 'n'},
         version: {type: 'string', alias: 'v'},
@@ -58,7 +60,7 @@ module.exports = Command.extend({
             cfg = r.config.cli;
             model = modelXml(jxon);
 
-            if (cfg.watch) {
+            if (cfg.collection) {
                 watch.watchTree(cfg.target, {
                     ignoreDotFiles: true,
                     ignoreUnreadableDir: true,
@@ -67,27 +69,38 @@ module.exports = Command.extend({
                         var v = exclude.indexOf(fileName);
                         return (v === -1);
                     }
-                }, onWatch);
-                output(chalk.cyan('Watching...'));
-            }
+                }, onWatchCollection);
+            } else {
 
-            return run();
+                if (cfg.watch) {
+                    watch.watchTree(cfg.target, {
+                        ignoreDotFiles: true,
+                        ignoreUnreadableDir: true,
+                        ignoreNotPermitted: true,
+                        filter: function(fileName) {
+                            var v = exclude.indexOf(fileName);
+                            return (v === -1);
+                        }
+                    }, onWatch);
+                }
+
+                return run(cfg.target);
+            }
         });
 
     }
 });
 
-function run() {
-    return prepareModel()
+function run(target) {
+    return prepareModel(target)
     .then(function() {
-        name = model.getName() + ' v' + model.getProperty('version');
         // console.log(model.getXml());
         // return;
         var replacements = {
             'model.xml': model.getXml()
         };
         output('Creating zip...');
-        return zipDir(cfg.target, exclude, replacements)
+        return zipDir(target, exclude, replacements)
         .then(function(zip) {
             return bbrest.importItem().file(zip.path).post()
             .then(function(r) {
@@ -98,7 +111,8 @@ function run() {
                 var body = jxon.stringToJs(_.unescape(r.body)).import;
                 if (body.level === 'ERROR') throw new Error(body.message);
                 zip.clean();
-                ok(r);
+                name = model.getName() + ' v' + model.getProperty('version');
+                ok(r, name);
             });
         });
     })
@@ -107,15 +121,15 @@ function run() {
     });
 }
 
-function prepareModel() {
+function prepareModel(target) {
     output('Reading model.xml...');
-    return model.read(path.resolve(cfg.target, 'model.xml'))
+    return model.read(path.resolve(target, 'model.xml'))
     .then(function() {
         if (!model.getProperty('version')) {
             if (cfg.version) {
                 model.addProperty('version', cfg.version);
             } else {
-                return getBowerJson()
+                return getBowerJson(target)
                 .then(function(bjson) {
                     if (bjson.version) model.addProperty('version', bjson.version);
                     else return addZeroVersion(model);
@@ -155,7 +169,7 @@ function prepareModel() {
                     }
                 }
 
-                return getBowerJson()
+                return getBowerJson(target)
                 .then(function(bjson) {
                     if (!cfg.name) model.createFeature(bjson.name);
                     if (cfg.version) model.addProperty('version', cfg.version);
@@ -172,9 +186,9 @@ function prepareModel() {
     });
 }
 
-function getBowerJson() {
+function getBowerJson(target) {
     output('Reading bower.json...');
-    return fs.readFileAsync(path.resolve(cfg.target, 'bower.json'))
+    return fs.readFileAsync(path.resolve(target, 'bower.json'))
     .then(function(bjson) {
         try {
             bjson = JSON.parse(bjson.toString());
@@ -183,27 +197,6 @@ function getBowerJson() {
         }
         return bjson;
     });
-}
-
-function onWatch(fileName, curStat, prevStat) {
-    // if (typeof f === 'object' && prevStat === null && curStat === null) {
-    //     // Finished walking the tree
-    //     // file is object where key is fileName and value is stat
-    // } else
-    if (prevStat === null) {
-        if (typeof fileName !== 'string') return;
-        // f is a new file
-        output(chalk.gray(fileName) + ' created.');
-        run();
-    } else if (curStat.nlink === 0) {
-        // f was removed
-        output(chalk.gray(fileName) + ' removed.');
-        run();
-    } else {
-        output(chalk.gray(fileName) + ' changed.');
-        run();
-        // f was changed
-    }
 }
 
 function addZeroVersion(model) {
@@ -217,7 +210,59 @@ function output() {
 function error(err) {
     util.err(chalk.red('bb import-item: ') + (err.message || err.error));
 }
-function ok(r) {
-    util.ok(chalk.yellow(name) + ' imported from ' + chalk.green(cfg.target));
+function ok(r, name) {
+    util.ok(chalk.yellow(name) + ' imported');
     return r;
+}
+
+function onWatch(fileName, curStat, prevStat) {
+    if (typeof f === 'object' && prevStat === null && curStat === null) {
+        console.log(chalk.cyan('Watching...'));
+        // Finished walking the tree
+        // file is object where key is fileName and value is stat
+    } else {
+        if (prevStat === null) {
+            if (typeof fileName !== 'string') return;
+            // f is a new file
+            output(chalk.gray(fileName) + ' created.');
+            run(cfg.target);
+        } else if (curStat.nlink === 0) {
+            // f was removed
+            output(chalk.gray(fileName) + ' removed.');
+            run(cfg.target);
+        } else {
+            output(chalk.gray(fileName) + ' changed.');
+            run(cfg.target);
+            // f was changed
+        }
+    }
+}
+var dirs = {};
+function onWatchCollection(f, curStat, prevStat) {
+    var p;
+    if (typeof f === 'object' && prevStat === null && curStat === null) {
+        _.each(f, function(v, k) {
+            p = path.dirname(k).split(path.sep)[0];
+            dirs[p] = path.resolve(p);
+        });
+        console.log(chalk.cyan('Watching Collection...'));
+        // Finished walking the tree
+        // file is object where key is fileName and value is stat
+    } else {
+        p = path.dirname(f).split(path.sep)[0];
+        if (prevStat === null) {
+            if (typeof f !== 'string') return;
+            // f is a new file
+            output(chalk.gray(f) + ' created.');
+            run(dirs[p]);
+        } else if (curStat.nlink === 0) {
+            // f was removed
+            output(chalk.gray(f) + ' removed.');
+            run(dirs[p]);
+        } else {
+            output(chalk.gray(f) + ' changed.');
+            run(dirs[p]);
+            // f was changed
+        }
+    }
 }
