@@ -10,6 +10,8 @@ var unzip = require('../lib/unzip');
 var temp = require('promised-temp');
 var request = require('request-promise');
 var inquirePortal = require('../lib/inquirePortal');
+var formattor = require('formattor');
+var Cmis = require('../lib/cmis');
 
 var Command = require('ronin').Command;
 
@@ -65,22 +67,10 @@ module.exports = Command.extend({
             return unzip(cfg.target)
             .then(function(path) {
                 unzipPath = path;
+
                 console.log('Parsing export data...');
                 return fs.readJsonAsync(path + 'page-export.json')
-                .then(function(data) {
-                    return checkCatalogItems(data.catalog)
-                    .then(function() {
-
-                        return importContainers(data.container)
-                        .then(function() {
-                            return importWidgets(data.widget)
-                            .then(function() {
-                                return importPage(data);
-                                
-                            });
-                        });
-                    });
-                });
+                .then(parseExport);
             });
 
         })
@@ -93,6 +83,11 @@ module.exports = Command.extend({
     }
 });
 
+function parseExport(data) {
+    return checkCatalogItems(data)
+    .then(importItems);
+}
+
 // function getPortal() {
 //     if (bbrest.config.portal) return Q(bbrest.config.portal);
 //     return inquirePortal(bbrest, jxon);
@@ -101,7 +96,7 @@ module.exports = Command.extend({
 function checkCatalogItems(data) {
     var all = [];
     var cnt = 0;
-    for (var itemName in data) {
+    for (var itemName in data.catalog) {
         cnt++;
         all.push(
             bbrest.catalog(itemName).get()
@@ -118,31 +113,39 @@ function checkCatalogItems(data) {
             }
         });
         if (errors) {
-            //throw new Error('Problem checking for catalog items');
+            throw new Error('Problem checking for catalog items');
         }
-    });
-}
-function importPage(obj) {
-    console.log('Importing page...');
-    return putOrPost('container', obj.manageable[0])
-    .then(function() {
-        return putOrPost('page', obj.page)
-        .then(function() {
-            if (obj.link) return putOrPost('link', obj.link);
-        });
+        return data;
     });
 }
 
-function importContainers(conts) {
-    console.log('Importing ' + conts.length + ' containers...');
+function importItems(data) {
+    console.log('Importing items...');
     var all = [];
-    _.each(conts, function(cont) {
+    all.push({
+        type: 'link',
+        jx: data.link
+    });
+    all.push({
+        type: 'page',
+        jx: data.page
+    });
+
+    addItems(all, data, 'container');
+    addItems(all, data, 'widget');
+    return waterfall(all)
+    .then(function() {
+        return data;
+    });
+}
+
+function addItems(all, data, type) {
+    _.each(data[type], function(jx) {
         all.push({
-            type: 'container',
-            jx: cont
+            type: type,
+            jx: jx
         });
     });
-    return waterfall(all);
 }
 
 function waterfall(all) {
@@ -154,38 +157,79 @@ function waterfall(all) {
 }
 
 function putOrPost(type, jx) {
+    delete jx.children;
     var njx = {};
     var one = {};
     one[type] = jx;
     njx[type + 's'] = one;
     var req = bbrest[type]();
+    var contents;
     req.headers.Connection = 'keep-alive';
+    if (jx.referencedContentItems) {
+        contents = _.cloneDeep(jx.referencedContentItems);
+        delete jx.referencedContentItems;
+    }
+    // console.log(formattor(jxon.jsToString(njx), {method: 'xml'}));
     return req.put(njx)
     .then(function(res) {
-        if (res.error && res.statusCode === 404) {
-            return bbrest[type]().post(one)
-            .then(function() {
-                console.log(chalk.gray(jx.name) + ' ' + chalk.yellow('post') + ' ' + chalk.green('OK'));
-            });
+        if (res.statusCode >= 400) {
+            return bbrest[type]().post(one);
+        }
+        return res;
+    })
+    .then(function(res) {
+        var out = [jx.name, chalk.yellow(res.method), chalk.gray(res.href)];
+        if (res.statusCode < 300) {
+            out.unshift(chalk.green(res.statusCode));
+            console.log(out.join(' '));
+            if (contents) {
+                return importContent(jx, contents);
+            }
+            if (type === 'page') {
+                bbrest.page(jx.name).get()
+                .then(function(res) {
+                    var pjx = jxon.stringToJs(_.unescape(res.body));
+                    var panels = pjx.page.children.container.children.container.children.container;
+                    var our = _.find(panels, {name: 'panel-container-533529'});
+                    console.log(our.children.container);
+                });
+            }
         } else {
-            console.log(chalk.gray(jx.name) + ' ' + chalk.yellow('put') + ' ' + chalk.green('OK'));
+            out.unshift(chalk.red(res.statusCode));
+            out.push(res.error || res.body);
+            console.log(out.join(' '));
         }
     });
 }
-
-function importWidgets(widgs) {
-    console.log('Importing ' + widgs.length + ' widgets...');
-    var all = [];
-    _.each(widgs, function(widg) {
-        all.push({
-            type: 'widget',
-            jx: widg
-        });
-        // if (widg.referencedContentItems) {
-        //     // console.log(widg.referencedContentItems);
-        // }
+function deleteItem(type, jx) {
+    return bbrest[type](jx.name).delete()
+    .then(function(res) {
+        console.log(chalk.green('OK') + ' ' + jx.name + ' ' + chalk.yellow(res.method) + ' ' + chalk.gray(res.href));
     });
-    return waterfall(all);
+}
+
+function importContent(jx, contents) {
+    console.log(chalk.yellow('POST') + ' CONTENT ' + chalk.gray(jx.name));
+    var all = [];
+    _.each(contents, function(val, key) {
+        var cmis = new Cmis({
+            path: val.cmis.path,
+            type: val.cmis.objectTypeId
+        }, bbrest.config, jxon);
+
+        if (val.cmis.objectTypeId === 'bb:richtext') {
+            all.push(cmis.importText(val.content));
+        } else if (val.cmis.objectTypeId === 'bb:image') {
+            all.push(cmis.importImage(path.resolve(unzipPath, val.cmis.objectId, val.bb.title)));
+        }
+    });
+    return Q.all(all)
+    .then(function(rall) {
+        console.log(chalk.green('OK') + ' CONTENT ' + chalk.gray(jx.name));
+    })
+    .catch(function(err) {
+        console.log(chalk.red('ERR') + ' CONTENT ' + chalk.gray(jx.name));
+    });
 }
 
 function error(err) {

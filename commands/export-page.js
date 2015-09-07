@@ -5,7 +5,7 @@ var _ = require('lodash');
 var Q = require('q');
 var fs = require('fs-extra-promise');
 var path = require('path');
-var cmis = require('../lib/cmis');
+var cmisParse = require('../lib/cmis-parse');
 var zipDir = require('../lib/zipDir');
 var temp = require('promised-temp');
 var request = require('request-promise');
@@ -74,10 +74,11 @@ module.exports = Command.extend({
             return getPortal()
             .then(function(portal) {
                 bbrest.config.portal = portal;
-                util.spin.start();
+                console.log(chalk.yellow('GET'), 'page', chalk.gray(portal + ' > ' + cfg.name));
                 return getPageByName(cfg.name)
                 .then(function(page) {
                     var siblings = getNewPageCollection(page);
+                    console.log(chalk.yellow('GET'), 'link for uuid:', chalk.gray(page.uuid));
                     return getLink(page.uuid)
                     .then(function(link) {
                         siblings.link = link;
@@ -101,8 +102,10 @@ module.exports = Command.extend({
 });
 
 function parsePage(page, siblings) {
+    console.log(chalk.yellow('PARSE'), 'page');
     return traverseChildren(page, siblings)
     .then(function() {
+        console.log(chalk.yellow('SAVE'), 'archive', chalk.gray(cfg.save));
         return saveAndZip(siblings)
         .then(function(zip) {
             var moveOpts = {};
@@ -168,8 +171,7 @@ function getNewPageCollection(page) {
         widget: [],
         // items that are extended + templates of the container
         // check if those exist before importing
-        catalog: {},
-        manageable: []
+        catalog: {}
     };
 }
 
@@ -182,19 +184,6 @@ function getLink(uuid) {
     })
     .catch(function(err) {
         console.log('Error getting link for ItemRef = ' + uuid);
-        throw err;
-    });
-}
-
-function getManageableInstance(name, obj) {
-    return bbrest.container(name).query({depth: 20}).get()
-    .then(function(res) {
-        var marea = jxon.stringToJs(_.unescape(res.body)).container;
-        console.log(marea);
-        obj.manageable.push(marea);
-    })
-    .catch(function(err) {
-        console.log('Error getting ' + name);
         throw err;
     });
 }
@@ -232,7 +221,7 @@ function traverseChildren(item, siblings) {
 
 function add(item, type, obj) {
     var ca = obj[type];
-    var images = [];
+    var all = [];
 
     if (type === 'container') {// add template to catalog dependencies
         var props = item.properties.property;
@@ -242,24 +231,40 @@ function add(item, type, obj) {
     // add parent to cataog dependencies
     if (item.extendedItemName && !obj.catalog[item.extendedItemName]) {
         if (item.extendedItemName.indexOf('Manageable_Area_Closure-') !== -1) {
-            images.push(getManageableInstance(item.extendedItemName, obj));
+            all.push(getManageableInstance(item.extendedItemName, obj, item));
         } else {
             obj.catalog[item.extendedItemName] = true;
         }
     }
     if (item.extendedItemName === 'widget-advanced-content') {
-        var parsed = cmis.parse(item.referencedContentItems);
+        console.log('adv', chalk.gray(item.name), item.parentItemName);
+        var parsed = cmisParse(item.referencedContentItems);
         item.referencedContentItems = parsed;
         _.each(parsed, function(content) {
             if (content.cmis.objectTypeId === 'bb:image') {
                 var imgPath = 'http://' + bbrest.config.host + ':' + bbrest.config.port + content.path;
-                images.push(writeImage(content.bb.title, content.cmis.objectId, imgPath));
+                all.push(writeImage(content.bb.title, content.cmis.objectId, imgPath));
             }
         });
     }
     ca.unshift(item);
-    if (images) return Q.all(images);
+    if (all) return Q.all(all);
     return Q(true);
+}
+
+function getManageableInstance(name, obj, item) {
+    return bbrest.container(name).query({depth: 20}).get()
+    .then(function(res) {
+        var marea = jxon.stringToJs(_.unescape(res.body)).container;
+        item.parentItemName = marea.parentItemName;
+        //item.extendedItemName = 'Manageable_Area_Closure';
+        //console.log(item);
+        obj.container.push(marea);
+    })
+    .catch(function(err) {
+        console.log('Error getting ' + name);
+        throw err;
+    });
 }
 
 var tempDir;
@@ -291,11 +296,9 @@ function saveAndZip(expo) {
     });
 }
 function error(err) {
-    util.spin.stop();
     util.err(chalk.red('bb export-pages: ') + (err.message || err.error));
 }
 function ok(r) {
-    util.spin.stop();
     util.ok('Done.');
     return r;
 }
