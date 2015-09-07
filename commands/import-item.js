@@ -25,8 +25,10 @@ module.exports = Command.extend({
         r += '\n\t Zips and imports item.';
         r += '\n\n  ' + title('Options') + ': -short, --name <type> ' + d('default') + ' description\n';
         r += '      -t,  --target <string>\t\t' + '\t\tDir to import.\n';
-        r += '      -w,  --watch <boolean>\t\t' + '\t\tWatch for file changes in the current dir and autosubmit.\n\n';
-        r += '      -a,  --auto <boolean>\t\t' + '\t\tAuto create model.xml if doesn\'t exist.\n\n';
+        r += '      -w,  --watch <boolean>\t\t' + '\t\tWatch for file changes in the current dir and autosubmit.\n';
+        r += '      -a,  --auto <boolean>\t\t' + '\t\tAuto create model.xml if doesn\'t exist.\n';
+        r += '      -n,  --name <boolean>\t\t' + '\t\tName of the feature to auto create before reading bower.json\n';
+        r += '      -v,  --version <boolean>\t\t' + '\t\tVersion of the feature to auto create before reading bower.json\n\n';
 
         r += '      -H,  --host <string>\t\t' + d('localhost') + '\tThe host name of the server running portal foundation.\n';
         r += '      -P,  --port <number>\t\t' + d('7777') + '\t\tThe port of the server running portal foundation.\n';
@@ -75,6 +77,8 @@ function run() {
     return prepareModel()
     .then(function() {
         name = model.getName() + ' v' + model.getProperty('version');
+        // console.log(model.getXml());
+        // return;
         var replacements = {
             'model.xml': model.getXml()
         };
@@ -83,6 +87,7 @@ function run() {
         .then(function(zip) {
             return bbrest.importItem().file(zip.path).post()
             .then(function(r) {
+                console.log(r);
                 if (r.error) {
                     throw new Error('Rest API Error: ' + r.statusInfo);
                 }
@@ -101,38 +106,78 @@ function run() {
 function prepareModel() {
     console.log('Reading model.xml...');
     return model.read(path.resolve(cfg.target, 'model.xml'))
-    .then(getVersionFromBower)
+    .then(function() {
+        if (!model.getProperty('version')) {
+            if (cfg.version) {
+                model.addProperty('version', cfg.version);
+            } else {
+                return getBowerJson()
+                .then(function(bjson) {
+                    if (bjson.version) model.addProperty('version', bjson.version);
+                    else return addZeroVersion(model);
+                })
+                .catch(function() {
+                    return addZeroVersion(model);
+                });
+            }
+        }
+    })
     .catch(function(err) {
         if (err.code === 'ENOENT') {
+            var defer = Q.defer();
+            console.log(chalk.gray('model.xml') + ' is not found.');
+
             if (cfg.auto) {
-                return getVersionFromBower();
+                defer.resolve();
             } else {
-                var defer = Q.defer();
                 inquirer.prompt([{
-                    message: "'model.xml' does not exist. Auto submit one?",
+                    message: 'Auto submit one?',
                     name: 'saveModel',
                     type: 'confirm'
                 }], function(prm) {
                     if (prm.saveModel) defer.resolve();
-                    else defer.reject();
-                });
-                return defer.promise
-                .then(function() {
-                    return getVersionFromBower();
+                    else defer.reject(new Error('Can not import item without model.xml'));
                 });
             }
+
+            return defer.promise
+            .then(function() { // --auto options is on
+                console.log('Creating model.xml for feature...');
+                if (cfg.name) {
+                    model.createFeature(cfg.name);
+                    if (cfg.version) {
+                        model.addProperty('version', cfg.version);
+                        return;
+                    }
+                }
+
+                return getBowerJson()
+                .then(function(bjson) {
+                    if (!cfg.name) model.createFeature(bjson.name);
+                    if (cfg.version) model.addProperty('version', cfg.version);
+                    else if (bjson.version) model.addProperty('version', bjson.version);
+                    else return addZeroVersion(model);
+                });
+            })
+            .catch(function(err) {
+                console.log('Can not auto create model.xml');
+                throw err;
+            });
         }
         throw err;
     });
 }
 
-function getVersionFromBower() {
+function getBowerJson() {
     console.log('Reading bower.json...');
     return fs.readFileAsync(path.resolve(cfg.target, 'bower.json'))
     .then(function(bjson) {
-        bjson = JSON.parse(bjson.toString());
-        if (cfg.auto && model.isEmpty()) model.createFeature(bjson.name);
-        if (bjson.version) model.addProperty('version', bjson.version);
+        try {
+            bjson = JSON.parse(bjson.toString());
+        } catch(err) {
+            throw new Error('Error while parsing bower.json');
+        }
+        return bjson;
     });
 }
 
@@ -154,6 +199,11 @@ function onWatch(fileName, curStat, prevStat) {
         run();
         // f was changed
     }
+}
+
+function addZeroVersion(model) {
+    model.addProperty('version', '0.0.0-alpha.0');
+    console.log('Version can not be resolved. Setting version to ' + model.getProperty('version'));
 }
 
 function error(err) {
