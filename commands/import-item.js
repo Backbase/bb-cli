@@ -7,6 +7,8 @@ var _ = require('lodash');
 var jxon = require('jxon');
 var watch = require('watch');
 var path = require('path');
+var Q = require('q');
+var inquirer = require('inquirer');
 
 var zipDir = require('../lib/zipDir');
 
@@ -23,8 +25,12 @@ module.exports = Command.extend({
         r += '\n\t Zips and imports item.';
         r += '\n\n  ' + title('Options') + ': -short, --name <type> ' + d('default') + ' description\n';
         r += '      -t,  --target <string>\t\t' + '\t\tDir to import.\n';
-        r += '      -w,  --watch <boolean>\t\t' + '\t\tWatch for file changes in the current dir and autosubmit.\n\n';
-        r += '      -a,  --auto <boolean>\t\t' + '\t\tAuto create model.xml if doesn\'t exist.\n\n';
+        r += '      -w,  --watch <boolean>\t\t' + '\t\tWatch for file changes in the current dir and autosubmit.\n';
+        r += '      -l,  --collection <boolean>\t\t' + '\t\tWatch collection directory tree for changes.\n';
+        r += '      -a,  --auto <boolean>\t\t' + '\t\tAuto create model.xml if doesn\'t exist.\n';
+        r += '      -n,  --name <boolean>\t\t' + '\t\tName of the feature to auto create before reading bower.json\n';
+        r += '      -v,  --version <boolean>\t\t' + '\t\tVersion of the feature to auto create before reading bower.json\n';
+        r += '           --verbose <boolean>\t\t' + '\t\tEnables detailed output.\n\n';
 
         r += '      -H,  --host <string>\t\t' + d('localhost') + '\tThe host name of the server running portal foundation.\n';
         r += '      -P,  --port <number>\t\t' + d('7777') + '\t\tThe port of the server running portal foundation.\n';
@@ -38,7 +44,11 @@ module.exports = Command.extend({
     options: {
         target: {type: 'string', alias: 't', default: './'},
         watch: {type: 'boolean', alias: 'w'},
-        auto: {type: 'boolean', alias: 'a'}
+        collection: {type: 'boolean', alias: 'l'},
+        auto: {type: 'boolean', alias: 'a'},
+        name: {type: 'string', alias: 'n'},
+        version: {type: 'string', alias: 'v'},
+        verbose: {type: 'boolean'}
     },
 
     run: function () {
@@ -50,7 +60,7 @@ module.exports = Command.extend({
             cfg = r.config.cli;
             model = modelXml(jxon);
 
-            if (cfg.watch) {
+            if (cfg.collection) {
                 watch.watchTree(cfg.target, {
                     ignoreDotFiles: true,
                     ignoreUnreadableDir: true,
@@ -59,35 +69,50 @@ module.exports = Command.extend({
                         var v = exclude.indexOf(fileName);
                         return (v === -1);
                     }
-                }, onWatch);
-                console.log(chalk.cyan('Watching...'));
-            }
+                }, onWatchCollection);
+            } else {
 
-            return run();
+                if (cfg.watch) {
+                    watch.watchTree(cfg.target, {
+                        ignoreDotFiles: true,
+                        ignoreUnreadableDir: true,
+                        ignoreNotPermitted: true,
+                        filter: function(fileName) {
+                            var v = exclude.indexOf(fileName);
+                            return (v === -1);
+                        }
+                    }, onWatch);
+                }
+
+                return run(cfg.target);
+            }
         });
 
     }
 });
 
-function run() {
-    return prepareModel()
+function run(target) {
+    return prepareModel(target)
     .then(function() {
-        name = model.getName() + ' v' + model.getProperty('version');
+        // console.log(model.getXml());
+        // return;
         var replacements = {
             'model.xml': model.getXml()
         };
-        console.log('Creating zip...');
-        return zipDir(cfg.target, exclude, replacements)
+        output('Creating zip...');
+        return zipDir(target, exclude, replacements)
         .then(function(zip) {
             return bbrest.importItem().file(zip.path).post()
             .then(function(r) {
+                output(r);
                 if (r.error) {
                     throw new Error('Rest API Error: ' + r.statusInfo);
                 }
                 var body = jxon.stringToJs(_.unescape(r.body)).import;
                 if (body.level === 'ERROR') throw new Error(body.message);
                 zip.clean();
-                ok(r);
+                name = model.getName() + ' v' + model.getProperty('version');
+                ok(r, name);
             });
         });
     })
@@ -96,52 +121,148 @@ function run() {
     });
 }
 
-function prepareModel() {
-    console.log('Reading model.xml...');
-    return model.read(path.resolve(cfg.target, 'model.xml'))
-    .then(getVersionFromBower)
+function prepareModel(target) {
+    output('Reading model.xml...');
+    return model.read(path.resolve(target, 'model.xml'))
+    .then(function() {
+        if (!model.getProperty('version')) {
+            if (cfg.version) {
+                model.addProperty('version', cfg.version);
+            } else {
+                return getBowerJson(target)
+                .then(function(bjson) {
+                    if (bjson.version) model.addProperty('version', bjson.version);
+                    else return addZeroVersion(model);
+                })
+                .catch(function() {
+                    return addZeroVersion(model);
+                });
+            }
+        }
+    })
     .catch(function(err) {
-        if (err.code === 'ENOENT' && cfg.auto) {
-            return getVersionFromBower();
+        if (err.code === 'ENOENT') {
+            var defer = Q.defer();
+            console.log(chalk.gray('model.xml') + ' is not found.');
+
+            if (cfg.auto) {
+                defer.resolve();
+            } else {
+                inquirer.prompt([{
+                    message: 'Auto submit one?',
+                    name: 'saveModel',
+                    type: 'confirm'
+                }], function(prm) {
+                    if (prm.saveModel) defer.resolve();
+                    else defer.reject(new Error('Can not import item without model.xml'));
+                });
+            }
+
+            return defer.promise
+            .then(function() { // --auto options is on
+                output('Creating model.xml for feature...');
+                if (cfg.name) {
+                    model.createFeature(cfg.name);
+                    if (cfg.version) {
+                        model.addProperty('version', cfg.version);
+                        return;
+                    }
+                }
+
+                return getBowerJson(target)
+                .then(function(bjson) {
+                    if (!cfg.name) model.createFeature(bjson.name);
+                    if (cfg.version) model.addProperty('version', cfg.version);
+                    else if (bjson.version) model.addProperty('version', bjson.version);
+                    else return addZeroVersion(model);
+                });
+            })
+            .catch(function(err) {
+                console.log('Can not auto create model.xml');
+                throw err;
+            });
         }
         throw err;
     });
 }
 
-function getVersionFromBower() {
-    console.log('Reading bower.json...');
-    return fs.readFileAsync(path.resolve(cfg.target, 'bower.json'))
+function getBowerJson(target) {
+    output('Reading bower.json...');
+    return fs.readFileAsync(path.resolve(target, 'bower.json'))
     .then(function(bjson) {
-        bjson = JSON.parse(bjson.toString());
-        if (cfg.auto && model.isEmpty()) model.createFeature(bjson.name);
-        if (bjson.version) model.addProperty('version', bjson.version);
+        try {
+            bjson = JSON.parse(bjson.toString());
+        } catch(err) {
+            throw new Error('Error while parsing bower.json');
+        }
+        return bjson;
     });
 }
 
-function onWatch(fileName, curStat, prevStat) {
-    // if (typeof f === 'object' && prevStat === null && curStat === null) {
-    //     // Finished walking the tree
-    //     // file is object where key is fileName and value is stat
-    // } else
-    if (prevStat === null) {
-        // f is a new file
-        console.log(chalk.gray(fileName) + ' created.');
-        run();
-    } else if (curStat.nlink === 0) {
-        // f was removed
-        console.log(chalk.gray(fileName) + ' removed.');
-        run();
-    } else {
-        console.log(chalk.gray(fileName) + ' changed.');
-        run();
-        // f was changed
-    }
+function addZeroVersion(model) {
+    model.addProperty('version', '0.0.0-alpha.0');
+    output('Version can not be resolved. Setting version to ' + model.getProperty('version'));
 }
 
+function output() {
+    if (cfg.verbose) console.log.apply(this, arguments);
+}
 function error(err) {
     util.err(chalk.red('bb import-item: ') + (err.message || err.error));
 }
-function ok(r) {
-    util.ok('Importing ' + chalk.yellow(name) + ' from ' + chalk.green(cfg.target) + '. Done.');
+function ok(r, name) {
+    util.ok(chalk.yellow(name) + ' imported');
     return r;
+}
+
+function onWatch(fileName, curStat, prevStat) {
+    if (typeof f === 'object' && prevStat === null && curStat === null) {
+        console.log(chalk.cyan('Watching...'));
+        // Finished walking the tree
+        // file is object where key is fileName and value is stat
+    } else {
+        if (prevStat === null) {
+            if (typeof fileName !== 'string') return;
+            // f is a new file
+            output(chalk.gray(fileName) + ' created.');
+            run(cfg.target);
+        } else if (curStat.nlink === 0) {
+            // f was removed
+            output(chalk.gray(fileName) + ' removed.');
+            run(cfg.target);
+        } else {
+            output(chalk.gray(fileName) + ' changed.');
+            run(cfg.target);
+            // f was changed
+        }
+    }
+}
+var dirs = {};
+function onWatchCollection(f, curStat, prevStat) {
+    var p;
+    if (typeof f === 'object' && prevStat === null && curStat === null) {
+        _.each(f, function(v, k) {
+            p = path.dirname(k).split(path.sep)[0];
+            dirs[p] = path.resolve(p);
+        });
+        console.log(chalk.cyan('Watching Collection...'));
+        // Finished walking the tree
+        // file is object where key is fileName and value is stat
+    } else {
+        p = path.dirname(f).split(path.sep)[0];
+        if (prevStat === null) {
+            if (typeof f !== 'string') return;
+            // f is a new file
+            output(chalk.gray(f) + ' created.');
+            run(dirs[p]);
+        } else if (curStat.nlink === 0) {
+            // f was removed
+            output(chalk.gray(f) + ' removed.');
+            run(dirs[p]);
+        } else {
+            output(chalk.gray(f) + ' changed.');
+            run(dirs[p]);
+            // f was changed
+        }
+    }
 }

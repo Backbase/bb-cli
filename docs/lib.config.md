@@ -69,10 +69,14 @@ config.absolutizePath()
 #### .bbrc
 ``` json
 {
-  "path": "/path/to/the/portalserver",
+  "scheme": "http",
+  "host": "localhost",
+  "port": "8080",
+  "context": "portalserver",
   "username": "john",
   "password": "HU&69wev*!$8",
-  "portal": "myportal"
+  "portal": "myportal",
+  "path": "/path/to/the/portalserver"
 }
 ```
 

@@ -52,17 +52,16 @@ module.exports = Command.extend({
             return parseCollection(cfg.target, exclude, cfg.auto, r.jxon)
             .then(createAllZips)
             .then(importAll)
-            .then(ok)
-            .catch(function(err) {
-                if (err.error) {
-                    error(new Error(err.statusInfo));
-                } else if (err.code === 'ENOENT') {
-                    error(new Error('Can not open file ' + chalk.yellow(err.path.substr(path.resolve(cfg.target).length))));
-                } else {
-                    error(err);
-                }
-            });
-
+            .then(ok);
+        })
+        .catch(function(err) {
+            if (err.error) {
+                error(new Error(err.statusInfo));
+            } else if (err.code === 'ENOENT') {
+                error(new Error('Can not open file ' + chalk.yellow(err.path.substr(path.resolve(cfg.target).length))));
+            } else {
+                error(err);
+            }
         });
 
     }
@@ -78,7 +77,7 @@ function createAllZips(result) {
     var replacements;
     _.each(result, function(comp) {
         if (!comp.model.isEmpty()) {
-            comp.model.addProperty('version', comp.version);
+            if (comp.version) comp.model.addProperty('version', comp.version);
             replacements = {
                 'model.xml': comp.model.getXml()
             };

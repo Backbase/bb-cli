@@ -1,18 +1,15 @@
 Backbase CLI tools
 ===================
 
-[![Npm Version](https://badge.fury.io/js/bb-cli-nightly.svg)](https://www.npmjs.com/package/bb-cli-nightly)
-[![Build Status](https://travis-ci.org/Backbase/bb-cli.svg?branch=nightly)](https://travis-ci.org/Backbase/bb-cli)
+[![Npm Version](https://badge.fury.io/js/bb-cli.svg)](https://www.npmjs.com/package/bb-cli)
+[![Build Status](https://travis-ci.org/Backbase/bb-cli.svg)](https://travis-ci.org/Backbase/bb-cli)
 
-**Early preview, nightly version. Unstable.**
-
-[Nightly] Command line tools for working with [Backbase CXP](http://backbase.com).
+Command line tools for working with [Backbase CXP](http://backbase.com).
 
 Scaffold new components, navigate through archetypes and work with REST API helpers using clean, automated workflow.
 
 ## Table of contents
 
-- [Archetype](#archetype)
 - [Generate](#generate)
 - [Export](#export)
 - [Import](#import)
@@ -27,12 +24,11 @@ Scaffold new components, navigate through archetypes and work with REST API help
 ## Install
 
 ```shell
-npm install --global bb-cli@nightly
+npm install --global bb-cli
 ```
 
 ### Requirements
 - [Node.js](http://nodejs.org/) v0.11.15 or higher
-
 
 ## Commands
 
@@ -43,22 +39,6 @@ Global help is also available:
 ```
 bb -h
 ```
-
-### <a name="archetype"></a>Archetype
-
-You can check out a new `mvn archetype` by executing the command:
-
-```
-bb archetype
-```
-
-Or use its short version:
-
-```
-bb arch
-```
-
-Read more about Archetype API [here](/docs/archetype.md).
 
 ### <a name="generate"></a>Generate
 
@@ -72,6 +52,10 @@ bb generate widget
 
 ```
 bb generate container
+```
+
+```
+bb generate project
 ```
 
 ##### Launchpad 0.12 Generators
@@ -178,9 +162,9 @@ bb import-collection [OPTIONS]
 ```
 
 Imports a collection of items into the portal.
-This tool gets information from the bower and zip for every component, then uploads it via REST API (import package) to the server.  
+This tool gets information from the bower and zip for every component, then uploads it via REST API (import package) to the server.
 
-All components should contain `model.xml` files. Any component without a `model.xml` file is ignored, unless the  `--auto` option is set, in which case the component will be installed to the portal as a feature. 
+All components should contain `model.xml` files. Any component without a `model.xml` file is ignored, unless the  `--auto` option is set, in which case the component will be installed to the portal as a feature.
 
 The version property is automatically added to each item.
 
@@ -189,7 +173,7 @@ Or you can define those properties inside a `.bbrc` file.
 
 ##### Requirements
 
-Backbase CXP v5.6  
+Backbase CXP v5.6
 [Bower](http://bower.io')
 
 ##### Options
@@ -223,7 +207,7 @@ bb import-item [OPTIONS]
 ```
 
 Imports item to the portal.
-This tool zips the targeted directory, then uploads it to the server via REST API(import package).  
+This tool zips the targeted directory, then uploads it to the server via REST API(import package).
 
 Target directory should contain `model.xml` file.
 If `--watch` option is set, component will be installed to the portal as feature.
@@ -234,7 +218,7 @@ Or you can define those properties inside `.bbrc` file.
 
 #### Requirements
 
-Backbase CXP v5.6  
+Backbase CXP v5.6
 
 ##### Options
 
@@ -267,13 +251,13 @@ This call is made on server catalog for the item defined by the `--save` paramet
 If `--save` is undefined, it will search for the `bower.json` file and use the name of the package as item name (handy for LP widgets).
 
 ```
-bb sync [OPTIONS]	 Syncs local XML model with remote.
+bb sync
 ```
 
 ##### Options
 
 ```
-  -short,  --name (type)        default              description
+-short, --name (type)          default              description
 
       -f,  --file (string)	    first xml file		 A file to target.
       -c,  --context (string)	portalserver		 Portal server context (for other options use `.bbrc`).
@@ -293,7 +277,7 @@ bb rest [OPTIONS]
 ##### Options
 
 ```
--short, --name <type>           default         description
+-short, --name <type>               default         description
 
 -H,  --host <string>		    localhost	    The host name of the server running portal foundation.
 -P,  --port <number>		    7777		    The port of the server running portal foundation.
@@ -346,33 +330,47 @@ where `package_name` will be the name of the package read from `bower.json` or `
 ##### Options
 
 ```
--short, --name <type>       default               description
+-short, --name <type>          default               description
 
--s,  --source <string>      current directory     Path to source directory.
--t,  --target <string>                            Path to directory in which to (un)link a source.
-     --lp-trunk <string>                          Path to `launchpad-trunk`.
-     --lp-portal <string>                         Path to portalserver containing lp.
-     --portal <string>                            Path to portalserver.
--f,  --force                                      Force removal of the target.
--u,  --unlink                                     Remove symlink.
+    -s, --source <string>      current directory     Path to source directory.
+    -t, --target <string>                            Path to directory in which to (un)link a source.
+        --lp-trunk <string>                          Path to `launchpad-trunk`.
+        --lp-portal <string>                         Path to portalserver containing lp.
+        --portal <string>                            Path to portalserver.
+    -f, --force                                      Force removal of the target.
+    -u, --unlink                                     Remove symlink.
 ```
 
 ### <a name="install"></a>Install
 
+Wraps a `bower install` and applies additional options like RequireJS conf generation and server catalog update.
+
+#### Options
+
 ```
+-short, --name <type>               default             description
+
+     C, --catalog <boolean>		    false			    Upload single component to CXP via REST after install.
+    -A, --catalog-all <boolean>	    false			    Upload all installed components to CXP via REST after install.
+    -n, --nested <boolean>		    false			    Run secondary `bb install` in installed component.
+    -v, --verbose <boolean>		    false			    Enable verbose logging mode.
+        --base-url <string>		    path/to/bower_comp	Web path to bower components directory (also configurable from .bbrc).
+        --require-confs <string>				        Coma seperated list of relative paths to existing require configuration (also configurable from .bbrc).
+```
+
+Available options in `.bbrc`:
+
+```
+{
+  "install": {
+    "excludes": ["jquery"],
+    "includes" ["jquery"],
+    "requirejsConfigs": ["./portal/target/portal/static/launchpad/modules/config/requirejs.conf.js"],
+    "requirejsBaseUrl": "bower_components"
+  }
+}
 bb install [OPTIONS]
 bb install <bower-endpoint> [<bower-endpoint> ..] [OPTIONS]
-```
-
-Wraps a `bower install` and applies additional options such as `requirejs-conf` generation and server catalog update.
-
-##### Options
-
-```
-    -C,  --catalog <boolean>		false			    Upload components to CXP via REST after install.
-    -v,  --verbose <boolean>		false			    Enable verbose logging mode.
-         --base-url <string>        path/to/bower_comp	Web path to bower components directory (also configurable from .bbrc).
-         --require-confs <string>				        Comma-separated list of relative paths to existing require configuration (also configurable from .bbrc).
 ```
 
 Also accepts `bower install` arguments such as --save, -save-dev, --production, check `bower install -h`.
@@ -384,6 +382,10 @@ bb install jquery --save
 bb install todo-widget -C --save
 ```
 
+* `excludes` - define paths to exclude from generated RequireJS conf
+* `includes` - define paths to include to generated RequireJS conf, ignoring existing configurations merge
+* `requirejsConfigs` - list of paths to existing RequireJS confs, to automatically get excludes list
+* `requirejsBaseUrl` - base url for paths in RequireJS conf
 
 ## <a name="configuration"></a>Configuration
 
@@ -415,9 +417,14 @@ Where the `.bbrc` file contains this conf:
 
 ```
 {
-"context": "/",
-"username": "me",
-"password": "it's me"
+  "scheme": "http",
+  "host": "localhost",
+  "port": "7777",
+  "context": "portalserver",
+  "username": "me",
+  "password": "it's me",
+  "portal": "myportal",
+  "path": "/path/to/the/portalserver"
 }
 ```
 
