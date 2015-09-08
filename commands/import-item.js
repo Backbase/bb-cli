@@ -243,7 +243,7 @@ function onWatchCollection(f, curStat, prevStat) {
 
 
     if (typeof f === 'object' && prevStat === null && curStat === null) {
-        console.log(chalk.green('Scanning underlying directories for bower components...'))
+        console.log(chalk.green('Scanning underlying directories for items...'))
 
         _.each(f, function (v, k) {
             p = path.dirname(k).split(path.sep)[0];
