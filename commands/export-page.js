@@ -26,7 +26,7 @@ module.exports = Command.extend({
         r += '\n\n  ' + title('Options') + ': -short, --name <type> ' + d('default') + ' description';
         r += '\n\t  All `bb rest` options for configuring portal, context, username etc are valid.\n\n';
         r += '      -s,  --save <string>\t\t\t' + d('portal-name.ext') + '\tFile to save the export to.\n';
-        r += '      -n,  --name <string>\t\t\t\tName of the page to export.\n';
+        r += '      -n,  --name <string>\t\t\t\t\tName of the page to export.\n';
         r += '      -f,  --force <boolean>\t\t\t' + d('false') + '\t\tForce overwrite.\n\n';
 
         r += '           --host <string>\t\t\t' + d('localhost') + '\tThe host name of the server running portal foundation.\n';
@@ -36,12 +36,8 @@ module.exports = Command.extend({
         r += '           --password <string>\t\t\t' + d('admin') + '\t\tPassword.\n';
         r += '           --portal <string>\t\t\t\t\tName of the portal on the server to target.\n';
         r += '\n  ' + title('Examples') + ':\n\n';
-        r += '      bb export \t\t\t\t\t\t\t\tOutputs prettified, sorted xml file.\n';
-        r += '      bb export --save myPortal.xml\t\t\t\t\t\tSaves export to myPortal.xml\n';
-        r += '      bb export --portal my-portal --save myPortal -k\t\t\tChunks my-portal export to myPortal dir\n';
-        r += '      bb export --type portal --save retail.zip\t\t\t\t\tSaves export including content to retail.zip\n';
-        r += '      bb export --type portal --portal retail-banking --save retail.zip -k\tChunks full portal export(including content) into retail dir\n';
-        r += '      bb export -s accounts --type widget --name accounts -k\t\t\tChunks export of accounts widget into accounts dir\n';
+        r += '      bb export-page --save home-page.zip --portal retail-banking -n page_0123456789 \t\tExports page_0123456789 to home-page.zip\n';
+        
         return r;
     },
 
@@ -68,58 +64,24 @@ module.exports = Command.extend({
             bbrest = r.bbrest;
             jxon = r.jxon;
             cfg = r.config.cli;
-            jxon.config({parseValues: false});
 
             if (cfg.save === undefined) throw new Error('Save path is missing. Use --save');
 
             return getPortal()
             .then(function(portal) {
                 bbrest.config.portal = portal;
+
                 console.log(chalk.yellow('GET'), 'page', chalk.gray(portal + ' > ' + cfg.name));
                 return getPageByName(cfg.name)
-                .then(function(page) {
-                    var exportObj = getExportObj(page);
-                    console.log(chalk.yellow('GET'), 'link for uuid:', chalk.gray(page.uuid));
-                    return getLink(page.uuid)
-                    .then(function(link) {
-                        exportObj.link = link;
-                        return parsePage(page, exportObj);
-                    })
-                    .catch(function() {
-                        return parsePage(page, exportObj);
-                    });
-
-                    // console.log(exportObj);
-                });
+                .then(parsePage);
             });
 
         })
         .then(ok)
-        .catch(function(err) {
-            error(err);
-        })
+        .catch(error)
         .done();
     }
 });
-
-function parsePage(page, exportObj) {
-    console.log(chalk.yellow('PARSE'), 'page');
-    return traverseChildren(page, exportObj)
-    .then(function() {
-        // delete exportObj.page.children;
-        sortItems(exportObj.container);
-        console.log(chalk.yellow('SAVE'), 'archive', chalk.gray(cfg.save));
-        return saveAndZip(exportObj)
-        .then(function(zip) {
-            var moveOpts = {};
-            if (cfg.force) moveOpts.clobber = true;
-            return fs.moveAsync(zip.path, path.resolve(cfg.save), moveOpts)
-            .then(function() {
-                zip.clean();
-            });
-        });
-    });
-}
 
 function getPortal() {
     if (bbrest.config.portal) return Q(bbrest.config.portal);
@@ -137,37 +99,44 @@ function getPageByName(name) {
     });
 }
 
-// -----------------------------
-function getLastModifiedPage() {
-    return getPages({
-        ps: 1,
-        depth: 12,
-        s: 'lastModifiedTimestamp(dsc)'
+function parsePage(page) {
+    console.log(chalk.yellow('PARSE'), 'page');
+    var children = page.children;
+    // delete page.children;
+    var exportObj = getExportObj(page);
+    cleanItem(page);
+    if (page.extendedItemName) {
+        exportObj.catalog[page.extendedItemName] = 'page';
+    }
+
+    return getLink(page.uuid)
+    .then(function(link) {
+        cleanItem(link);
+        exportObj.link = link;
+
+        return traverseChildren(children, exportObj)
+        .then(function() {
+            sortItems(exportObj.container);
+
+            console.log(chalk.yellow('SAVE'), 'archive', chalk.gray(cfg.save));
+            return saveAndZip(exportObj)
+            .then(function(zip) {
+                var moveOpts = {};
+                if (cfg.force) moveOpts.clobber = true;
+                return fs.moveAsync(zip.path, path.resolve(cfg.save), moveOpts)
+                .then(function() {
+                    zip.clean();
+                });
+            });
+        });
     });
 }
-function getPages(q) {
-    // query({f: 'extendedItemName(eq)page_1415023255184'})
-    var bbp = bbrest.page();
-    if (q) bbp = bbp.query(q);
-    return bbp.get()
-    .then(function(res) {
-        var jx = jxon.stringToJs(_.unescape(res.body));
-        return jx.pages.page;
-    });
-}
-// -----------------------------
 
 function getExportObj(page) {
-    if (page.referencedLinks) {
-        delete page.referencedLinks.$totalSize;
-        _.each(page.referencedLinks.linkEntry, function(val, key) {
-            if (key !== 'link') delete page.referencedLinks.linkEntry[key];
-            else page.referencedLinks.link = val;
-        });
-        delete page.referencedLinks.linkEntry;
-    }
-    return {
+    var ret = {
         page: page,
+        // referenced links of the page
+        link: [],
         // ordered instances of containers that belong to the page
         container: [],
         // instances of widgets that belong to the page
@@ -179,6 +148,35 @@ function getExportObj(page) {
         // values are names of instances of Manageable_Area_Closure
         closures: {}
     };
+
+    return ret;
+}
+
+function objOrCol(entry, callback) {
+    if (entry instanceof Array) {
+        _.each(entry, function(val) {
+            callback(val);
+        });
+    } else {
+        callback(entry);
+    }
+}
+
+function cleanItem(item) {
+    delete item.children;
+    delete item.itemHandlerBeanName;
+    delete item.createdBy;
+    delete item.createdTimestamp;
+    delete item.lastModifiedItem;
+    delete item.lastModifiedBy;
+    delete item.lastModifiedTimestamp;
+    delete item.hidden;
+    delete item.referencedItem;
+    delete item.securityProfile;
+    delete item.publishState;
+    delete item.lockState;
+    delete item.referencedLinks;
+    return item;
 }
 
 function getLink(uuid) {
@@ -194,29 +192,21 @@ function getLink(uuid) {
     });
 }
 
-function traverseChildren(item, exportObj) {
+function traverseChildren(children, exportObj) {
     var all = [];
-    _.each(item.children, function(a, childType) {
+    _.each(children, function(a, childType) {
         switch(childType) {
             case 'container':
-                if (a instanceof Array) {
-                    _.each(a, function(cont) {
-                        all.push(add(cont, 'container', exportObj));
-                        all.push(traverseChildren(cont, exportObj));
-                    });
-                } else {
-                    all.push(add(a, 'container', exportObj));
-                    all.push(traverseChildren(a, exportObj));
-                }
+                objOrCol(a, function(cont) {
+                    var contChildren = cont.children;
+                    all.push(add(cont, 'container', exportObj));
+                    all.push(traverseChildren(contChildren, exportObj));
+                });
                 break;
             case 'widget':
-                if (a instanceof Array) {
-                    _.each(a, function(cont) {
-                        all.push(add(cont, 'widget', exportObj));
-                    });
-                } else {
-                    all.push(add(a, 'widget', exportObj));
-                }
+                objOrCol(a, function(cont) {
+                    all.push(add(cont, 'widget', exportObj));
+                });
                 break;
             default:
                 break;
@@ -231,32 +221,31 @@ function add(item, type, exportObj) {
     if (type === 'container') {// add template to catalog dependencies
         var props = item.properties.property;
         var template = _.find(props, {$name: 'TemplateName'}).value._;
-        if (!exportObj.catalog[template]) exportObj.catalog[template] = true;
+        if (!exportObj.catalog[template]) exportObj.catalog[template] = 'template';
     }
     // add parent to cataog dependencies
     if (item.extendedItemName && !exportObj.catalog[item.extendedItemName]) {
         if (type === 'container' && item.contextItemName !== '[BBHOST]') {
-            getExtendedItem(item.extendedItemName, exportObj, item);
-        } else {
-            exportObj.catalog[item.extendedItemName] = true;
+            all.push(getExtendedItem(item.extendedItemName, exportObj, item));
         }
+        exportObj.catalog[item.extendedItemName] = type;
     }
     if (item.extendedItemName === 'widget-advanced-content') {
-        console.log('adv', chalk.gray(item.name), item.parentItemName);
-        var parsed = cmisParse(item.referencedContentItems);
-        item.referencedContentItems = parsed;
-        _.each(parsed, function(content) {
-            if (content.cmis.objectTypeId === 'bb:image') {
-                var imgPath = 'http://' + bbrest.config.host + ':' + bbrest.config.port + content.path;
-                all.push(writeImage(content.bb.title, content.cmis.objectId, imgPath));
-            }
-        });
+        if (item.referencedContentItems) {
+            console.log('Parsing content', chalk.gray(item.name));
+            var parsed = cmisParse(item.referencedContentItems);
+            item.referencedContentItems = parsed;
+            _.each(parsed, function(content) {
+                if (content.cmis.objectTypeId === 'bb:image') {
+                    var imgPath = 'http://' + bbrest.config.host + ':' + bbrest.config.port + content.path;
+                    all.push(writeImage(content.bb.title, content.cmis.objectId, imgPath));
+                }
+            });
+        }
     }
-    var itemCopy = _.cloneDeep(item);
-    //delete itemCopy.children;
-    exportObj[type].unshift(itemCopy);
-    if (all) return Q.all(all);
-    return Q(true);
+    cleanItem(item);
+    exportObj[type].unshift(item);
+    return Q.all(all);
 }
 
 function getExtendedItem(extendedName, exportObj, item) {
@@ -264,12 +253,12 @@ function getExtendedItem(extendedName, exportObj, item) {
     .then(function(res) {
         var jx = jxon.stringToJs(_.unescape(res.body));
         jx = jx[_.keys(jx)[0]];
-        if (jx.extendedItemName === 'Manageable_Area_Closure') {
+        if (jx.extendedItemName === 'Manageable_Area_Closure' && jx.name !== 'Manageable_Area_Closure') {
             exportObj.closures[item.name] = jx.name;
-            exportObj.container.unshift(item);
+            cleanItem(jx);
             exportObj.container.unshift(jx);
         } else {
-            exportObj.catalog[extendedName] = true;
+            exportObj.catalog[extendedName] = 'container';
         }
 
     });

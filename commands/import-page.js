@@ -21,8 +21,7 @@ module.exports = Command.extend({
         r += '\n\t Imports portal page.';
         r += '\n\n  ' + title('Options') + ': -short, --name <type> ' + d('default') + ' description';
         r += '\n\t  All `bb rest` options for configuring portal, context, username etc are valid.\n\n';
-        r += '      -t,  --target <string>\t\t\t\tzip file to import.\n';
-        r += '      -f,  --force <boolean>\t\t\t' + d('false') + '\t\tForce overwrite.\n\n';
+        r += '      -t,  --target <string>\t\t\t\t\tzip file to import.\n\n';
 
         r += '           --host <string>\t\t\t' + d('localhost') + '\tThe host name of the server running portal foundation.\n';
         r += '           --port <number>\t\t\t' + d('7777') + '\t\tThe port of the server running portal foundation.\n';
@@ -31,23 +30,12 @@ module.exports = Command.extend({
         r += '           --password <string>\t\t\t' + d('admin') + '\t\tPassword.\n';
         r += '           --portal <string>\t\t\t\t\tName of the portal on the server to target.\n';
         r += '\n  ' + title('Examples') + ':\n\n';
-        r += '      bb export \t\t\t\t\t\t\t\tOutputs prettified, sorted xml file.\n';
-        r += '      bb export --save myPortal.xml\t\t\t\t\t\tSaves export to myPortal.xml\n';
-        r += '      bb export --portal my-portal --save myPortal -k\t\t\tChunks my-portal export to myPortal dir\n';
-        r += '      bb export --type portal --save retail.zip\t\t\t\t\tSaves export including content to retail.zip\n';
-        r += '      bb export --type portal --portal retail-banking --save retail.zip -k\tChunks full portal export(including content) into retail dir\n';
-        r += '      bb export -s accounts --type widget --name accounts -k\t\t\tChunks export of accounts widget into accounts dir\n';
+        r += '      bb import-page -t home-page.zip --portal retail-banking\t\t\tImports home-page.zip to retail-banking portal.\n';
         return r;
     },
 
     options: {
-        target: {type: 'string', alias: 't'},
-        name: {type: 'string', alias: 'n'},
-        'item-context': {type: 'string', alias: 'C'},
-        pretty: {type: 'boolean', default: true},
-        sanitize: {type: 'boolean', default: true},
-        chunk: {type: 'boolean', alias: 'k', default: false},
-        force: {type: 'boolean', alias: 'f', default: false}
+        target: {type: 'string', alias: 't'}
     },
 
     run: function () {
@@ -72,7 +60,7 @@ module.exports = Command.extend({
         })
         .then(ok)
         .catch(function(err) {
-            console.log(err.statusCode, err.statusInfo, err.error);
+            // console.log(err.statusCode, err.statusInfo, err.error);
             error(err);
         })
         .done();
@@ -82,7 +70,7 @@ module.exports = Command.extend({
 function parseExport(data) {
     return checkCatalogItems(data)
     .then(importPage)
-    .then(parsePage)
+    .then(replaceManageable)
     .then(importItems);
 }
 
@@ -94,19 +82,20 @@ function parseExport(data) {
 function checkCatalogItems(data) {
     var all = [];
     var cnt = 0;
-    for (var itemName in data.catalog) {
+    _.each(data.catalog, function(type, name) {
         cnt++;
         all.push(
-            bbrest.catalog(itemName).get()
+            bbrest[type](name).get()
         );
-    }
+    });
     console.log('Checking for ' + cnt + ' extended items...');
     return Q.all(all)
     .then(function(results) {
         var errors = false;
         _.each(results, function(res) {
             if (res.error) {
-                console.log(res.error);
+                if (typeof res.error === 'string') console.log(res.error);
+                else console.log(res.body);
                 errors = true;
             }
         });
@@ -119,22 +108,26 @@ function checkCatalogItems(data) {
 
 function importPage(data) {
     console.log('Importing page...');
-    data.container = sortItems(data.container);
+    data.container = sortItems(data.container); // do it again
     return putOrPost('page', data.page)
     .then(function() {
         return data;
     });
 }
 
-function parsePage(data) {
-    console.log('Parsing page...');
+function replaceManageable(data) {
+    console.log('Replacing manageable instances...');
     return bbrest.page(data.page.name).query({depth: 0}).get()
     .then(function(res) {
         var jx = jxon.stringToJs(_.unescape(res.body));
         var names = {};
         var inds = [];
 
+        if (!jx.page.children.container) return data;
+
+        // names will contain names of newly created manageable area instances
         traverseContainers(jx.page.children.container, names);
+        // replace old manageable area instance names with new ones
         _.each(data.closures, function(marea, cont) {
             data.closures[cont] = names[marea];
             _.each(data.container, function(item, ind) {
@@ -151,6 +144,7 @@ function parsePage(data) {
                 }
             });
         });
+        // remove old manageable area instances
         _.each(inds, function(id) {
             data.container.splice(id, 1);
         });
@@ -204,28 +198,18 @@ function waterfall(all) {
         if (all.length) return waterfall(all);
     });
 }
-/*
-<itemHandlerBeanName>containerInstanceHandler</itemHandlerBeanName>
-<createdBy>admin</createdBy>
-<createdTimestamp>2015-09-09T12:47:54.498+02:00</createdTimestamp>
-<lastModifiedBy>admin</lastModifiedBy>
-<lastModifiedTimestamp>2015-09-09T12:47:54.498+02:00</lastModifiedTimestamp>
-<securityProfile>ADMIN</securityProfile>
-<hidden>false</hidden>
-<contents/>
-*/
+
 function putOrPost(type, jx) {
-    delete jx.children;
-    delete jx.itemHandlerBeanName;
-    delete jx.createdBy;
-    delete jx.createdTimestamp;
-    delete jx.lastModifiedBy;
-    delete jx.lastModifiedTimestamp;
-    delete jx.hidden;
+    // return deleteItem(type, jx);
     var njx = {};
     var one = {};
     one[type] = jx;
     njx[type + 's'] = one;
+    // we need to post master page to portalCatalog, otherwise it is not working?
+    if (type === 'page' && !jx.extendedItemName) {
+        type = 'portalCatalog';
+        one = njx = {catalog: one};
+    }
     var req = bbrest[type]();
     var contents;
     req.headers.Connection = 'keep-alive';
@@ -237,7 +221,7 @@ function putOrPost(type, jx) {
     return req.put(njx)
     .then(function(res) {
         if (res.statusCode >= 400) {
-            return bbrest[type]().post(one);
+            return req.post(one);
         }
         return res;
     })
@@ -250,6 +234,7 @@ function putOrPost(type, jx) {
                 return importContent(jx, contents);
             }
         } else {
+            console.log(res);
             out.unshift(chalk.red(res.statusCode));
             out.push(res.error || res.body);
             console.log(out.join(' '));
@@ -275,7 +260,6 @@ function importContent(jx, contents) {
         }, bbrest.config, jxon);
 
         if (val.cmis.objectTypeId === 'bb:richtext') {
-            console.log(val);
             all.push(cmis.importText(val.content));
         } else if (val.cmis.objectTypeId === 'bb:image') {
             all.push(cmis.importImage(path.resolve(unzipPath, val.cmis.objectId, val.bb.title)));
