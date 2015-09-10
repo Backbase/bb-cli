@@ -11,7 +11,7 @@ var temp = require('promised-temp');
 var request = require('request-promise');
 var inquirePortal = require('../lib/inquirePortal');
 var sortItems = require('../lib/sortItems');
-var formattor = require('formattor');
+// var formattor = require('formattor');
 
 var Command = require('ronin').Command;
 
@@ -37,7 +37,7 @@ module.exports = Command.extend({
         r += '           --portal <string>\t\t\t\t\tName of the portal on the server to target.\n';
         r += '\n  ' + title('Examples') + ':\n\n';
         r += '      bb export-page --save home-page.zip --portal retail-banking -n page_0123456789 \t\tExports page_0123456789 to home-page.zip\n';
-        
+
         return r;
     },
 
