@@ -10,6 +10,7 @@ var zipDir = require('../lib/zipDir');
 var temp = require('promised-temp');
 var request = require('request-promise');
 var inquirePortal = require('../lib/inquirePortal');
+var sortItems = require('../lib/sortItems');
 var formattor = require('formattor');
 
 var Command = require('ronin').Command;
@@ -77,18 +78,18 @@ module.exports = Command.extend({
                 console.log(chalk.yellow('GET'), 'page', chalk.gray(portal + ' > ' + cfg.name));
                 return getPageByName(cfg.name)
                 .then(function(page) {
-                    var siblings = getNewPageCollection(page);
+                    var exportObj = getExportObj(page);
                     console.log(chalk.yellow('GET'), 'link for uuid:', chalk.gray(page.uuid));
                     return getLink(page.uuid)
                     .then(function(link) {
-                        siblings.link = link;
-                        return parsePage(page, siblings);
+                        exportObj.link = link;
+                        return parsePage(page, exportObj);
                     })
                     .catch(function() {
-                        return parsePage(page, siblings);
+                        return parsePage(page, exportObj);
                     });
 
-                    // console.log(siblings);
+                    // console.log(exportObj);
                 });
             });
 
@@ -101,12 +102,14 @@ module.exports = Command.extend({
     }
 });
 
-function parsePage(page, siblings) {
+function parsePage(page, exportObj) {
     console.log(chalk.yellow('PARSE'), 'page');
-    return traverseChildren(page, siblings)
+    return traverseChildren(page, exportObj)
     .then(function() {
+        // delete exportObj.page.children;
+        sortItems(exportObj.container);
         console.log(chalk.yellow('SAVE'), 'archive', chalk.gray(cfg.save));
-        return saveAndZip(siblings)
+        return saveAndZip(exportObj)
         .then(function(zip) {
             var moveOpts = {};
             if (cfg.force) moveOpts.clobber = true;
@@ -154,7 +157,7 @@ function getPages(q) {
 }
 // -----------------------------
 
-function getNewPageCollection(page) {
+function getExportObj(page) {
     if (page.referencedLinks) {
         delete page.referencedLinks.$totalSize;
         _.each(page.referencedLinks.linkEntry, function(val, key) {
@@ -171,7 +174,10 @@ function getNewPageCollection(page) {
         widget: [],
         // items that are extended + templates of the container
         // check if those exist before importing
-        catalog: {}
+        catalog: {},
+        // keys are names of the instances of instances of Manageable_Area_Closure
+        // values are names of instances of Manageable_Area_Closure
+        closures: {}
     };
 }
 
@@ -188,28 +194,28 @@ function getLink(uuid) {
     });
 }
 
-function traverseChildren(item, siblings) {
+function traverseChildren(item, exportObj) {
     var all = [];
     _.each(item.children, function(a, childType) {
         switch(childType) {
             case 'container':
                 if (a instanceof Array) {
                     _.each(a, function(cont) {
-                        all.push(add(cont, 'container', siblings));
-                        all.push(traverseChildren(cont, siblings));
+                        all.push(add(cont, 'container', exportObj));
+                        all.push(traverseChildren(cont, exportObj));
                     });
                 } else {
-                    all.push(add(a, 'container', siblings));
-                    all.push(traverseChildren(a, siblings));
+                    all.push(add(a, 'container', exportObj));
+                    all.push(traverseChildren(a, exportObj));
                 }
                 break;
             case 'widget':
                 if (a instanceof Array) {
                     _.each(a, function(cont) {
-                        all.push(add(cont, 'widget', siblings));
+                        all.push(add(cont, 'widget', exportObj));
                     });
                 } else {
-                    all.push(add(a, 'widget', siblings));
+                    all.push(add(a, 'widget', exportObj));
                 }
                 break;
             default:
@@ -219,21 +225,20 @@ function traverseChildren(item, siblings) {
     return Q.all(all);
 }
 
-function add(item, type, obj) {
-    var ca = obj[type];
+function add(item, type, exportObj) {
     var all = [];
 
     if (type === 'container') {// add template to catalog dependencies
         var props = item.properties.property;
         var template = _.find(props, {$name: 'TemplateName'}).value._;
-        if (!obj.catalog[template]) obj.catalog[template] = true;
+        if (!exportObj.catalog[template]) exportObj.catalog[template] = true;
     }
     // add parent to cataog dependencies
-    if (item.extendedItemName && !obj.catalog[item.extendedItemName]) {
-        if (item.extendedItemName.indexOf('Manageable_Area_Closure-') !== -1) {
-            all.push(getManageableInstance(item.extendedItemName, obj, item));
+    if (item.extendedItemName && !exportObj.catalog[item.extendedItemName]) {
+        if (type === 'container' && item.contextItemName !== '[BBHOST]') {
+            getExtendedItem(item.extendedItemName, exportObj, item);
         } else {
-            obj.catalog[item.extendedItemName] = true;
+            exportObj.catalog[item.extendedItemName] = true;
         }
     }
     if (item.extendedItemName === 'widget-advanced-content') {
@@ -247,23 +252,26 @@ function add(item, type, obj) {
             }
         });
     }
-    ca.unshift(item);
+    var itemCopy = _.cloneDeep(item);
+    //delete itemCopy.children;
+    exportObj[type].unshift(itemCopy);
     if (all) return Q.all(all);
     return Q(true);
 }
 
-function getManageableInstance(name, obj, item) {
-    return bbrest.container(name).query({depth: 20}).get()
+function getExtendedItem(extendedName, exportObj, item) {
+    return bbrest.portalCatalog(extendedName).query({}).get()
     .then(function(res) {
-        var marea = jxon.stringToJs(_.unescape(res.body)).container;
-        item.parentItemName = marea.parentItemName;
-        //item.extendedItemName = 'Manageable_Area_Closure';
-        //console.log(item);
-        obj.container.push(marea);
-    })
-    .catch(function(err) {
-        console.log('Error getting ' + name);
-        throw err;
+        var jx = jxon.stringToJs(_.unescape(res.body));
+        jx = jx[_.keys(jx)[0]];
+        if (jx.extendedItemName === 'Manageable_Area_Closure') {
+            exportObj.closures[item.name] = jx.name;
+            exportObj.container.unshift(item);
+            exportObj.container.unshift(jx);
+        } else {
+            exportObj.catalog[extendedName] = true;
+        }
+
     });
 }
 

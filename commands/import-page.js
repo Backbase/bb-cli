@@ -12,6 +12,7 @@ var request = require('request-promise');
 var inquirePortal = require('../lib/inquirePortal');
 var formattor = require('formattor');
 var Cmis = require('../lib/cmis');
+var sortItems = require('../lib/sortItems');
 
 var Command = require('ronin').Command;
 
@@ -85,7 +86,9 @@ module.exports = Command.extend({
 
 function parseExport(data) {
     return checkCatalogItems(data)
-    .then(importItems);
+    .then(importPage)
+    .then(parsePage)
+    .then(importItems)
 }
 
 // function getPortal() {
@@ -119,16 +122,67 @@ function checkCatalogItems(data) {
     });
 }
 
+function importPage(data) {
+    console.log('Importing page...');
+    data.container = sortItems(data.container);
+    return putOrPost('page', data.page)
+    .then(function() {
+        return data;
+    });
+}
+
+function parsePage(data) {
+    console.log('Parsing page...');
+    return bbrest.page(data.page.name).query({depth: 0}).get()
+    .then(function(res) {
+        var jx = jxon.stringToJs(_.unescape(res.body));
+        var names = {};
+        var inds = [];
+
+        traverseContainers(jx.page.children.container, names);
+        _.each(data.closures, function(marea, cont) {
+            data.closures[cont] = names[marea];
+            _.each(data.container, function(item, ind) {
+                if (item.parentItemName === cont) {
+                    item.parentItemName = names[marea];
+                }
+                if (item.name === cont) {
+                    inds.unshift(ind);
+                }
+            });
+            _.each(data.widget, function(item) {
+                if (item.parentItemName === cont) {
+                    item.parentItemName = names[marea];
+                }
+            });
+        });
+        _.each(inds, function(id) {
+            data.container.splice(id, 1);
+        });
+        return data;
+    });
+
+}
+
+function traverseContainers(conts, names) {
+    if (conts instanceof Array) {
+        _.each(conts, function(cont) {
+            traverseContainers(cont, names);
+        });
+    } else {
+        if (conts.extendedItemName && conts.contextItemName !== '[BBHOST]') {
+            names[conts.extendedItemName] = conts.name;
+        }
+        if (conts.children && conts.children.container) traverseContainers(conts.children.container, names);
+    }
+}
+
 function importItems(data) {
     console.log('Importing items...');
     var all = [];
     all.push({
         type: 'link',
         jx: data.link
-    });
-    all.push({
-        type: 'page',
-        jx: data.page
     });
 
     addItems(all, data, 'container');
@@ -155,9 +209,24 @@ function waterfall(all) {
         if (all.length) return waterfall(all);
     });
 }
-
+/*
+<itemHandlerBeanName>containerInstanceHandler</itemHandlerBeanName>
+<createdBy>admin</createdBy>
+<createdTimestamp>2015-09-09T12:47:54.498+02:00</createdTimestamp>
+<lastModifiedBy>admin</lastModifiedBy>
+<lastModifiedTimestamp>2015-09-09T12:47:54.498+02:00</lastModifiedTimestamp>
+<securityProfile>ADMIN</securityProfile>
+<hidden>false</hidden>
+<contents/>
+*/
 function putOrPost(type, jx) {
     delete jx.children;
+    delete jx.itemHandlerBeanName;
+    delete jx.createdBy;
+    delete jx.createdTimestamp;
+    delete jx.lastModifiedBy;
+    delete jx.lastModifiedTimestamp;
+    delete jx.hidden;
     var njx = {};
     var one = {};
     one[type] = jx;
@@ -185,20 +254,12 @@ function putOrPost(type, jx) {
             if (contents) {
                 return importContent(jx, contents);
             }
-            if (type === 'page') {
-                bbrest.page(jx.name).get()
-                .then(function(res) {
-                    var pjx = jxon.stringToJs(_.unescape(res.body));
-                    var panels = pjx.page.children.container.children.container.children.container;
-                    var our = _.find(panels, {name: 'panel-container-533529'});
-                    console.log(our.children.container);
-                });
-            }
         } else {
             out.unshift(chalk.red(res.statusCode));
             out.push(res.error || res.body);
             console.log(out.join(' '));
         }
+        return res;
     });
 }
 function deleteItem(type, jx) {
@@ -214,10 +275,12 @@ function importContent(jx, contents) {
     _.each(contents, function(val, key) {
         var cmis = new Cmis({
             path: val.cmis.path,
-            type: val.cmis.objectTypeId
+            type: val.cmis.objectTypeId,
+            mimeType: val.mimeType
         }, bbrest.config, jxon);
 
         if (val.cmis.objectTypeId === 'bb:richtext') {
+            console.log(val);
             all.push(cmis.importText(val.content));
         } else if (val.cmis.objectTypeId === 'bb:image') {
             all.push(cmis.importImage(path.resolve(unzipPath, val.cmis.objectId, val.bb.title)));

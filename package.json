@@ -57,6 +57,7 @@
     "ronin": "^0.3.11",
     "semver": "^5.0.1",
     "through2": "^2.0.0",
+    "topsort": "0.0.2",
     "update-notifier": "^0.5.0",
     "watch": "^0.16.0"
   },
