@@ -5,12 +5,7 @@ var _ = require('lodash');
 var Q = require('q');
 var fs = require('fs-extra-promise');
 var path = require('path');
-var zipDir = require('../lib/zipDir');
 var unzip = require('../lib/unzip');
-var temp = require('promised-temp');
-var request = require('request-promise');
-var inquirePortal = require('../lib/inquirePortal');
-var formattor = require('formattor');
 var Cmis = require('../lib/cmis');
 var sortItems = require('../lib/sortItems');
 
@@ -88,7 +83,7 @@ function parseExport(data) {
     return checkCatalogItems(data)
     .then(importPage)
     .then(parsePage)
-    .then(importItems)
+    .then(importItems);
 }
 
 // function getPortal() {
@@ -104,7 +99,7 @@ function checkCatalogItems(data) {
         all.push(
             bbrest.catalog(itemName).get()
         );
-    };
+    }
     console.log('Checking for ' + cnt + ' extended items...');
     return Q.all(all)
     .then(function(results) {
@@ -272,7 +267,7 @@ function deleteItem(type, jx) {
 function importContent(jx, contents) {
     console.log(chalk.yellow('POST') + ' CONTENT ' + chalk.gray(jx.name));
     var all = [];
-    _.each(contents, function(val, key) {
+    _.each(contents, function(val) {
         var cmis = new Cmis({
             path: val.cmis.path,
             type: val.cmis.objectTypeId,
@@ -287,10 +282,10 @@ function importContent(jx, contents) {
         }
     });
     return Q.all(all)
-    .then(function(rall) {
+    .then(function() {
         console.log(chalk.green('OK') + ' CONTENT ' + chalk.gray(jx.name));
     })
-    .catch(function(err) {
+    .catch(function() {
         console.log(chalk.red('ERR') + ' CONTENT ' + chalk.gray(jx.name));
     });
 }
