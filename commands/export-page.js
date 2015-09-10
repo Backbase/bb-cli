@@ -54,11 +54,6 @@ module.exports = Command.extend({
 
     run: function () {
 
-        _.extend(this.options, {
-            host: 'bb-breeze.backbase.com',
-            port: 8280
-        });
-
         return config.getCommon(this.options)
         .then(function(r) {
             bbrest = r.bbrest;
