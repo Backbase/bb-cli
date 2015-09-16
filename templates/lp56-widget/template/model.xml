@@ -18,7 +18,7 @@
                 <value type="string">Standard_Widget</value>
             </property>
             <property label="Widget Chrome" name="widgetChrome" viewHint="select-one,user,designModeOnly">
-                <value type="string">$(contextRoot)/static/backbase.com.2012.aurora/html/chromes/widget_none.html</value>
+                <value type="string">$(contextRoot)/static/features/[BBHOST]/chromes/blank/chrome-blank.html</value>
             </property>
             <!-- mobile widgets-specific properties -->
             <property label="Preload Widget" name="preload" viewHint="checkbox,user,designModeOnly">
