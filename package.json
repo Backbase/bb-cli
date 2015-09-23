@@ -1,6 +1,6 @@
 {
   "name": "bb-cli",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Command line tools for working with Backbase CXP.",
   "author": "Backbase",
   "licenses": [
@@ -24,8 +24,8 @@
     "cli-table": "^0.3.1",
     "clui": "^0.3.1",
     "cross-spawn": "^0.2.6",
+    "decompress-zip": "^0.2.0",
     "escodegen": "^1.4.3",
-    "extract-zip": "^1.0.3",
     "formattor": "0.0.2",
     "fs-extra-promise": "^0.2.0",
     "fs-finder": "^1.8.0",

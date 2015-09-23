@@ -6,7 +6,7 @@ var _ = require('lodash');
 var Q = require('q');
 var fs = require('fs-extra-promise');
 var path = require('path');
-var extract = require('extract-zip');
+var DecompressZip = require('decompress-zip');
 var inquirePortal = require('../lib/inquirePortal');
 var os = require('os');
 
@@ -237,11 +237,15 @@ function unzip(src, dir) {
 
     return fs.removeAsync(dir)
     .then(function() {
-        extract(src, {dir: dir}, function(err) {
-            if (err) defer.reject(err);
-            else {
-                defer.resolve(true);
-            }
+        var unzipper = new DecompressZip(src);
+        unzipper.on('error', function (err) {
+            defer.reject(err);
+        });
+        unzipper.on('extract', function () {
+            defer.resolve(true);
+        });
+        unzipper.extract({
+            path: dir
         });
         return defer.promise;
     });
