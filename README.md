@@ -21,6 +21,7 @@ Scaffold new components, navigate through archetypes and work with REST API help
 - [Install](#install)
 - [Configuration](#configuration)
 - [Setup .bbscaff directory](/docs/bbscaff-setups.md)
+
 ## Install
 
 ```shell
