@@ -15,7 +15,7 @@ var zipDir = require('../lib/zipDir');
 var Command = require('ronin').Command;
 var exclude = ['.git', '.gitignore', 'bower_components', 'node_modules'];
 
-var bbrest, jxon, cfg, model, name;
+var bbrest, jxon, cfg, name;
 
 module.exports = Command.extend({
     help: function() {
@@ -27,6 +27,7 @@ module.exports = Command.extend({
         r += '      -t,  --target <string>\t\t' + '\t\tDir to import.\n';
         r += '      -w,  --watch <boolean>\t\t' + '\t\tWatch for file changes in the current dir and autosubmit.\n';
         r += '      -l,  --collection <boolean>\t' + '\t\tWatch collection directory tree for changes.\n';
+        r += '      -i,  --init-import <boolean>\t' + '\t\tImport whole collection on init.\n';
         r += '      -a,  --auto <boolean>\t\t' + '\t\tAuto create model.xml if doesn\'t exist.\n';
         r += '      -n,  --name <boolean>\t\t' + '\t\tName of the feature to auto create before reading bower.json\n';
         r += '      -v,  --version <boolean>\t\t' + '\t\tVersion of the feature to auto create before reading bower.json\n';
@@ -45,6 +46,7 @@ module.exports = Command.extend({
         target: {type: 'string', alias: 't', default: './'},
         watch: {type: 'boolean', alias: 'w'},
         collection: {type: 'boolean', alias: 'l'},
+        'init-import': {type: 'boolean', alias: 'i'},
         auto: {type: 'boolean', alias: 'a'},
         name: {type: 'string', alias: 'n'},
         version: {type: 'string', alias: 'v'},
@@ -58,7 +60,6 @@ module.exports = Command.extend({
             bbrest = r.bbrest;
             jxon = r.jxon;
             cfg = r.config.cli;
-            model = modelXml(jxon);
 
             if (cfg.collection) {
                 watch.watchTree(cfg.target, {
@@ -92,10 +93,9 @@ module.exports = Command.extend({
 });
 
 function run(target) {
-    return prepareModel(target)
+    var model = modelXml(jxon);
+    return prepareModel(target, model)
     .then(function() {
-        // console.log(model.getXml());
-        // return;
         var replacements = {
             'model.xml': model.getXml()
         };
@@ -116,11 +116,11 @@ function run(target) {
         });
     })
     .catch(function(err) {
-        error(err);
+        error(err, model);
     });
 }
 
-function prepareModel(target) {
+function prepareModel(target, model) {
     output('Reading model.xml...');
     return model.read(path.resolve(target, 'model.xml'))
     .then(function() {
@@ -142,13 +142,13 @@ function prepareModel(target) {
     .catch(function(err) {
         if (err.code === 'ENOENT') {
             var defer = Q.defer();
-            console.log(chalk.gray('model.xml') + ' is not found.');
+            //console.log(chalk.gray('model.xml') + ' is not found.');
 
-            if (cfg.auto) {
+            if (cfg.auto || cfg['init-import']) {
                 defer.resolve();
             } else {
                 inquirer.prompt([{
-                    message: 'Auto submit one?',
+                    message: 'model.xml is not found. Auto submit one?',
                     name: 'saveModel',
                     type: 'confirm'
                 }], function(prm) {
@@ -206,8 +206,8 @@ function addZeroVersion(model) {
 function output() {
     if (cfg.verbose) console.log.apply(this, arguments);
 }
-function error(err) {
-    util.err(chalk.red('bb import-item: ') + (err.message || err.error));
+function error(err, model) {
+    util.err(chalk.red((model.getName() || '')) + ' ' + (err.message || err.error));
 }
 function ok(r, name) {
     util.ok(chalk.yellow(name) + ' imported');
@@ -240,27 +240,26 @@ var dirs = {};
 function onWatchCollection(f, curStat, prevStat) {
     var p;
 
-
     if (typeof f === 'object' && prevStat === null && curStat === null) {
         console.log(chalk.green('Scanning underlying directories for items...'));
 
         _.each(f, function(v, k) {
             p = path.dirname(k).split(path.sep)[0];
+            if (p === '.') return;
             dirs[p] = path.resolve(p);
         });
 
         var numberOfDirectories = 0;
         var remoteHost = bbrest.config;
         _.each(dirs, function(value, key) {
-            console.log(chalk.cyan('Adding watch for ' + key));
+            console.log(chalk.cyan('Adding watch for ') + chalk.yellow(key));
             numberOfDirectories++;
+            if (cfg['init-import']) run(value);
         });
 
-
         console.log(chalk.cyan('Finished setting up ' + numberOfDirectories + ' watches.'));
-
-
-        console.log(chalk.cyan('Items are uploaded to: ' + remoteHost.scheme + '//' + remoteHost.host + ':' + remoteHost.port + remoteHost.context));
+        console.log(chalk.cyan('Endpoint: ') + remoteHost.scheme + '://' + remoteHost.host + ':' + remoteHost.port + '/' + remoteHost.context);
+        if (cfg['init-import']) console.log('Importing all items...');
         // Finished walking the tree
         // file is object where key is fileName and value is stat
     } else {
