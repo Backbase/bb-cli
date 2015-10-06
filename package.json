@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "acorn": "^0.11.0",
-    "bower": "^1.4.1",
+    "bower": "^1.5.3",
     "bower-config": "^1.2.0",
     "chalk": "^1.1.1",
     "cli-table": "^0.3.1",
