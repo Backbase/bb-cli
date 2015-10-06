@@ -82,8 +82,8 @@ function createAllZips(result) {
                 'model.xml': comp.model.getXml()
             };
             all.push(zipDir(comp.path, exclude, replacements)
-            .then(function(zip) {
-                comp.zip = zip;
+            .then(function(zipPath) {
+                comp.zipPath = zipPath;
                 return comp;
             }));
         }
@@ -93,10 +93,10 @@ function createAllZips(result) {
 
 function importAll(dirs) {
     var comp = dirs.shift();
-    if (!comp.zip && dirs.length) return importAll(dirs);
+    if (!comp.zipPath && dirs.length) return importAll(dirs);
     currentlyImporting = comp.name;
 
-    return bbrest.importItem().file(comp.zip.path).post()
+    return bbrest.importItem().file(comp.zipPath).post()
     .then(function(r) {
         var body = jxon.stringToJs(_.unescape(r.body)).import;
         if (body.level === 'ERROR') {
@@ -105,26 +105,8 @@ function importAll(dirs) {
             console.log(chalk.green(comp.name) + ' ' + body.message);
         }
         if (dirs.length) return importAll(dirs);
-        return comp.zip.clean;
     });
 }
-
-// function removeQueue() {
-//     var qu = queue.shift();
-//     return getModelName(qu.name)
-//     .then(function(name) {
-//         return bbrest.catalog(name).delete()
-//         .then(function(r) {
-//             if (r.error) {
-//                 currentlyImporting = name;
-//                 error({message: r.statusInfo});
-//             } else {
-//                 console.log(chalk.green(name) + chalk.red(' deleted'));
-//             }
-//             if (queue.length) return removeQueue();
-//         });
-//     });
-// }
 
 function error(err) {
     if (err.statusInfo === 'Error: connect ECONNREFUSED') {
