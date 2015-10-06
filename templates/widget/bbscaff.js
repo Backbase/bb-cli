@@ -1,3 +1,5 @@
+console.log('This widget is not compatible with CXP 5.6');
+
 module.exports = function(bbscaff){
     bbscaff.prompt([
         {
