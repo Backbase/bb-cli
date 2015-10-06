@@ -3,10 +3,6 @@
   "version": "<%=widget_version%>",
   "description": "<%=widget_description%>",
   "main": "./scripts/main.js",
-  "repository": {
-    "type": "git",
-    "url": ""
-  },
   "authors": [
     "<%=widget_author%>"
   ],
@@ -18,14 +14,5 @@
     "bower_components",
     "node_modules"
   ],
-  "private": true,
-  "dependencies": {
-    "base": "*",
-    "core": "*",
-    "ui": "*"
-  },
-  "devDependencies": {
-    "config": "master",
-    "angular-mocks": "~1.2.28"
-  }
+  "private": true
 }
