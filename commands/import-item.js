@@ -50,10 +50,19 @@ module.exports = Command.extend({
         auto: {type: 'boolean', alias: 'a'},
         name: {type: 'string', alias: 'n'},
         version: {type: 'string', alias: 'v'},
-        verbose: {type: 'boolean'}
+        verbose: {type: 'boolean'},
+
+        host: {type: 'string', alias: 'H'},
+        port: {type: 'string', alias: 'P'},
+        context: {type: 'string', alias: 'c'},
+        username: {type: 'string', alias: 'u'},
+        password: {type: 'string', alias: 'w'},
+        portal: {type: 'string', alias: 'p'}
     },
 
     run: function () {
+
+        console.log(this.options);
 
         return config.getCommon(this.options)
         .then(function(r) {
