@@ -1,17 +1,6 @@
-__tmp
 node_modules
-web_modules
 bower_components
-resources
-features
-docs
-vendors
-sandbox
-pids
-logs
-results
 target
-*.seed
 *.log
 *.csv
 *.dat
