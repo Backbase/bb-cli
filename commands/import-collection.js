@@ -37,14 +37,7 @@ module.exports = Command.extend({
     options: {
         target: {type: 'string', alias: 't', default: './'},
         auto: {type: 'boolean', alias: 'a'},
-        remove: {type: 'boolean', alias: 'r'},
-
-        host: {type: 'string', alias: 'H'},
-        port: {type: 'string', alias: 'P'},
-        context: {type: 'string', alias: 'c'},
-        username: {type: 'string', alias: 'u'},
-        password: {type: 'string', alias: 'w'},
-        portal: {type: 'string', alias: 'p'}
+        remove: {type: 'boolean', alias: 'r'}
     },
 
     run: function () {
@@ -89,8 +82,8 @@ function createAllZips(result) {
                 'model.xml': comp.model.getXml()
             };
             all.push(zipDir(comp.path, exclude, replacements)
-            .then(function(zipPath) {
-                comp.zipPath = zipPath;
+            .then(function(zip) {
+                comp.zip = zip;
                 return comp;
             }));
         }
@@ -100,10 +93,10 @@ function createAllZips(result) {
 
 function importAll(dirs) {
     var comp = dirs.shift();
-    if (!comp.zipPath && dirs.length) return importAll(dirs);
+    if (!comp.zip && dirs.length) return importAll(dirs);
     currentlyImporting = comp.name;
 
-    return bbrest.importItem().file(comp.zipPath).post()
+    return bbrest.importItem().file(comp.zip.path).post()
     .then(function(r) {
         var body = jxon.stringToJs(_.unescape(r.body)).import;
         if (body.level === 'ERROR') {
@@ -112,8 +105,26 @@ function importAll(dirs) {
             console.log(chalk.green(comp.name) + ' ' + body.message);
         }
         if (dirs.length) return importAll(dirs);
+        return comp.zip.clean;
     });
 }
+
+// function removeQueue() {
+//     var qu = queue.shift();
+//     return getModelName(qu.name)
+//     .then(function(name) {
+//         return bbrest.catalog(name).delete()
+//         .then(function(r) {
+//             if (r.error) {
+//                 currentlyImporting = name;
+//                 error({message: r.statusInfo});
+//             } else {
+//                 console.log(chalk.green(name) + chalk.red(' deleted'));
+//             }
+//             if (queue.length) return removeQueue();
+//         });
+//     });
+// }
 
 function error(err) {
     if (err.statusInfo === 'Error: connect ECONNREFUSED') {
