@@ -87,7 +87,8 @@ module.exports = Command.extend({
 
                 return run(cfg.target);
             }
-        });
+        })
+        .catch(error);
 
     }
 });
