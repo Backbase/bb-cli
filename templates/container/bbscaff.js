@@ -1,3 +1,5 @@
+console.log('This container is not compatible with 5.6');
+
 module.exports = function(bbscaff){
     bbscaff.prompt([
         {
