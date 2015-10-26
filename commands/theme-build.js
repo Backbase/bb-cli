@@ -117,7 +117,9 @@ function compile(entry, opts) {
 
         // Save files for promise resolve.
         .pipe(through.obj(function (file, enc, cb) {
-            files.push(file.path);
+            if (file.path.substring(file.path.length - 4) !== '.map') {
+                files.push(file.path);
+            }
             cb(null, file);
         }))
 
