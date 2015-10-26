@@ -101,7 +101,7 @@ function buildTheme(bowerJson, opts) {
     var doReworkIe = util.partial(reworkIe, util.partial.placeholder, opts.target);
 
     // Compress files are the CSS and the ie.css files.
-    var doCompress = util.partial(compress, util.partial.placeholder, opts.target);
+    var doCompress = util.partial(compress, util.partial.placeholder, opts.target, opts);
 
     // Run.
     return compile(entry, opts)
@@ -114,9 +114,7 @@ function compile(entry, opts) {
     var files = [];
 
     gulp.src(entry, {base: opts.target})
-        .pipe(gulpif(function() { return !!opts.sourcemaps; },
-            sourcemaps.init()
-        ))
+        .pipe(gulpif(function() { return !!opts.sourcemaps; }, sourcemaps.init()))
         .pipe(debug({title: 'compiling'}))
         .pipe(less({
             modifyVars: util.merge({}, { // use opts if defined.
@@ -128,9 +126,7 @@ function compile(entry, opts) {
             path.dirname = distDirname(path.dirname, opts.dist);
             path.basename = 'base';
         }))
-        .pipe(gulpif(function() { return !!opts.sourcemaps; },
-            sourcemaps.write('.') // write to same dir as CSS
-        ))
+        .pipe(gulpif(function() { return !!opts.sourcemaps; }, sourcemaps.write('.')))
 
         // Save files for promise resolve.
         .pipe(through.obj(function (file, enc, cb) {
@@ -197,16 +193,18 @@ function reworkIe(files, target) {
     return deferred.promise;
 }
 
-function compress(entry, target) {
+function compress(entry, target, opts) {
     var deferred = Q.defer();
 
     gulp.src(entry, {base: target})
         .pipe(debug({title: 'compressing'}))
+        .pipe(gulpif(function() { return !!opts.sourcemaps; }, sourcemaps.init({loadMaps: true})))
         .pipe(minifyCss({keepBreaks: true}))
         .pipe(rename({
             suffix: '.min',
             extname: '.css'
         }))
+        .pipe(gulpif(function() { return true; }, sourcemaps.write('.')))
         .pipe(debug({title: 'writing'}))
         .pipe(gulp.dest(target))
         .on('error', deferred.reject)
