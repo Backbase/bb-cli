@@ -27,6 +27,7 @@ module.exports = Command.extend({
         r += '      -e,  --edition <string>\t\t\t\t Pass edition var to less.\n';
         r += '      -b,  --base-path <string>\t\t\t\t Pass base-path var to less.\n';
         r += '      -s   --sourcemaps <string>\t\t\t Whether to generate source maps.\n';
+        r += '      -w   --watch <string>\t\t\t Watch less files and rebuild on change.\n';
         return r;
     },
 
@@ -35,6 +36,7 @@ module.exports = Command.extend({
         edition: {type: 'string', alias: 'e'},
         'base-path': {type: 'string', alias: 'b'},
         sourcemaps: {type: 'flag', alias: 's'},
+        watch: {type: 'flag', alias: 'w'},
         dist: {type: 'string', alias: 'd'}
     },
 
@@ -45,14 +47,29 @@ module.exports = Command.extend({
         opts.dist = opts.dist || 'dist';
 
         var bowerFiles = opts.target + '/**/bower.json';
-        var ignore = [opts.target + '/**/bower_components/**', opts.target + '/**/node_modules/**'];
+        var ignore = [
+            opts.target + '/**/bower_components/**',
+            opts.target + '/**/node_modules/**'
+        ];
 
-        // Find bower.json files, as entry for themes.
-        return glob(bowerFiles, {ignore: ignore})
-        .then(util.partial(buildAll, util, opts))
-        .catch(function(err) {
-            console.log(err);
-        });
+        var _run = function() {
+            // Find bower.json files, as entry for themes.
+            return glob(bowerFiles, {ignore: ignore})
+            .then(util.partial(buildAll, util, opts))
+            .catch(function(err) {
+                console.log(err);
+            });
+        };
+
+        if (opts.watch) {
+            var watchFiles = opts.target + '/**/*.less';
+            gulp.watch(watchFiles, []).on('change', function(event) {
+                console.log('File ' + event.path + ' was ' + event.type + ', running build...');
+                _run();
+            });
+        }
+
+        _run();
     }
 });
 
