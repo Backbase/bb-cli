@@ -1,4 +1,5 @@
 var chalk = require('chalk');
+var semver = require('semver');
 var util = require('../lib/util');
 var _ = require('lodash');
 var config = require('../lib/config');
@@ -77,7 +78,9 @@ function createAllZips(result) {
     var replacements;
     _.each(result, function(comp) {
         if (!comp.model.isEmpty()) {
-            if (comp.version) comp.model.addProperty('version', comp.version);
+            if (comp.version && semver.valid(comp.version)) {
+                comp.model.addProperty('version', comp.version);
+            }
             replacements = {
                 'model.xml': comp.model.getXml()
             };

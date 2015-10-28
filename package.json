@@ -1,6 +1,6 @@
 {
   "name": "bb-cli",
-  "version": "0.2.3-beta.1",
+  "version": "0.2.3-beta.2",
   "description": "Command line tools for working with Backbase CXP.",
   "author": "Backbase",
   "licenses": [
@@ -29,6 +29,7 @@
     "formattor": "0.0.2",
     "fs-extra-promise": "^0.3.0",
     "fs-finder": "^1.8.0",
+    "gift": "^0.6.1",
     "glob": "~5.0.3",
     "gulp": "^3.8.8",
     "gulp-conflict": "^0.2.0",

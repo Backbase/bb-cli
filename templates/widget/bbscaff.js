@@ -1,25 +1,24 @@
+console.log('This widget is not compatible with CXP 5.6');
+
 module.exports = function(bbscaff){
     bbscaff.prompt([
         {
-            name: 'widget_title',
-            message: 'Widget title'
-        },
-        {
+            type: 'input',
             name: 'widget_name',
-            message: 'Widget name',
-            default: function(answers){
-                return answers.widget_title.replace(/ /gi, '-').toLowerCase();
-            }
-        },
-        {
-            name: 'bundle_name',
-            message: 'Bundle name',
-            'default': bbscaff.getCurrentBundle()
-        },
-        {
-            name: 'bundle_prefix',
-            message: 'Bundle prefix',
-            'default': bbscaff.getPrefix(bbscaff.getCurrentBundle())
+            message: 'Name'
+        }, {
+            type: 'input',
+            name: 'widget_description',
+            message: 'Description'
+        }, {
+            type: 'input',
+            name: 'widget_version',
+            message: 'Version',
+            default: '1.0.0'
+        }, {
+            type: 'input',
+            name: 'widget_author',
+            message: 'Author'
         }
     ], function(answers){
         bbscaff.generate(answers, answers.widget_name);
