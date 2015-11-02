@@ -128,7 +128,7 @@ function prepareModel(target, model) {
     .then(function() {
         if (!model.getProperty('version')) {
             if (cfg.version && semver.valid(cfg.version)) {
-                comp.model.addProperty('version', comp.version);
+                model.addProperty('version', cfg.version);
             } else {
                 return getBowerJson(target)
                 .then(function(bjson) {
