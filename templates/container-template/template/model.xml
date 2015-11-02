@@ -1,0 +1,19 @@
+<template>
+    <type>CONTAINER</type>
+    <name><%=template_name%></name>
+    <contextItemName>[BBHOST]</contextItemName>
+    <properties>
+        <property name="Web">
+            <value type="string">templates/<%=template_name_dashed%></value>
+        </property>
+        <property name="BundleName">
+            <value type="string"><%=bundle_name%></value>
+        </property>
+        <property name="title">
+            <value type="string"><%=template_title%></value>
+        </property>
+        <property name="DefaultDevice">
+            <value type="string">Web</value>
+        </property>
+    </properties>
+</template>
