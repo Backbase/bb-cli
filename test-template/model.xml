@@ -1,16 +1,16 @@
 <template>
     <type>CONTAINER</type>
-    <name><%=template_name%></name>
+    <name>testTemplate</name>
     <contextItemName>[BBHOST]</contextItemName>
     <properties>
         <property name="Web">
-            <value type="string">containers/<%=container_name%>/templates/<%=template_name%></value>
+            <value type="string">templates/test-template</value>
         </property>
         <property name="BundleName">
-            <value type="string"><%=bundle_name%></value>
+            <value type="string">Backbase</value>
         </property>
         <property name="title">
-            <value type="string"><%=container_title%></value>
+            <value type="string">Test template</value>
         </property>
         <property name="DefaultDevice">
             <value type="string">Web</value>

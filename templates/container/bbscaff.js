@@ -1,5 +1,3 @@
-console.log('This container is not compatible with 5.6');
-
 module.exports = function(bbscaff){
     bbscaff.prompt([
         {
@@ -10,29 +8,26 @@ module.exports = function(bbscaff){
             name: 'container_name',
             message: 'Container name',
             'default': function(answers){
-                return answers.container_title.replace(/ /gi, '-').toLowerCase();
+                return answers.container_title.replace(/\s+/gi, '-').toLowerCase();
             },
-
             validate: function(string){
-                return string.split(/ /).length === 1
+                return string.length > 1;
             }
         },
         {
             name: 'template_name',
             message: 'Template name',
-            'default': function(answers){
-                return bbscaff.toCamelCase(answers.container_name);
+            filter: function(string){
+                return bbscaff.toCamelCase(string);
             },
-
             validate: function(string){
-                return string.split(/[- \.]/).length === 1
+                return string.length > 1;
             }
         },
         {
             name: 'bundle_name',
             message: 'Bundle name', 'default': bbscaff.getCurrentBundle()
         },
-
         {
             name: 'bundle_prefix',
             message: 'Bundle prefix', 'default': bbscaff.getPrefix(bbscaff.getCurrentBundle())

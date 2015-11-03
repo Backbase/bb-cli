@@ -1,0 +1,30 @@
+<catalog>
+    <container>
+        <name>test-container</name>
+        <contextItemName>[BBHOST]</contextItemName>
+        <properties>
+            <property name="TemplateName">
+                <value type="string">testTemplate</value>
+            </property>
+            <property name="viewNamespace">
+                <value type="string">Backbase</value>
+            </property>
+            <property name="title" label="Title" viewHint="admin,designModeOnly">
+                <value type="string">Test container</value>
+            </property>
+            <property name="config">
+                <value type="string">$(contextRoot)/static/Backbase/containers/test-container/config.xml</value>
+            </property>
+            <property name="csr">
+                <value type="boolean">false</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(contextRoot)/static/Backbase/containers/test-container/media/icon.png</value>
+            </property>
+        </properties>
+        <tags>
+            <tag type="regular">layout</tag>
+            <tag type="section">layouts</tag>
+        </tags>
+    </container>
+</catalog>
