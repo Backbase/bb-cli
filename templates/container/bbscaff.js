@@ -5,6 +5,12 @@ module.exports = function(bbscaff){
             message: 'Container title'
         },
         {
+            name: 'render_type',
+            message: 'Render type',
+            choices: ['csr', 'ssr'],
+            default: 'ssr'
+        },
+        {
             name: 'container_name',
             message: 'Container name',
             'default': function(answers){

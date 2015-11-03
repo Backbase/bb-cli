@@ -4,7 +4,8 @@
     xmlns="http://www.w3.org/1999/xhtml">
 
     <bb:resources>
-        <link rel="stylesheet" type='text/css' href="css/<%=container_name%>.css"/>
-        <script type="text/javascript" src="js/<%=container_name%>.js"></script>
+        <link rel="stylesheet" type='text/css' href="styles/<%=container_name%>.css"/>
+        <script type="text/javascript" src="$(contextRoot)/templates/<%=template_name%>/template.js"></script>
+        <script type="text/javascript" src="scripts/<%=container_name%>.js"></script>
     </bb:resources>
 </w3c:widget>
