@@ -1,5 +1,5 @@
 {
-  "name": "{container-name}",
+  "name": "<%=container_name%>",
   "version": "1.0.0",
   "private": true
 }

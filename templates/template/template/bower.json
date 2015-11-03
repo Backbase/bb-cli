@@ -1,5 +1,5 @@
 {
-  "name": "{template-name}",
+  "name": "<%=template_name%>",
   "version": "1.0.0",
   "private": true
 }

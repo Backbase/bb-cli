@@ -9,7 +9,7 @@
                 <value type="string">templates/<%=template_name_dashed%></value>
             </property>
             <property name="BundleName">
-                <value type="string">$(itemRoot)</value>
+                <value type="string"><%=bundle_name%></value>
             </property>
             <property name="title">
                 <value type="string"><%=template_title%></value>
