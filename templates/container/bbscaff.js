@@ -14,6 +14,9 @@ module.exports = function(bbscaff){
             name: 'container_name',
             message: 'Container name',
             'default': function(answers){
+                //if 'a b ' is matched, it will convert it to '-a-b-'
+                //the container name is used in the model.xml, and for naming the js and css files
+                //in the scripts and styles folder respectively
                 return answers.container_title.replace(/\s+/gi, '-').toLowerCase();
             },
             validate: function(string){
