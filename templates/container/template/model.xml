@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <catalog>
     <container>
         <name><%=container_name%></name>
@@ -7,19 +8,19 @@
                 <value type="string"><%=template_name%></value>
             </property>
             <property name="viewNamespace">
-                <value type="string"><%=bundle_name%></value>
+                <value type="string">templates_<%=template_name%></value>
             </property>
             <property name="title" label="Title" viewHint="admin,designModeOnly">
                 <value type="string"><%=container_title%></value>
             </property>
             <property name="config">
-                <value type="string">$(contextRoot)/static/<%=bundle_name%>/containers/<%=container_name%>/config.xml</value>
+                <value type="string">$(itemRoot)/config.xml</value>
             </property>
             <property name="csr">
-                <value type="boolean">false</value>
+                <value type="boolean"><%=(render_type === 'csr')%></value>
             </property>
             <property name="thumbnailUrl">
-                <value type="string">$(contextRoot)/static/<%=bundle_name%>/containers/<%=container_name%>/media/icon.png</value>
+                <value type="string">$(itemRoot)/media/icon.png</value>
             </property>
         </properties>
         <tags>
