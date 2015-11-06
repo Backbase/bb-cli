@@ -19,7 +19,9 @@
             </property> -->
         </properties>
         <tags>
-
+            <% _.each(tags, function(tag){ %>
+            <tag type="<%= tag%>"></tag>
+            <% }); %>
         </tags>
     </widget>
 </catalog>
