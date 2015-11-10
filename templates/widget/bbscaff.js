@@ -20,8 +20,12 @@ module.exports = function(bbscaff){
             name: 'widget_author',
             message: 'Author'
         },{
+            name: 'sectionTag',
+            message: 'Section tag'
+        },
+        {
             name: 'tags',
-            message: 'Tags',
+            message: 'Regular tags',
             filter: function(str){
                 return str.split(/\s*,\s*/);
             }
