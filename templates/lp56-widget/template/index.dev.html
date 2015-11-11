@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="styles/base.css" type="text/css" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <script src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.15/require.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.8.3/jquery.js"></script>
     <script>
         // Re-define jquery in require
@@ -12,9 +13,11 @@
         define("jquery", [], function () {
             return jQuery;
         });
-    </script>
 
-    <script src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.15/require.js"></script>
+        window.launchpad = window.launchpad || {};
+        window.launchpad.config = window.launchpad.config || {};
+        window.launchpad.config.path = window.launchpad.config.path || 'bower_components';
+    </script>
     <script src="/bower_components/config/requirejs.conf.js"></script>
 
     <script>
@@ -23,6 +26,11 @@
         var __WIDGET__ = {
             body:  document.body,
             getPreference: function(name){
+                switch(name){
+                    case 'some-pref': return 'some-value'; break;
+                }
+            },
+            getPreferenceFromParents: function (name){
                 switch(name){
                     case 'some-pref': return 'some-value'; break;
                 }
