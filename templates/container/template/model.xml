@@ -24,8 +24,10 @@
             </property>
         </properties>
         <tags>
-            <tag type="regular">layout</tag>
-            <tag type="section">layouts</tag>
+          <tag type="section"><%= sectionTag%></tag>
+          <% _.each(tags, function(tag){ %>
+          <tag type="regular"><%= tag%></tag>
+          <% }); %>
         </tags>
     </container>
 </catalog>

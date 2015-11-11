@@ -34,6 +34,17 @@ module.exports = function(bbscaff){
             }
         },
         {
+            name: 'sectionTag',
+            message: 'Section tag'
+        },
+        {
+            name: 'tags',
+            message: 'Regular tags',
+            filter: function(str){
+                return str.split(/\s*,\s*/);
+            }
+        },
+        {
             name: 'bundle_name',
             message: 'Bundle name', 'default': bbscaff.getCurrentBundle()
         },

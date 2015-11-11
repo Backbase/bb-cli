@@ -19,6 +19,16 @@ module.exports = function(bbscaff){
             type: 'input',
             name: 'widget_author',
             message: 'Author'
+        },{
+            name: 'sectionTag',
+            message: 'Section tag'
+        },
+        {
+            name: 'tags',
+            message: 'Regular tags',
+            filter: function(str){
+                return str.split(/\s*,\s*/);
+            }
         }
     ], function(answers){
         bbscaff.generate(answers, answers.widget_name);
