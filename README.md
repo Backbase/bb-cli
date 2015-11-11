@@ -15,6 +15,7 @@ Scaffold new components, navigate through archetypes and work with REST API help
 - [Import](#import)
 - [Import Collection](#import-collection)
 - [Import Item](#import-item)
+- [Theme Build](#theme-build)
 - [Sync](#sync)
 - [Rest](#rest)
 - [Ln](#ln)
@@ -59,16 +60,8 @@ bb generate container
 bb generate project
 ```
 
-##### Launchpad 0.12 Generators
-
-For Launchpad 0.12 development, use the following commands:
-
 ```
-bb generate lp12-widget
-```
-
-```
-bb generate lp12-module
+bb generate template
 ```
 
 Read more about generate API [here](/docs/generate.md).
@@ -224,15 +217,21 @@ Backbase CXP v5.6
 ##### Options
 
 ```
-  -t,  --target <string>        Current directory            Dir to import.
-  -w,  --watch <boolean>                   Watch for file changes and autosubmit.
+  -t,  --target <string>        Current directory   Dir to import.
+  -w,  --watch <boolean>                             Watch for file changes and autosubmit.
+  -l,  --collection <boolean>                        Watch collection directory tree for changes.
+  -i,  --init-import <boolean>                       Import whole collection on init.
+  -a,  --auto <boolean>                              Auto create model.xml if doesn't exist.
+  -n,  --name <boolean>                              Name of the feature to auto create before reading bower.json
+  -v,  --version <boolean>                           Version of the feature to auto create before reading bower.json
+       --verbose <boolean>                           Enables detailed output.
 
-  -H,  --host <string>		localhost	  The host name of the server.
-  -P,  --port <number>		7777		  The port of the server.
-  -c,  --context <string>	portalserver  The application context of the portal.
-  -u,  --username <string>	admin		  Username.
-  -w,  --password <string>	admin		  Password.
-  -p,  --portal <string>                  Name of the portal to target.
+  -H,  --host <string>          localhost           The host name of the server.
+  -P,  --port <number>          7777                The port of the server.
+  -c,  --context <string>       portalserver        The application context of the portal.
+  -u,  --username <string>      admin               Username.
+  -w,  --password <string>      admin               Password.
+  -p,  --portal <string>                            Name of the portal to target.
 ```
 
 ##### Examples
@@ -241,6 +240,27 @@ Imports current directory as item to the portal. Then it watches for file change
 
 ```
 bb import-item --watch
+```
+
+### <a name="theme-build"></a>Theme Build
+
+Builds a theme.
+Requires a bower.json file in the directory with a "main" pointing to the base less file
+
+```
+bb theme-build
+```
+
+##### Options
+
+```
+-short, --name                 default      description
+
+-t,  --target <string>                 .            Path to directory to build.
+-e,  --edition <string>                             Pass edition var to less.
+-b,  --base-path <string>                           Pass base-path var to less.
+-s   --sourcemaps <string>                          Whether to generate source maps.
+-w   --watch <string>                               Watch less files and rebuild on change.
 ```
 
 ### <a name="sync"></a>Sync
@@ -260,11 +280,11 @@ bb sync
 ```
 -short, --name (type)          default              description
 
-      -f,  --file (string)	    first xml file		 A file to target.
-      -c,  --context (string)	portalserver		 Portal server context (for other options use `.bbrc`).
-      -s,  --save (string)	            			 Name of the server item for which the model is to be exported to a file.
-      -y,  --yes (boolean)	            			 Disables dialogs.
-      -v,  --verbose		    false   			 Prints detailed output.
+-f,  --file (string)	    first xml file		 A file to target.
+-c,  --context (string)	portalserver		 Portal server context (for other options use `.bbrc`).
+-s,  --save (string)	            			 Name of the server item for which the model is to be exported to a file.
+-y,  --yes (boolean)	            			 Disables dialogs.
+-v,  --verbose		    false   			 Prints detailed output.
 ```
 
 ### <a name="rest"></a>Rest
