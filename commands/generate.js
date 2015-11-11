@@ -5,11 +5,12 @@ var _ = require('lodash');
 var Table = require('cli-table');
 var map = require('map-stream');
 var gulp = require('gulp');
+var osenv = require('osenv');
 var Command = require('ronin').Command;
 
 var bbscaff = require('../lib/bbscaff');
 
-var homeDir = process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE;
+var homeDir = osenv.home();
 var templatesDir = [
     path.join(homeDir, '.bbscaff'),
     path.join(__dirname, '..', 'templates')
