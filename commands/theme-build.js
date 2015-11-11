@@ -27,6 +27,7 @@ module.exports = Command.extend({
         r += '      -e,  --edition <string>\t\t\t\t Pass edition var to less.\n';
         r += '      -b,  --base-path <string>\t\t\t\t Pass base-path var to less.\n';
         r += '      -s   --sourcemaps <string>\t\t\t Whether to generate source maps.\n';
+        r += '      -w   --watch <string>\t\t\t Watch less files and rebuild on change.\n';
         return r;
     },
 
@@ -35,6 +36,7 @@ module.exports = Command.extend({
         edition: {type: 'string', alias: 'e'},
         'base-path': {type: 'string', alias: 'b'},
         sourcemaps: {type: 'flag', alias: 's'},
+        watch: {type: 'flag', alias: 'w'},
         dist: {type: 'string', alias: 'd'}
     },
 
@@ -45,14 +47,29 @@ module.exports = Command.extend({
         opts.dist = opts.dist || 'dist';
 
         var bowerFiles = opts.target + '/**/bower.json';
-        var ignore = [opts.target + '/**/bower_components/**', opts.target + '/**/node_modules/**'];
+        var ignore = [
+            opts.target + '/**/bower_components/**',
+            opts.target + '/**/node_modules/**'
+        ];
 
-        // Find bower.json files, as entry for themes.
-        return glob(bowerFiles, {ignore: ignore})
-        .then(util.partial(buildAll, util, opts))
-        .catch(function(err) {
-            console.log(err);
-        });
+        var _run = function() {
+            // Find bower.json files, as entry for themes.
+            return glob(bowerFiles, {ignore: ignore})
+            .then(util.partial(buildAll, util, opts))
+            .catch(function(err) {
+                console.log(err);
+            });
+        };
+
+        if (opts.watch) {
+            var watchFiles = opts.target + '/**/*.less';
+            gulp.watch(watchFiles, []).on('change', function(event) {
+                console.log('File ' + event.path + ' was ' + event.type + ', running build...');
+                _run();
+            });
+        }
+
+        _run();
     }
 });
 
@@ -84,7 +101,7 @@ function buildTheme(bowerJson, opts) {
     var doReworkIe = util.partial(reworkIe, util.partial.placeholder, opts.target);
 
     // Compress files are the CSS and the ie.css files.
-    var doCompress = util.partial(compress, util.partial.placeholder, opts.target);
+    var doCompress = util.partial(compress, util.partial.placeholder, opts.target, opts);
 
     // Run.
     return compile(entry, opts)
@@ -97,9 +114,7 @@ function compile(entry, opts) {
     var files = [];
 
     gulp.src(entry, {base: opts.target})
-        .pipe(gulpif(function() { return !!opts.sourcemaps; },
-            sourcemaps.init()
-        ))
+        .pipe(gulpif(function() { return !!opts.sourcemaps; }, sourcemaps.init()))
         .pipe(debug({title: 'compiling'}))
         .pipe(less({
             modifyVars: util.merge({}, { // use opts if defined.
@@ -111,13 +126,13 @@ function compile(entry, opts) {
             path.dirname = distDirname(path.dirname, opts.dist);
             path.basename = 'base';
         }))
-        .pipe(gulpif(function() { return !!opts.sourcemaps; },
-            sourcemaps.write('.') // write to same dir as CSS
-        ))
+        .pipe(gulpif(function() { return !!opts.sourcemaps; }, sourcemaps.write('.')))
 
         // Save files for promise resolve.
         .pipe(through.obj(function (file, enc, cb) {
-            files.push(file.path);
+            if (file.path.substring(file.path.length - 4) !== '.map') {
+                files.push(file.path);
+            }
             cb(null, file);
         }))
 
@@ -178,16 +193,18 @@ function reworkIe(files, target) {
     return deferred.promise;
 }
 
-function compress(entry, target) {
+function compress(entry, target, opts) {
     var deferred = Q.defer();
 
     gulp.src(entry, {base: target})
         .pipe(debug({title: 'compressing'}))
+        .pipe(gulpif(function() { return !!opts.sourcemaps; }, sourcemaps.init({loadMaps: true})))
         .pipe(minifyCss({keepBreaks: true}))
         .pipe(rename({
             suffix: '.min',
             extname: '.css'
         }))
+        .pipe(gulpif(function() { return true; }, sourcemaps.write('.')))
         .pipe(debug({title: 'writing'}))
         .pipe(gulp.dest(target))
         .on('error', deferred.reject)

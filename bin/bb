@@ -26,14 +26,12 @@ program.set({
     }
 });
 
-program.autoupdate(function () {
-    try {
-        program.run();
-    } catch(e){
-        util.err(chalk.red('Error running command. Please check the stacktrace or the help section "bb -h".\n'));
-        util.err(e.stack);
-    }
-});
+try {
+    program.run();
+} catch(e){
+    util.err(chalk.red('Error running command. Please check the stacktrace or the help section "bb -h".\n'));
+    util.err(e.stack);
+}
 
 var notifier = updateNotifier({
     pkg: pkg

@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:g="http://www.backbase.com/2008/gadget" xml:lang="en">
 <head>
-    <title><%=widget_title%></title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link rel="stylesheet" href="css/<%=widget_name%>.css" />
+    <meta http-equiv="Content-Type" content="text/xml; charset=UTF-8" />
+    <link rel="stylesheet" href="styles/base.css" type="text/css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 </head>
-<body g:onload="requireWidget(__WIDGET__, 'js/<%=widget_name%>')" class="<%=bundle_prefix%>-<%=widget_name%>" ng-controller="main">
-    <h1><%=widget_title%></h1>
-    <p>{{data}}</p>
+
+<body g:onload="requireWidget(__WIDGET__, 'scripts/main')"  class="<%=widget_name%>">
+    <div ng-controller="MainCtrl as mainCtrl">
+        Hello World
+    </div>
 </body>
 </html>
