@@ -38,7 +38,14 @@ module.exports = Command.extend({
     options: {
         target: {type: 'string', alias: 't', default: './'},
         auto: {type: 'boolean', alias: 'a'},
-        remove: {type: 'boolean', alias: 'r'}
+        remove: {type: 'boolean', alias: 'r'},
+
+        host: {type: 'string', alias: 'H'},
+        port: {type: 'string', alias: 'P'},
+        context: {type: 'string', alias: 'c'},
+        username: {type: 'string', alias: 'u'},
+        password: {type: 'string', alias: 'w'},
+        portal: {type: 'string', alias: 'p'}
     },
 
     run: function () {
