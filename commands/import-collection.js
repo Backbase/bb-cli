@@ -23,7 +23,7 @@ module.exports = Command.extend({
         r += '\n\t Zips and imports directory recursively.';
         r += '\n\n  ' + title('Options') + ': -short, --name <type> ' + d('default') + ' description\n';
         r += '      -t,  --target <string>\t\t' + '\t\tDir where bower.json is.\n\n';
-        r += '      -a,  --auto <boolean>\t\t' + '\t\tAuto generate model.xml when it is missing.\n\n';
+        r += '      -s,  --skip <boolean>\t\t' + '\t\tDon`t generate model.xml when it is missing.\n\n';
         // r += '      -r,  --remove <boolean>\t\t' + '\t\tRemoves components in target instead of adding them.\n\n';
 
         r += '      -H,  --host <string>\t\t' + d('localhost') + '\tThe host name of the server running portal foundation.\n';
@@ -37,7 +37,7 @@ module.exports = Command.extend({
 
     options: {
         target: {type: 'string', alias: 't', default: './'},
-        auto: {type: 'boolean', alias: 'a'},
+        skip: {type: 'boolean', alias: 's'},
         remove: {type: 'boolean', alias: 'r'}
     },
 
@@ -50,7 +50,7 @@ module.exports = Command.extend({
             cfg = r.config.cli;
 
             console.log('Parsing collection...');
-            return parseCollection(cfg.target, exclude, cfg.auto, r.jxon)
+            return parseCollection(cfg.target, exclude, !cfg.skip, r.jxon)
             .then(createAllZips)
             .then(importAll)
             .then(ok);
