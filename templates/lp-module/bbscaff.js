@@ -19,9 +19,9 @@ module.exports = function(bbscaff){
             message: 'Author'
         }
     ], function(answers){
-        bbscaff.fetchTemplate('ssh://git@stash.backbase.com:7999/lp/module-blank-template.git', __dirname, function(err){
+        bbscaff.fetchTemplate('ssh://git@bitbucket.org:backbase/lp-module-blank-template.git', __dirname, function(err){
             if(err) {
-                return console.error('Error trying to update template from stash', err);
+                return console.error('Error trying to update template from git', err);
             }
 
             bbscaff.generate({
