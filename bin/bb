@@ -8,7 +8,6 @@ var dirname = __dirname.substr(0, 1).toUpperCase() + __dirname.substr(1);
 var program = ronin(path.join(dirname, '..'));
 var util = require('../lib/util');
 var pkg = require('../package.json');
-var updateNotifier = require('update-notifier');
 
 // Changing the limit for listeners, since we work ofter with remote calls
 require('events').EventEmitter.prototype._maxListeners = 100;
@@ -32,11 +31,4 @@ try {
     util.err(chalk.red('Error running command. Please check the stacktrace or the help section "bb -h".\n'));
     util.err(e.stack);
 }
-
-var notifier = updateNotifier({
-    pkg: pkg
-    // updateCheckInterval: 1000 * 60 * 60 * 24 * 7 // 1 week 
-});
-
-notifier.notify();
 
