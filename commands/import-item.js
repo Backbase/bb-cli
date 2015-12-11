@@ -14,7 +14,7 @@ var inquirer = require('inquirer');
 var zipDir = require('../lib/zipDir');
 
 var Command = require('ronin').Command;
-var exclude = ['.git', '.gitignore', 'bower_components', 'node_modules'];
+var exclude = ['.git', '.gitignore', 'bower_components', 'node_modules', 'node', 'target'];
 
 var bbrest, jxon, cfg, name;
 
