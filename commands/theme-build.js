@@ -27,7 +27,9 @@ module.exports = Command.extend({
         r += '      -e,  --edition <string>\t\t\t\t Pass edition var to less.\n';
         r += '      -b,  --base-path <string>\t\t\t\t Pass base-path var to less.\n';
         r += '      -s   --sourcemaps <string>\t\t\t Whether to generate source maps.\n';
-        r += '      -w   --watch <string>\t\t\t Watch less files and rebuild on change.\n';
+        r += '      -w   --watch <string>\t\t\t\t Watch less files and rebuild on change.\n';
+        r += '           --disable-compress <string>\t\t\t Don\'t compress CSS into .min files.\n';
+        r += '           --disable-ie <string>\t\t\t Don\'t create reworked .ie files for IE8.\n';
         return r;
     },
 
@@ -37,7 +39,9 @@ module.exports = Command.extend({
         'base-path': {type: 'string', alias: 'b'},
         sourcemaps: {type: 'flag', alias: 's'},
         watch: {type: 'flag', alias: 'w'},
-        dist: {type: 'string', alias: 'd'}
+        dist: {type: 'string', alias: 'd'},
+        'disable-compress': {type: 'flag'},
+        'disable-ie': {type: 'flag'}
     },
 
     run: function () {
@@ -98,10 +102,20 @@ function buildTheme(bowerJson, opts) {
 
     // Css files to rework are the less files, but with .css extension,
     // and are in the dist.
-    var doReworkIe = util.partial(reworkIe, util.partial.placeholder, opts.target);
+    var doReworkIe = function(entry) {
+        if (opts['disable-ie']) {
+            return entry;
+        }
+        return reworkIe(entry, opts.target);
+    }
 
     // Compress files are the CSS and the ie.css files.
-    var doCompress = util.partial(compress, util.partial.placeholder, opts.target, opts);
+    var doCompress = function(entry) {
+        if (opts['disable-compress']) {
+            return entry;
+        }
+        return compress(entry, opts.target, opts);
+    };
 
     // Run.
     return compile(entry, opts)
