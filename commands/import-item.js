@@ -98,6 +98,16 @@ module.exports = Command.extend({
         })
         .catch(error);
 
+    },
+
+    runImport: function(target) {
+        return config.getCommon()
+            .then(function(r) {
+                bbrest = r.bbrest;
+                jxon = r.jxon;
+                cfg = {};
+                run(target);
+            });
     }
 });
 
