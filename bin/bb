@@ -19,7 +19,7 @@ program.set({
         var title = chalk.bold;
         var r = '  ' + title('Version') + ': ' + pkg.version;
         r += '\n\n  ' + title('Usage') + ': bb <command> [OPTIONS]';
-        r += '\n\n  ' + title('Commands') + ': archetype (arch), export, import, import-item, import-collection, generate, rest, sync, ln, install.';
+        r += '\n\n  ' + title('Commands') + ': archetype (arch), theme-build, export, import, import-item, import-collection, generate, rest, sync, ln, install.';
         r += '\n\n';
         return r;
     }
