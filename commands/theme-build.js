@@ -30,11 +30,11 @@ module.exports = Command.extend({
         r += '      -t,  --target <string>\t\t\t\t Path to directory to build.\n';
         r += '      -e,  --edition <string>\t\t\t\t Pass edition var to less.\n';
         r += '      -b,  --base-path <string>\t\t\t\t Pass base-path var to less.\n';
-        r += '      -s   --sourcemaps <string>\t\t\t Whether to generate source maps.\n';
-        r += '      -w   --watch <string>\t\t\t\t Watch less files and rebuild on change.\n';
-        r += '           --disable-compress <string>\t\t\t Don\'t compress CSS into .min files.\n';
-        r += '           --disable-ie <string>\t\t\t Don\'t create reworked .ie files for IE8.\n';
-        r += '      -i   --import <string>\t\t\t Run bb import-item after building.\n';
+        r += '      -s   --sourcemaps\t\t\t\t\t Whether to generate source maps.\n';
+        r += '      -w   --watch\t\t\t\t\t Watch less files and rebuild on change.\n';
+        r += '           --disable-compress\t\t\t\t Don\'t compress CSS into .min files.\n';
+        r += '           --disable-ie\t\t\t\t\t Don\'t create reworked .ie files for IE8.\n';
+        r += '      -i   --import\t\t\t\t\t Run bb import-item after building.\n';
         return r;
     },
 
@@ -113,7 +113,7 @@ function buildTheme(bowerJson, opts) {
             return entry;
         }
         return reworkIe(entry, opts.target);
-    }
+    };
 
     // Compress files are the CSS and the ie.css files.
     var doCompress = function(entry) {
@@ -133,13 +133,13 @@ function buildTheme(bowerJson, opts) {
         } else {
             return entry;
         }
-    }
+    };
 
     // Run.
     return compile(entry, opts)
         .then(doReworkIe)
         .then(doCompress)
-        .then(doImport)
+        .then(doImport);
 }
 
 function compile(entry, opts) {
