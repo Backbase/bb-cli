@@ -14,7 +14,7 @@ var inquirer = require('inquirer');
 var zipDir = require('../lib/zipDir');
 
 var Command = require('ronin').Command;
-var exclude = ['.git', '.gitignore', 'bower_components', 'node_modules'];
+var exclude = ['.git', '.gitignore', 'bower_components', 'node_modules', 'node', 'target'];
 
 var bbrest, jxon, cfg, name;
 
@@ -98,6 +98,16 @@ module.exports = Command.extend({
         })
         .catch(error);
 
+    },
+
+    runImport: function(target) {
+        return config.getCommon()
+            .then(function(r) {
+                bbrest = r.bbrest;
+                jxon = r.jxon;
+                cfg = {};
+                run(target);
+            });
     }
 });
 

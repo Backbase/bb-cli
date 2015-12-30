@@ -11,7 +11,7 @@ var parseCollection = require('../lib/parseCollection');
 var Command = require('ronin').Command;
 
 var currentlyImporting = '';
-var exclude = ['.git', '.gitignore', 'bower_components', 'node_modules'];
+var exclude = ['.git', '.gitignore', 'bower_components', 'node_modules', 'node', 'target'];
 
 var bbrest, jxon, cfg;
 

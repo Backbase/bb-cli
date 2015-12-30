@@ -7,7 +7,8 @@ var less = require('gulp-less');
 var path = require('path');
 var glob = Q.denodeify(require('glob'));
 var fs = require('fs-extra-promise');
-var util = require('lodash');
+var _ = require('lodash');
+var util = require('../lib/util');
 var sourcemaps = require('gulp-sourcemaps');
 var gulpif = require('gulp-if');
 var mqRemove = require('gulp-mq-remove');
@@ -16,6 +17,9 @@ var debug = require('gulp-debug');
 var minifyCss = require('gulp-minify-css');
 var chalk = require('chalk');
 var through = require('through2');
+
+var ImportItem = require('./import-item');
+var importCmd = new ImportItem();
 
 module.exports = Command.extend({
     help: function () {
@@ -27,7 +31,10 @@ module.exports = Command.extend({
         r += '      -e,  --edition <string>\t\t\t\t Pass edition var to less.\n';
         r += '      -b,  --base-path <string>\t\t\t\t Pass base-path var to less.\n';
         r += '      -s   --sourcemaps <string>\t\t\t Whether to generate source maps.\n';
-        r += '      -w   --watch <string>\t\t\t Watch less files and rebuild on change.\n';
+        r += '      -w   --watch <string>\t\t\t\t Watch less files and rebuild on change.\n';
+        r += '           --disable-compress <string>\t\t\t Don\'t compress CSS into .min files.\n';
+        r += '           --disable-ie <string>\t\t\t Don\'t create reworked .ie files for IE8.\n';
+        r += '      -i   --import <string>\t\t\t Run bb import-item after building.\n';
         return r;
     },
 
@@ -37,7 +44,10 @@ module.exports = Command.extend({
         'base-path': {type: 'string', alias: 'b'},
         sourcemaps: {type: 'flag', alias: 's'},
         watch: {type: 'flag', alias: 'w'},
-        dist: {type: 'string', alias: 'd'}
+        dist: {type: 'string', alias: 'd'},
+        'disable-compress': {type: 'flag'},
+        'disable-ie': {type: 'flag'},
+        'import': {type: 'flag', alias: 'i'}
     },
 
     run: function () {
@@ -55,9 +65,9 @@ module.exports = Command.extend({
         var _run = function() {
             // Find bower.json files, as entry for themes.
             return glob(bowerFiles, {ignore: ignore})
-            .then(util.partial(buildAll, util, opts))
+            .then(_.partial(buildAll, _, opts))
             .catch(function(err) {
-                console.log(err);
+                util.err(chalk.red('Error:') + ' ' + (err.message || err.error));
             });
         };
 
@@ -77,7 +87,7 @@ function buildAll(files, opts) {
     var promises = [];
     files.forEach(function(f) {
         promises.push(fs.readJsonAsync(f).then(
-            util.partial(buildTheme, util, opts)
+            _.partial(buildTheme, _, opts)
         ));
     });
     return Q.all(promises);
@@ -87,7 +97,7 @@ function buildTheme(bowerJson, opts) {
     var entry = bowerJson.main;
 
     // Normalise main to an array.
-    if (!util.isArray(entry)) {
+    if (!_.isArray(entry)) {
         entry = [entry];
     }
 
@@ -98,15 +108,38 @@ function buildTheme(bowerJson, opts) {
 
     // Css files to rework are the less files, but with .css extension,
     // and are in the dist.
-    var doReworkIe = util.partial(reworkIe, util.partial.placeholder, opts.target);
+    var doReworkIe = function(entry) {
+        if (opts['disable-ie']) {
+            return entry;
+        }
+        return reworkIe(entry, opts.target);
+    }
 
     // Compress files are the CSS and the ie.css files.
-    var doCompress = util.partial(compress, util.partial.placeholder, opts.target, opts);
+    var doCompress = function(entry) {
+        if (opts['disable-compress']) {
+            return entry;
+        }
+        return compress(entry, opts.target, opts);
+    };
+
+    // Import on completing.
+    var doImport = function(entry) {
+        if (opts.import) {
+            return importCmd.runImport('./')
+                .then(function() {
+                    return entry;
+                });
+        } else {
+            return entry;
+        }
+    }
 
     // Run.
     return compile(entry, opts)
         .then(doReworkIe)
-        .then(doCompress);
+        .then(doCompress)
+        .then(doImport)
 }
 
 function compile(entry, opts) {
@@ -117,15 +150,17 @@ function compile(entry, opts) {
         .pipe(gulpif(function() { return !!opts.sourcemaps; }, sourcemaps.init()))
         .pipe(debug({title: 'compiling'}))
         .pipe(less({
-            modifyVars: util.merge({}, { // use opts if defined.
+            modifyVars: _.merge({}, { // use opts if defined.
                 edition: opts.edition,
                 'base-path': opts['base-path']
             })
         }))
+        .on('error', deferred.reject)
         .pipe(rename(function(path) {
             path.dirname = distDirname(path.dirname, opts.dist);
             path.basename = 'base';
         }))
+        .on('error', deferred.reject)
         .pipe(gulpif(function() { return !!opts.sourcemaps; }, sourcemaps.write('.')))
 
         // Save files for promise resolve.
@@ -138,7 +173,6 @@ function compile(entry, opts) {
 
         .pipe(debug({title: 'writing'}))
         .pipe(gulp.dest(opts.target))
-        .on('error', deferred.reject)
         .on('end', function() {
             deferred.resolve(files);
         });
