@@ -1,6 +1,6 @@
 {
   "name": "bb-cli",
-  "version": "0.2.4-beta.3",
+  "version": "0.2.4-fsevents.3",
   "description": "Command line tools for working with Backbase CXP.",
   "author": "Backbase",
   "licenses": [
@@ -21,6 +21,7 @@
     "bower": "^1.5.3",
     "bower-config": "^1.2.0",
     "chalk": "^1.1.1",
+    "chokidar": "^1.4.2",
     "cli-table": "^0.3.1",
     "clui": "^0.3.1",
     "cross-spawn": "^0.2.6",
@@ -58,8 +59,7 @@
     "ronin": "^0.3.11",
     "semver": "^5.0.1",
     "through2": "^2.0.0",
-    "tmp": "^0.0.28",
-    "watch": "^0.16.0"
+    "tmp": "^0.0.28"
   },
   "main": "lib",
   "repository": {

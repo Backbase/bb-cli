@@ -6,7 +6,7 @@ var modelXml = require('../lib/modelXml');
 var fs = require('fs-extra-promise');
 var _ = require('lodash');
 var jxon = require('jxon');
-var watch = require('watch');
+var chokidar = require('chokidar');
 var path = require('path');
 var Q = require('q');
 var inquirer = require('inquirer');
@@ -70,27 +70,23 @@ module.exports = Command.extend({
             cfg = r.config.cli;
 
             if (cfg.collection) {
-                watch.watchTree(cfg.target, {
-                    ignoreDotFiles: true,
-                    ignoreUnreadableDir: true,
-                    ignoreNotPermitted: true,
-                    filter: function(fileName) {
-                        var v = exclude.indexOf(fileName);
-                        return (v === -1);
-                    }
-                }, onWatchCollection);
+                if (cfg.watch) {
+                    chokidar.watch(cfg.target, {
+                        ignored: exclude,
+                        followSymlinks: false,
+                    })
+                    .on('ready', onWatchCollectionReady)
+                    .on('all', onWatchCollection);
+                }
             } else {
 
                 if (cfg.watch) {
-                    watch.watchTree(cfg.target, {
-                        ignoreDotFiles: true,
-                        ignoreUnreadableDir: true,
-                        ignoreNotPermitted: true,
-                        filter: function(fileName) {
-                            var v = exclude.indexOf(fileName);
-                            return (v === -1);
-                        }
-                    }, onWatch);
+                    chokidar.watch(cfg.target, {
+                        ignored: exclude,
+                        followSymlinks: false,
+                    })
+                    .on('ready', onWatchReady)
+                    .on('all', onWatch);
                 }
 
                 return run(cfg.target);
@@ -233,70 +229,33 @@ function ok(r, name) {
     return r;
 }
 
-function onWatch(fileName, curStat, prevStat) {
-    if (typeof f === 'object' && prevStat === null && curStat === null) {
-        console.log(chalk.cyan('Watching...'));
-        // Finished walking the tree
-        // file is object where key is fileName and value is stat
-    } else {
-        if (prevStat === null) {
-            if (typeof fileName !== 'string') return;
-            // f is a new file
-            output(chalk.gray(fileName) + ' created.');
-            run(cfg.target);
-        } else if (curStat.nlink === 0) {
-            // f was removed
-            output(chalk.gray(fileName) + ' removed.');
-            run(cfg.target);
-        } else {
-            output(chalk.gray(fileName) + ' changed.');
-            run(cfg.target);
-            // f was changed
-        }
-    }
+function onWatchReady() {
+    console.log(arguments);
+}
+function onWatch(evName, fpath) {
+    output(chalk.gray(path) + ' ' + evName + '...');
+    run(cfg.target);
 }
 var dirs = {};
-function onWatchCollection(f, curStat, prevStat) {
-    var p;
-
-    if (typeof f === 'object' && prevStat === null && curStat === null) {
-        console.log(chalk.green('Scanning underlying directories for items...'));
-
-        _.each(f, function(v, k) {
-            p = path.dirname(k).split(path.sep)[0];
-            if (p === '.') return;
-            dirs[p] = path.resolve(p);
+function onWatchCollectionReady() {
+    console.log('Watching collection...');
+    fs.readdirAsync(cfg.target)
+    .then(function(files) {
+        _.each(files, function(name) {
+            var fullPath = path.join(cfg.target, name);
+            fs.isDirectoryAsync(fullPath)
+                .then(function(res) {
+                    dirs[fullPath] = path.resolve(fullPath);
+                    if (cfg['init-import']) run(dirs[fullPath]);
+                });
         });
-
-        var numberOfDirectories = 0;
-        var remoteHost = bbrest.config;
-        _.each(dirs, function(value, key) {
-            console.log(chalk.cyan('Adding watch for ') + chalk.yellow(key));
-            numberOfDirectories++;
-            if (cfg['init-import']) run(value);
-        });
-
-        console.log(chalk.cyan('Finished setting up ' + numberOfDirectories + ' watches.'));
-        console.log(chalk.cyan('Endpoint: ') + remoteHost.scheme + '://' + remoteHost.host + ':' + remoteHost.port + '/' + remoteHost.context);
-        if (cfg['init-import']) console.log('Importing all items...');
-        // Finished walking the tree
-        // file is object where key is fileName and value is stat
-    } else {
-        p = path.dirname(f).split(path.sep)[0];
-
-        if (prevStat === null) {
-            if (typeof f !== 'string') return;
-            // f is a new file
-            output(chalk.gray(f) + ' created.');
-            run(dirs[p]);
-        } else if (curStat.nlink === 0) {
-            // f was removed
-            output(chalk.gray(f) + ' removed.');
-            run(dirs[p]);
-        } else {
-            output(chalk.gray(f) + ' changed.');
-            run(dirs[p]);
-            // f was changed
+    });
+}
+function onWatchCollection(evName, fpath) {
+    _.each(dirs, function(fullPath, dir) {
+        if (fpath.indexOf(dir + '/') === 0) {
+            run(fullPath);
+            return false;
         }
-    }
+    });
 }
