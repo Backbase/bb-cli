@@ -34,6 +34,7 @@ module.exports = Command.extend({
         r += '      -w   --watch\t\t\t\t\t Watch less files and rebuild on change.\n';
         r += '           --disable-compress\t\t\t\t Don\'t compress CSS into .min files.\n';
         r += '           --disable-ie\t\t\t\t\t Don\'t create reworked .ie files for IE8.\n';
+        r += '           --disable-assets\t\t\t\t Don\'t collect font/image assets.\n';
         r += '      -i   --import\t\t\t\t\t Run bb import-item after building.\n';
         return r;
     },
@@ -47,6 +48,7 @@ module.exports = Command.extend({
         dist: {type: 'string', alias: 'd'},
         'disable-compress': {type: 'flag'},
         'disable-ie': {type: 'flag'},
+        'disable-assets': {type: 'flag'},
         'import': {type: 'flag', alias: 'i'}
     },
 
@@ -123,6 +125,14 @@ function buildTheme(bowerJson, opts) {
         return compress(entry, opts.target, opts);
     };
 
+    // Copy Assets
+    var doCopyAssets = function(entry) {
+        if (opts['disable-assets']) {
+            return entry;
+        }
+        return copyAssets(entry, opts);
+    };
+
     // Import on completing.
     var doImport = function(entry) {
         if (opts.import) {
@@ -139,6 +149,7 @@ function buildTheme(bowerJson, opts) {
     return compile(entry, opts)
         .then(doReworkIe)
         .then(doCompress)
+        .then(doCopyAssets)
         .then(doImport);
 }
 
@@ -241,6 +252,42 @@ function compress(entry, target, opts) {
         .pipe(gulpif(function() { return true; }, sourcemaps.write('.')))
         .pipe(debug({title: 'writing'}))
         .pipe(gulp.dest(target))
+        .on('error', deferred.reject)
+        .on('end', deferred.resolve);
+
+    return deferred.promise;
+}
+
+function copyAssets(entry, opts) {
+    var deferred = Q.defer();
+
+    // bower_components is globbed specifically to enforce
+    // local resources overriding inherited ones
+    var fontGlob = '**/*.{ttf,woff,woff2,eof,svg}';
+    var imageGlob = '**/*.{jpg,jpeg,png,svg,gif}';
+    var assetPaths = [
+        // fonts
+        'bower_components/' + fontGlob,
+        fontGlob,
+
+        //images
+        'bower_components/' + imageGlob,
+        imageGlob,
+
+        path.join('!**/' + opts.dist, '/**') // don't copy from `dist` directories
+    ];
+
+    gulp.src(assetPaths, {follow: true})
+        .pipe(debug({title: 'copying'}))
+        .pipe(rename(function (file) {
+            // special case because "theme" package has "universal" and "retail" editions nested in it
+            var themePattern = /^bower_components\/theme\/(retail|universal)\//;
+            file.dirname = file.dirname.replace(themePattern, '');
+
+            var bowerPattern = /^bower_components\/[^\/]*/;
+            file.dirname = file.dirname.replace(bowerPattern, '');
+        }))
+        .pipe(gulp.dest(opts.dist))
         .on('error', deferred.reject)
         .on('end', deferred.resolve);
 
