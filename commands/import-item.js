@@ -26,7 +26,7 @@ module.exports = Command.extend({
         r += '\n\t Zips and imports item.';
         r += '\n\n  ' + title('Options') + ': -short, --name <type> ' + d('default') + ' description\n';
         r += '      -t,  --target <string>\t\t' + '\t\tDir to import.\n';
-        r += '      -w,  --watch <boolean>\t\t' + '\t\tWatch for file changes in the current dir and autosubmit.\n';
+        r += '      -W,  --watch <boolean>\t\t' + '\t\tWatch for file changes in the current dir and autosubmit.\n';
         r += '      -l,  --collection <boolean>\t' + '\t\tWatch collection directory tree for changes.\n';
         r += '      -i,  --init-import <boolean>\t' + '\t\tImport whole collection on init.\n';
         r += '      -a,  --auto <boolean>\t\t' + '\t\tAuto create model.xml if doesn\'t exist.\n';
@@ -45,7 +45,7 @@ module.exports = Command.extend({
 
     options: {
         target: {type: 'string', alias: 't', default: './'},
-        watch: {type: 'boolean', alias: 'w'},
+        watch: {type: 'boolean', alias: 'W'},
         collection: {type: 'boolean', alias: 'l'},
         'init-import': {type: 'boolean', alias: 'i'},
         auto: {type: 'boolean', alias: 'a'},

@@ -19,8 +19,8 @@ module.exports = function(bbscaff){
             message: 'Author'
         }
     ], function(answers){
-        bbscaff.fetchTemplate('git@bitbucket.org:backbase/lp-widget-ng-template.git', __dirname, function(err){
-            if(err) {
+        bbscaff.fetchTemplate('http://bitbucket.org/backbase/lp-widget-ng-template.git', __dirname, function(err){
+            if (err) {
                 return console.error('Error trying to update template from git', err);
             }
 

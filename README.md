@@ -218,7 +218,7 @@ Backbase CXP v5.6
 
 ```
   -t,  --target <string>        Current directory   Dir to import.
-  -w,  --watch <boolean>                             Watch for file changes and autosubmit.
+  -W,  --watch <boolean>                             Watch for file changes and autosubmit.
   -l,  --collection <boolean>                        Watch collection directory tree for changes.
   -i,  --init-import <boolean>                       Import whole collection on init.
   -a,  --auto <boolean>                              Auto create model.xml if doesn't exist.
