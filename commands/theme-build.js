@@ -262,12 +262,10 @@ function compress(entry, target, opts) {
 function copyAssets(entry, opts) {
     var deferred = Q.defer();
 
-    // bower_components is globbed specifically to enforce
-    // local resources overriding inherited ones
     var fontGlob = path.join('**', '*.{ttf,woff,woff2,eof,svg}');
     var imageGlob = path.join('**', '*.{jpg,jpeg,png,svg,gif}');
     var noDistGlob = path.join('!**', opts.dist, '**'); // don't copy from `dist` directories
-    var noBowerGlob = path.join('!bower_components', '**'); // don't copy from `dist` directories
+    var noBowerGlob = path.join('!bower_components', '**'); // don't copy from `bower_components` directories
 
     gulp.task('copyThemeAssets', [], function () {
         var basePath = path.join('bower_components', 'theme');
