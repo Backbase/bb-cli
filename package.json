@@ -73,6 +73,7 @@
   "devDependencies": {
     "gulp-jscs": "^1.4.0",
     "gulp-jshint": "^1.9.2",
+    "gulp-merge": "^0.1.1",
     "gulp-mocha": "^2.0.1",
     "jshint-stylish": "^1.0.1",
     "mocha": "^2.0.1",

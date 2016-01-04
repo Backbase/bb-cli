@@ -17,6 +17,7 @@ var debug = require('gulp-debug');
 var minifyCss = require('gulp-minify-css');
 var chalk = require('chalk');
 var through = require('through2');
+var merge = require('gulp-merge');
 
 var ImportItem = require('./import-item');
 var importCmd = new ImportItem();
@@ -263,31 +264,54 @@ function copyAssets(entry, opts) {
 
     // bower_components is globbed specifically to enforce
     // local resources overriding inherited ones
-    var fontGlob = '**/*.{ttf,woff,woff2,eof,svg}';
-    var imageGlob = '**/*.{jpg,jpeg,png,svg,gif}';
-    var assetPaths = [
-        // fonts
-        'bower_components/' + fontGlob,
-        fontGlob,
+    var fontGlob = path.join('**', '*.{ttf,woff,woff2,eof,svg}');
+    var imageGlob = path.join('**', '*.{jpg,jpeg,png,svg,gif}');
+    var noDistGlob = path.join('!**', opts.dist, '**'); // don't copy from `dist` directories
+    var noBowerGlob = path.join('!bower_components', '**'); // don't copy from `dist` directories
 
-        //images
-        'bower_components/' + imageGlob,
-        imageGlob,
+    gulp.task('copyThemeAssets', [], function () {
+        var basePath = path.join('bower_components', 'theme');
+        var universalAssets = gulp.src([
+            path.join(basePath, 'universal', fontGlob),
+            path.join(basePath, 'universal', imageGlob)
+        ], {follow: true});
+        var retailAssets = gulp.src([
+            path.join(basePath, 'retail', fontGlob),
+            path.join(basePath, 'retail', imageGlob)
+        ], {follow: true});
+        return merge(universalAssets, retailAssets)
+            .pipe(debug({title: 'copying'}))
+            .pipe(gulp.dest(opts.dist));
+    });
 
-        path.join('!**/' + opts.dist, '/**') // don't copy from `dist` directories
-    ];
+    gulp.task('copyBowerAssets', ['copyThemeAssets'], function () {
+        var assets = gulp.src([
+            path.join('bower_components', fontGlob),
+            path.join('bower_components', imageGlob),
+            path.join('!bower_components', 'theme', '**')
+        ], {follow: true});
+        return assets
+            .pipe(debug({title: 'copying'}))
+            .pipe(rename(function (file) {
+                // drop the module name from the path
+                file.dirname = path.join.apply(null, file.dirname.split(path.sep).slice(1));
+            }))
+            .pipe(gulp.dest(opts.dist));
+    });
 
-    gulp.src(assetPaths, {follow: true})
-        .pipe(debug({title: 'copying'}))
-        .pipe(rename(function (file) {
-            // special case because "theme" package has "universal" and "retail" editions nested in it
-            var themePattern = /^bower_components\/theme\/(retail|universal)\//;
-            file.dirname = file.dirname.replace(themePattern, '');
+    gulp.task('copyAssets', ['copyThemeAssets', 'copyBowerAssets'], function () {
+        var assetPaths = [
+            fontGlob,
+            imageGlob,
+            noBowerGlob,
+            noDistGlob
+        ];
+        return gulp.src(assetPaths, {follow: true})
+            .pipe(debug({title: 'copying'}))
+            .pipe(gulp.dest(opts.dist));
+    });
 
-            var bowerPattern = /^bower_components\/[^\/]*/;
-            file.dirname = file.dirname.replace(bowerPattern, '');
-        }))
-        .pipe(gulp.dest(opts.dist))
+    gulp.start('copyAssets')
         .on('error', deferred.reject)
         .on('end', deferred.resolve);
 
