@@ -41,12 +41,28 @@ module.exports = function(bbscaff){
         checkGithubConnectivity()
             .then(
                 function () {
-                    bbscaff.fetchTemplate(repos.widget, __dirname, function(err){
-                        if (err) {
-                            return console.error('Error trying to update template from git', err);
+                    bbscaff.prompt([
+                            {
+                                type: 'input',
+                                name: 'update',
+                                message: 'There is a new version of the template. Do you want to update it?',
+                                default: 'false'
+                            }
+                        ],
+                        function(data){
+                            if(data.update === 'false'){
+                                generate(answers);
+                            }else {
+                                console.log('Updating template.');
+                                bbscaff.fetchTemplate(repos.widget, __dirname, function(err){
+                                    if (err) {
+                                        return console.error('Error trying to update template from git', err);
+                                    }
+                                    generate(answers);
+                                });
+                            }
                         }
-                        generate(answers);
-                    });
+                    );
                 },
                 function (err) {
                     generate(answers);
