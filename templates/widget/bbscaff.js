@@ -1,6 +1,13 @@
-console.log('This widget is not compatible with CXP 5.6');
+var checkGithubConnectivity = require('../../lib/checkGithubConnectivity');
+var repos = require('../repos.json');
+
+console.log('This widget could be not compatible with CXP 5.6');
 
 module.exports = function(bbscaff){
+    var generate = function (answers) {
+        bbscaff.generate(answers, answers.widget_name);
+    };
+
     bbscaff.prompt([
         {
             type: 'input',
@@ -31,6 +38,36 @@ module.exports = function(bbscaff){
             }
         }
     ], function(answers){
-        bbscaff.generate(answers, answers.widget_name);
+        checkGithubConnectivity()
+            .then(
+                function () {
+                    bbscaff.prompt([
+                            {
+                                type: 'input',
+                                name: 'update',
+                                message: 'There is a new version of the template. Do you want to update it?',
+                                default: 'false'
+                            }
+                        ],
+                        function(data){
+                            if(data.update === 'false'){
+                                generate(answers);
+                            }else {
+                                console.log('Updating template.');
+                                bbscaff.fetchTemplate(repos.widget, __dirname, function(err){
+                                    if (err) {
+                                        return console.error('Error trying to update template from git', err);
+                                    }
+                                    generate(answers);
+                                });
+                            }
+                        }
+                    );
+                },
+                function (err) {
+                    generate(answers);
+                }
+            );
+
     });
 };
