@@ -1,8 +1,13 @@
 var checkGithubConnectivity = require('../../lib/checkGithubConnectivity');
+var repos = require('../repos.json');
 
-console.log('This widget is not compatible with CXP 5.6');
+console.log('This widget could be not compatible with CXP 5.6');
 
 module.exports = function(bbscaff){
+    var generate = function (answers) {
+        bbscaff.generate(answers, answers.widget_name);
+    };
+
     bbscaff.prompt([
         {
             type: 'input',
@@ -33,18 +38,18 @@ module.exports = function(bbscaff){
             }
         }
     ], function(answers){
-        checkGithubConnectivity('https://bitbucket.org/backbase/lpg-generator-widget-ng-lite.git')
+        checkGithubConnectivity()
             .then(
-                function (repoUrl) {
-                    bbscaff.fetchTemplate(repoUrl, __dirname, function(err){
+                function () {
+                    bbscaff.fetchTemplate(repos.widget, __dirname, function(err){
                         if (err) {
                             return console.error('Error trying to update template from git', err);
                         }
-                        bbscaff.generate(answers, answers.widget_name);
+                        generate(answers);
                     });
                 },
                 function (err) {
-                    bbscaff.generate(answers, answers.widget_name);
+                    generate(answers);
                 }
             );
 
