@@ -1,4 +1,15 @@
 module.exports = function(bbscaff){
+    var generate = function (answers) {
+        bbscaff.generate({
+            // LP uses widget.name instead of widget_name
+            widget: answers
+        }, {
+            // Sets destination path
+            destination_path: answers.name,
+            // Reset interpolate from bbscaff, so instead of <%=var%> it uses ${var}
+            interpolate: undefined
+        });
+    };
     bbscaff.prompt([
         {
             type: 'input',
@@ -19,20 +30,36 @@ module.exports = function(bbscaff){
             message: 'Author'
         }
     ], function(answers){
-        bbscaff.fetchTemplate('http://bitbucket.org/backbase/lp-widget-ng-template.git', __dirname, function(err){
-            if (err) {
-                return console.error('Error trying to update template from git', err);
-            }
+        checkGithubConnectivity()
+            .then(
+                function (){
+                    bbscaff.prompt([
+                            {
+                                type: 'input',
+                                name: 'update',
+                                message: 'There is a new version of the template. Do you want to update it?',
+                                default: 'N'
+                            }
+                        ],
+                        function(data){
+                            if(data.update.toUpperCase() === 'N'){
+                                generate(answers);
+                            }else {
+                                console.log('Updating template.');
+                                bbscaff.fetchTemplate(repos['lp-widget'], __dirname, function(err){
+                                    if (err) {
+                                        return console.error('Error trying to update template from git', err);
+                                    }
+                                    generate(answers);
+                                });
+                            }
+                        }
+                    );
+                },
+                function (err) {
+                    generate(answers);
+                }
+            );
 
-            bbscaff.generate({
-                // LP uses widget.name instead of widget_name
-                widget: answers
-            }, {
-                // Sets destination path
-                destination_path: answers.name,
-                // Reset interpolate from bbscaff, so instead of <%=var%> it uses ${var}
-                interpolate: undefined
-            });
-        });
     });
 };
