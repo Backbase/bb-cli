@@ -73,7 +73,7 @@ module.exports = Command.extend({
                 if (cfg.watch) {
                     chokidar.watch(cfg.target, {
                         ignored: exclude,
-                        followSymlinks: false,
+                        followSymlinks: false
                     })
                     .on('ready', onWatchCollectionReady)
                     .on('all', onWatchCollection);
@@ -83,7 +83,7 @@ module.exports = Command.extend({
                 if (cfg.watch) {
                     chokidar.watch(cfg.target, {
                         ignored: exclude,
-                        followSymlinks: false,
+                        followSymlinks: false
                     })
                     .on('ready', onWatchReady)
                     .on('all', onWatch);
@@ -233,7 +233,7 @@ function onWatchReady() {
     console.log(arguments);
 }
 function onWatch(evName, fpath) {
-    output(chalk.gray(path) + ' ' + evName + '...');
+    output(chalk.gray(fpath) + ' ' + evName + '...');
     run(cfg.target);
 }
 var dirs = {};
@@ -244,7 +244,7 @@ function onWatchCollectionReady() {
         _.each(files, function(name) {
             var fullPath = path.join(cfg.target, name);
             fs.isDirectoryAsync(fullPath)
-                .then(function(res) {
+                .then(function() {
                     dirs[fullPath] = path.resolve(fullPath);
                     if (cfg['init-import']) run(dirs[fullPath]);
                 });
