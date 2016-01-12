@@ -1,5 +1,6 @@
 {
     "lp-module": "http://bitbucket.org/backbase/lp-module-blank-template.git",
     "lp-widget": "https://bitbucket.org/backbase/lpg-generator-widget-ng",
-    "widget": "https://bitbucket.org/backbase/lpg-generator-widget-ng-lite.git"
+    "ng-widget": "https://bitbucket.org/backbase/lpg-generator-widget-ng-lite.git",
+    "agnosthic-widget": "https://github.com/tcorral/generator-widget-agnostic.git"
 }
