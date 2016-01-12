@@ -1,4 +1,7 @@
-module.exports = function(bbscaff){
+var updateTemplatesOnDemand = require('../../lib/updateTemplatesOnDemand');
+var repos = require('../repos.json');
+
+module.exports = function (bbscaff) {
     var generate = function (answers) {
         bbscaff.generate({
             // LP uses widget.name instead of widget_name
@@ -10,56 +13,36 @@ module.exports = function(bbscaff){
             interpolate: undefined
         });
     };
-    bbscaff.prompt([
-        {
-            type: 'input',
-            name: 'name',
-            message: 'Name'
-        }, {
-            type: 'input',
-            name: 'description',
-            message: 'Description'
-        }, {
-            type: 'input',
-            name: 'version',
-            message: 'Version',
-            default: '1.0.0'
-        }, {
-            type: 'input',
-            name: 'author',
-            message: 'Author'
-        }
-    ], function(answers){
-        checkGithubConnectivity()
-            .then(
-                function (){
-                    bbscaff.prompt([
-                            {
-                                type: 'input',
-                                name: 'update',
-                                message: 'There is a new version of the template. Do you want to update it?',
-                                default: 'N'
-                            }
-                        ],
-                        function(data){
-                            if(data.update.toUpperCase() === 'N'){
-                                generate(answers);
-                            }else {
-                                console.log('Updating template.');
-                                bbscaff.fetchTemplate(repos['lp-widget'], __dirname, function(err){
-                                    if (err) {
-                                        return console.error('Error trying to update template from git', err);
-                                    }
-                                    generate(answers);
-                                });
-                            }
-                        }
-                    );
-                },
-                function (err) {
-                    generate(answers);
-                }
-            );
 
-    });
+    bbscaff.prompt([
+            {
+                type: 'input',
+                name: 'name',
+                message: 'Name'
+            }, {
+                type: 'input',
+                name: 'description',
+                message: 'Description'
+            }, {
+                type: 'input',
+                name: 'version',
+                message: 'Version',
+                default: '1.0.0'
+            }, {
+                type: 'input',
+                name: 'author',
+                message: 'Author'
+            }
+        ])
+        .then(function (answers) {
+            updateTemplatesOnDemand(repos['lp-widget'], __dirname)
+                .then(
+                    function () {
+                        generate(answers);
+                    },
+                    function () {
+                        generate(answers);
+                    }
+                );
+        });
 };
