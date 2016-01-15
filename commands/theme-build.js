@@ -1,4 +1,3 @@
-
 var Q = require('q');
 var Command = require('ronin').Command;
 var gulp = require('gulp');
@@ -113,7 +112,7 @@ function buildTheme(bowerJson, opts) {
             return entry;
         }
         return reworkIe(entry, opts.target);
-    }
+    };
 
     // Compress files are the CSS and the ie.css files.
     var doCompress = function(entry) {
@@ -133,13 +132,13 @@ function buildTheme(bowerJson, opts) {
         } else {
             return entry;
         }
-    }
+    };
 
     // Run.
     return compile(entry, opts)
         .then(doReworkIe)
         .then(doCompress)
-        .then(doImport)
+        .then(doImport);
 }
 
 function compile(entry, opts) {

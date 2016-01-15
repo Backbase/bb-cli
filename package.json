@@ -11,7 +11,8 @@
   ],
   "preferGlobal": "true",
   "scripts": {
-    "test": "gulp"
+    "test": "gulp",
+    "postinstall": "node ./lib/downloadLatestTemplates.js"
   },
   "bin": {
     "bb": "bin/bb"
@@ -59,7 +60,6 @@
     "semver": "^5.0.1",
     "through2": "^2.0.0",
     "tmp": "^0.0.28",
-    "walk": "^2.3.9",
     "watch": "^0.16.0"
   },
   "main": "lib",

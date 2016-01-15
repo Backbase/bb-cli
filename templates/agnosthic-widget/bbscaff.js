@@ -4,7 +4,6 @@ var repos = require('../repos.json');
 module.exports = function (bbscaff) {
     var generate = function (answers) {
         bbscaff.generate({
-            // LP uses widget.name instead of widget_name
             widget: answers
         }, {
             // Sets destination path
@@ -14,7 +13,21 @@ module.exports = function (bbscaff) {
         });
     };
 
-    bbscaff.prompt([
+    bbscaff
+        .prompt([
+            {
+                type: 'input',
+                name: 'namespace',
+                message: 'Namespace',
+                validate: function (input) {
+                    var done = this.async();
+                    if(input.length === 0){
+                        done('Namespace is mandatory');
+                        return;
+                    }
+                    done(true);
+                }
+            },
             {
                 type: 'input',
                 name: 'name',
@@ -30,15 +43,7 @@ module.exports = function (bbscaff) {
             }, {
                 type: 'input',
                 name: 'description',
-                message: 'Description',
-                validate: function (input) {
-                    var done = this.async();
-                    if(input.length === 0){
-                        done('Description is mandatory');
-                        return;
-                    }
-                    done(true);
-                }
+                message: 'Description'
             }, {
                 type: 'input',
                 name: 'version',
@@ -48,10 +53,20 @@ module.exports = function (bbscaff) {
                 type: 'input',
                 name: 'author',
                 message: 'Author'
+            }, {
+                name: 'sectionTag',
+                message: 'Section tag'
+            },
+            {
+                name: 'tags',
+                message: 'Regular tags',
+                filter: function (str) {
+                    return str.split(/\s*,\s*/);
+                }
             }
         ])
         .then(function (answers) {
-            updateTemplatesOnDemand(repos['lp-widget'], __dirname)
+            updateTemplatesOnDemand(repos['agnosthic-widget'], __dirname)
                 .then(
                     function () {
                         generate(answers);

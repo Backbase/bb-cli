@@ -1,38 +1,64 @@
-module.exports = function(bbscaff){
-    bbscaff.prompt([
-        {
-            type: 'input',
-            name: 'name',
-            message: 'Name'
-        }, {
-            type: 'input',
-            name: 'description',
-            message: 'Description'
-        }, {
-            type: 'input',
-            name: 'version',
-            message: 'Version',
-            default: '1.0.0'
-        }, {
-            type: 'input',
-            name: 'author',
-            message: 'Author'
-        }
-    ], function(answers){
-        bbscaff.fetchTemplate('http://bitbucket.org/backbase/lp-module-blank-template.git', __dirname, function(err){
-            if (err) {
-                return console.error('Error trying to update template from git', err);
-            }
+var updateTemplatesOnDemand = require('../../lib/updateTemplatesOnDemand');
+var repos = require('../repos.json');
 
-            bbscaff.generate({
-                // LP uses widget.name instead of widget_name
-                module: answers
-            }, {
-                // Sets destination path
-                destination_path: answers.name,
-                // Reset interpolate from bbscaff, so instead of <%=var%> it uses ${var}
-                interpolate: undefined
-            });
+module.exports = function (bbscaff) {
+    var generate = function (answers) {
+        bbscaff.generate({
+            // LP uses widget.name instead of widget_name
+            module: answers
+        }, {
+            // Sets destination path
+            destination_path: answers.name,
+            // Reset interpolate from bbscaff, so instead of <%=var%> it uses ${var}
+            interpolate: undefined
         });
-    });
+    };
+
+    bbscaff.prompt([
+            {
+                type: 'input',
+                name: 'name',
+                message: 'Name',
+                validate: function (input) {
+                    var done = this.async();
+                    if(input.length === 0){
+                        done('Name is mandatory');
+                        return;
+                    }
+                    done(true);
+                }
+            }, {
+                type: 'input',
+                name: 'description',
+                message: 'Description',
+                validate: function (input) {
+                    var done = this.async();
+                    if(input.length === 0){
+                        done('Description is mandatory');
+                        return;
+                    }
+                    done(true);
+                }
+            }, {
+                type: 'input',
+                name: 'version',
+                message: 'Version',
+                default: '1.0.0'
+            }, {
+                type: 'input',
+                name: 'author',
+                message: 'Author'
+            }
+        ])
+        .then(function (answers) {
+            updateTemplatesOnDemand(repos['lp-module'], __dirname)
+                .then(
+                    function () {
+                        generate(answers);
+                    },
+                    function () {
+                        generate(answers);
+                    }
+                );
+        });
 };

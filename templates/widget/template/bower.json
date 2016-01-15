@@ -1,10 +1,10 @@
 {
-  "name": "<%=widget_name%>",
-  "version": "<%=widget_version%>",
-  "description": "<%=widget_description%>",
-  "main": "./scripts/main.js",
+  "name": "${widget.name}",
+  "version": "${widget.version}",
+  "description": "${widget.description}",
+  "main": "./src/scripts/index.js",
   "authors": [
-    "<%=widget_author%>"
+    ""
   ],
   "moduleType": [
     "umd"
@@ -14,5 +14,16 @@
     "bower_components",
     "node_modules"
   ],
-  "private": true
+  "private": true,
+  "dependencies": {
+    "angular": "~1.4.7",
+    "ionic": "~1.1.0"
+  },
+  "devDependencies": {
+    "mock": "^1.0.7",
+    "angular-mocks": "~1.4.7"
+  },
+  "resolutions": {
+    "angular": "1.4.7"
+  }
 }
