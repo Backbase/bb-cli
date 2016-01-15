@@ -13,21 +13,41 @@ module.exports = function (bbscaff) {
             {
                 type: 'input',
                 name: 'widget_name',
-                message: 'Name'
-            }, {
+                message: 'Name',
+                validate: function (input) {
+                    var done = this.async();
+                    if(input.length === 0){
+                        done('Name is mandatory');
+                        return;
+                    }
+                    done(true);
+                }
+            },
+            {
                 type: 'input',
                 name: 'widget_description',
-                message: 'Description'
-            }, {
+                message: 'Description',
+                validate: function (input) {
+                    var done = this.async();
+                    if(input.length === 0){
+                        done('Description is mandatory');
+                        return;
+                    }
+                    done(true);
+                }
+            },
+            {
                 type: 'input',
                 name: 'widget_version',
                 message: 'Version',
                 default: '1.0.0'
-            }, {
+            },
+            {
                 type: 'input',
                 name: 'widget_author',
                 message: 'Author'
-            }, {
+            },
+            {
                 name: 'sectionTag',
                 message: 'Section tag'
             },

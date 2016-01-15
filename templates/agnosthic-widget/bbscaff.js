@@ -18,12 +18,28 @@ module.exports = function (bbscaff) {
             {
                 type: 'input',
                 name: 'namespace',
-                message: 'Namespace'
+                message: 'Namespace',
+                validate: function (input) {
+                    var done = this.async();
+                    if(input.length === 0){
+                        done('Namespace is mandatory');
+                        return;
+                    }
+                    done(true);
+                }
             },
             {
                 type: 'input',
                 name: 'name',
-                message: 'Name'
+                message: 'Name',
+                validate: function (input) {
+                    var done = this.async();
+                    if(input.length === 0){
+                        done('Name is mandatory');
+                        return;
+                    }
+                    done(true);
+                }
             }, {
                 type: 'input',
                 name: 'description',
