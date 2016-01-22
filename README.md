@@ -259,8 +259,11 @@ bb theme-build
 -t,  --target <string>                 .            Path to directory to build.
 -e,  --edition <string>                             Pass edition var to less.
 -b,  --base-path <string>                           Pass base-path var to less.
--s   --sourcemaps <string>                          Whether to generate source maps.
--w   --watch <string>                               Watch less files and rebuild on change.
+-s   --sourcemaps                                   Whether to generate source maps.
+-w   --watch                                        Watch less files and rebuild on change.
+     --disable-compress                             Don't compress CSS into .min files.
+     --disable-ie                                   Don't create reworked .ie files for IE8.
+-i   --import                                       Run bb import-item after building.
 ```
 
 ### <a name="sync"></a>Sync
