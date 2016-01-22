@@ -109,7 +109,7 @@ function importAll(dirs) {
     return bbrest.importItem().file(comp.zipPath).post()
     .then(function(r) {
         var body = jxon.stringToJs(_.unescape(r.body)).import;
-        if (body.level === 'ERROR') {
+        if (body && body.level === 'ERROR') {
             console.log(chalk.yellow(comp.name) + ' ' + body.message);
         } else {
             console.log(chalk.green(comp.name) + ' ' + body.message);
