@@ -1,6 +1,6 @@
 {
   "name": "bb-cli",
-  "version": "0.2.4-beta.3",
+  "version": "0.2.4-beta.4",
   "description": "Command line tools for working with Backbase CXP.",
   "author": "Backbase",
   "licenses": [
@@ -74,6 +74,7 @@
   "devDependencies": {
     "gulp-jscs": "^1.4.0",
     "gulp-jshint": "^1.9.2",
+    "gulp-merge": "^0.1.1",
     "gulp-mocha": "^2.0.1",
     "jshint-stylish": "^1.0.1",
     "mocha": "^2.0.1",
