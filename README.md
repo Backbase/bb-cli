@@ -263,6 +263,7 @@ bb theme-build
 -w   --watch                                        Watch less files and rebuild on change.
      --disable-compress                             Don't compress CSS into .min files.
      --disable-ie                                   Don't create reworked .ie files for IE8.
+     --disable-assets                               Don't collect font/image assets.
 -i   --import                                       Run bb import-item after building.
 ```
 
