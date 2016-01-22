@@ -3,6 +3,7 @@ var semver = require('semver');
 var util = require('../lib/util');
 var config = require('../lib/config');
 var modelXml = require('../lib/modelXml');
+var indexHtml = require('../lib/indexHtml');
 var fs = require('fs-extra-promise');
 var _ = require('lodash');
 var jxon = require('jxon');
@@ -30,6 +31,7 @@ module.exports = Command.extend({
         r += '      -l,  --collection <boolean>\t' + '\t\tWatch collection directory tree for changes.\n';
         r += '      -i,  --init-import <boolean>\t' + '\t\tImport whole collection on init.\n';
         r += '      -a,  --auto <boolean>\t\t' + '\t\tAuto create model.xml if doesn\'t exist.\n';
+        r += '      -d,  --dist <string>\t\t' + '\t\tSet to on/off to switch if dist file should be used in index.html\n';
         r += '      -n,  --name <boolean>\t\t' + '\t\tName of the feature to auto create before reading bower.json\n';
         r += '      -v,  --version <boolean>\t\t' + '\t\tVersion of the feature to auto create before reading bower.json\n';
         r += '           --verbose <boolean>\t\t' + '\t\tEnables detailed output.\n\n';
@@ -118,24 +120,42 @@ function run(target) {
         var replacements = {
             'model.xml': model.getXml()
         };
-        output('Creating zip...');
-        return zipDir(target, exclude, replacements)
-        .then(function(zipPath) {
-            return bbrest.importItem().file(zipPath).post()
-            .then(function(r) {
-                output(r);
-                if (r.error) {
-                    throw new Error('Rest API Error: ' + r.statusInfo);
-                }
-                var body = jxon.stringToJs(_.unescape(r.body)).import;
-                if (body.level === 'ERROR') throw new Error(body.message);
-                name = model.getName() + ' v' + model.getProperty('version');
-                ok(r, name);
+
+        if (cfg.dist) {
+            return indexHtml(path.resolve(target, 'index.html'), cfg.dist !== 'off')
+            .then(function(indexString) {
+                replacements['index.html'] = indexString;
+                console.log(indexString);
+                return doZip(target, replacements, model);
+            })
+            .catch(function() {
+                return doZip(target, replacements, model);
             });
-        });
+        } else {
+            return doZip(target, replacements, model);
+        }
+
     })
     .catch(function(err) {
         error(err, model);
+    });
+}
+
+function doZip(target, replacements, model) {
+    output('Creating zip...');
+    return zipDir(target, exclude, replacements)
+    .then(function(zipPath) {
+        return bbrest.importItem().file(zipPath).post()
+        .then(function(r) {
+            output(r);
+            if (r.error) {
+                throw new Error('Rest API Error: ' + r.statusInfo);
+            }
+            var body = jxon.stringToJs(_.unescape(r.body)).import;
+            if (body.level === 'ERROR') throw new Error(body.message);
+            name = model.getName() + ' v' + model.getProperty('version');
+            ok(r, name);
+        });
     });
 }
 
