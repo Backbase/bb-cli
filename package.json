@@ -1,6 +1,6 @@
 {
   "name": "bb-cli",
-  "version": "0.2.4-beta.4",
+  "version": "0.2.4-beta.5",
   "description": "Command line tools for working with Backbase CXP.",
   "author": "Backbase",
   "licenses": [
@@ -58,6 +58,7 @@
     "request-promise": "^0.4.3",
     "ronin": "^0.3.11",
     "semver": "^5.0.1",
+    "soap": "^0.11.4",
     "through2": "^2.0.0",
     "tmp": "^0.0.28",
     "watch": "^0.16.0"
