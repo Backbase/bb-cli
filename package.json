@@ -58,7 +58,7 @@
     "request-promise": "^0.4.3",
     "ronin": "^0.3.11",
     "semver": "^5.0.1",
-    "soap": "^0.11.4",
+    "soap-as-promised": "^1.5.0",
     "through2": "^2.0.0",
     "tmp": "^0.0.28",
     "watch": "^0.16.0"

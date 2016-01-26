@@ -15,7 +15,7 @@ var help = function(){
     r += '      -P,  --port <number>\t\t' + d('7777') + '\t\t The port of the server running studio.\n';
     r += '      -c,  --context <string>\t\t' + d('portalserver') + '\t The application context of studio.\n';
     r += '      -u,  --username <string>\t\t' + d('admin') + '\t\t Username.\n';
-    r += '      -w,  --password <string>\t\t' + d('welcome') + '\t\t Password.\n';
+    r += '      -x,  --password <string>\t\t' + d('welcome') + '\t\t Password.\n';
     r += '\n'+ title('Commands');
     r += '\n export, list';
     return r;

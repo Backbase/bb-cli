@@ -17,55 +17,33 @@ module.exports = Command.extend({
             password: password
         };
 
-        forms.getConfig(opt).then(function(config){
-            forms.getClient(config).then(function (mgmtService) {
+        return forms.getConfig(opt).then(function(config){
+            return forms.getClient(config).then(function (mgmtService) {
                 switch (item) {
                     case 'repositories':
-                        mgmtService.GetRepositories({}, function (err, result) {
-                            if (err)
-                                throw new Error(err);
-
-                            _.forEach(result.GetRepositoriesResult.string, function (result) {
-                                console.log(result);
+                        return mgmtService.GetRepositories({}).then(function (result) {
+                                _.forEach(result.GetRepositoriesResult.string, function (result) {
+                                    console.log(result);
+                                });
                             });
-                        });
-                        break;
                     case 'projects':
-                        mgmtService.GetProjects({
+                        return mgmtService.GetProjects({
                             repository: repository,
                             branch: branch
-                        }, function (err, result) {
-                            if (err)
-                                throw new Error(err);
-
+                        }).then(function(result){
                             _.forEach(result.GetProjectsResult.string, function (result) {
                                 console.log(result);
                             });
                         });
-                        break;
                     case 'branches':
-                        mgmtService.GetBranches({
+                        return mgmtService.GetBranches({
                             repository: repository
-                        }, function (err, result) {
-                            if (err)
-                                throw new Error(err);
-
+                        }).then(function (result) {
                             _.forEach(result.GetBranchesResult.string, function (result) {
                                 console.log(result);
                             });
                         });
-                        break;
-                    case 'flows':
-                        mgmtService.GetRepositories({}, function (err, result) {
-                            if (err)
-                                throw new Error(err);
-
-                            _.forEach(result.GetRepositoriesResult.string, function (result) {
-                                console.log(result);
-                            });
-                        });
-                        break;
-                    default:  util.err('Please specify item type.');
+                    default:  throw new Error('Please specify item type.');
                 }
             });
         });
