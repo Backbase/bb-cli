@@ -11,7 +11,7 @@ var parseCollection = require('../lib/parseCollection');
 var Command = require('ronin').Command;
 
 var currentlyImporting = '';
-var exclude = ['.git', '.gitignore', 'bower_components', 'node_modules'];
+var exclude = ['.git', '.gitignore', 'bower_components', 'node_modules', 'node', 'target'];
 
 var bbrest, jxon, cfg;
 
@@ -39,6 +39,14 @@ module.exports = Command.extend({
         target: {type: 'string', alias: 't', default: './'},
         skip: {type: 'boolean', alias: 's'},
         remove: {type: 'boolean', alias: 'r'}
+        remove: {type: 'boolean', alias: 'r'},
+
+        host: {type: 'string', alias: 'H'},
+        port: {type: 'string', alias: 'P'},
+        context: {type: 'string', alias: 'c'},
+        username: {type: 'string', alias: 'u'},
+        password: {type: 'string', alias: 'w'},
+        portal: {type: 'string', alias: 'p'}
     },
 
     run: function () {
@@ -102,7 +110,7 @@ function importAll(dirs) {
     return bbrest.importItem().file(comp.zipPath).post()
     .then(function(r) {
         var body = jxon.stringToJs(_.unescape(r.body)).import;
-        if (body.level === 'ERROR') {
+        if (body && body.level === 'ERROR') {
             console.log(chalk.yellow(comp.name) + ' ' + body.message);
         } else {
             console.log(chalk.green(comp.name) + ' ' + body.message);

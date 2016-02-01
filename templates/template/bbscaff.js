@@ -3,8 +3,13 @@ module.exports = function(bbscaff){
 		{
             name: 'template_title',
             message: 'Template title',
-            validate: function(string){
-                return string.length > 1;
+            validate: function (input) {
+                var done = this.async();
+                if(input.length === 0){
+                    done('Template title is mandatory');
+                    return;
+                }
+                done(true);
             }
         },
         {
@@ -16,8 +21,13 @@ module.exports = function(bbscaff){
             filter: function(string){
                 return bbscaff.toCamelCase(string);
             },
-            validate: function(string){
-                return string.length > 1;
+            validate: function (input) {
+                var done = this.async();
+                if(input.length === 0){
+                    done('Template name is mandatory');
+                    return;
+                }
+                done(true);
             }
         },
         {

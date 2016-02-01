@@ -24,8 +24,11 @@ module.exports = function(bbscaff){}
 
 --------------------
 
-##### bbscaff.prompt(questions, callback)
+##### bbscaff.prompt(questions, [callback])
 Prompt necessary questions to inject data in your templates. Please see [Inquirer](https://github.com/SBoudrias/Inquirer.js) for more details.
+To maintain the compatibility with old versions you can still add the callback but now it returns a promise that also returns the answers.
+
+*Callback approach*
 
 ``` js
 bbscaff.prompt([{
@@ -34,6 +37,18 @@ bbscaff.prompt([{
     }], function(answers){
 
     })
+})
+```
+*Promise approach*
+
+``` js
+bbscaff.prompt([{
+        name: 'name',
+        message: 'Name'
+    }])
+    .then(function(answers){
+
+    });
 })
 ```
 
@@ -92,6 +107,8 @@ fs.readFile('file.xml'), "utf8", function(err, content){
 
 ### Example of a basic `bbscaff.js`
 
+*Callback approach*
+
 ``` js
 module.exports = function(bbscaff){
     bbscaff.prompt([
@@ -101,6 +118,22 @@ module.exports = function(bbscaff){
         }
     ], function(answers){
         bbscaff.generate(answers, answers.name)
-    })
+    });
+}
+```
+
+*Promise approach*
+
+``` js
+module.exports = function(bbscaff){
+    bbscaff.prompt([
+        {
+            name: 'name',
+            message: 'Name'
+        }
+    ])
+    .then(function(answers){
+        bbscaff.generate(answers, answers.name)
+    });
 }
 ```

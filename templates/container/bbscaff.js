@@ -19,8 +19,13 @@ module.exports = function(bbscaff){
                 //in the scripts and styles folder respectively
                 return answers.container_title.replace(/\s+/gi, '-').toLowerCase();
             },
-            validate: function(string){
-                return string.length > 1;
+            validate: function (input) {
+                var done = this.async();
+                if(input.length === 0){
+                    done('Container name is mandatory');
+                    return;
+                }
+                done(true);
             }
         },
         {
@@ -29,8 +34,13 @@ module.exports = function(bbscaff){
             filter: function(string){
                 return bbscaff.toCamelCase(string);
             },
-            validate: function(string){
-                return string.length > 1;
+            validate: function (input) {
+                var done = this.async();
+                if(input.length === 0){
+                    done('Template name is mandatory');
+                    return;
+                }
+                done(true);
             }
         },
         {

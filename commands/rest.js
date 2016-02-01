@@ -71,7 +71,7 @@ module.exports = Command.extend({
 
             if (cfg.info) logInfo(bbrest.config);
 
-            cfg.targetArg = tryParseJSON(cfg.targetArg) || [cfg.targetArg];
+            cfg.targetArg = tryParseJSON(cfg['target-arg']) || [cfg['target-arg']];
             cfg.file = tryParseJSON(cfg.file) || cfg.file;
             cfg.query = tryParseJSON(cfg.query);
 

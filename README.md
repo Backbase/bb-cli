@@ -218,7 +218,7 @@ Backbase CXP v5.6
 
 ```
   -t,  --target <string>        Current directory   Dir to import.
-  -w,  --watch <boolean>                             Watch for file changes and autosubmit.
+  -W,  --watch <boolean>                             Watch for file changes and autosubmit.
   -l,  --collection <boolean>                        Watch collection directory tree for changes.
   -i,  --init-import <boolean>                       Import whole collection on init.
   -a,  --auto <boolean>                              Auto create model.xml if doesn't exist.
@@ -259,8 +259,12 @@ bb theme-build
 -t,  --target <string>                 .            Path to directory to build.
 -e,  --edition <string>                             Pass edition var to less.
 -b,  --base-path <string>                           Pass base-path var to less.
--s   --sourcemaps <string>                          Whether to generate source maps.
--w   --watch <string>                               Watch less files and rebuild on change.
+-s   --sourcemaps                                   Whether to generate source maps.
+-w   --watch                                        Watch less files and rebuild on change.
+     --disable-compress                             Don't compress CSS into .min files.
+     --disable-ie                                   Don't create reworked .ie files for IE8.
+     --disable-assets                               Don't collect font/image assets.
+-i   --import                                       Run bb import-item after building.
 ```
 
 ### <a name="sync"></a>Sync
