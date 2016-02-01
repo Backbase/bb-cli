@@ -42,7 +42,6 @@ module.exports = Command.extend({
             templateModule(_.extend({}, bbscaff, {
                 template_dir: path.join(tmpl_path, template_name, 'template')
             }));
-
         } else {
             listTemplates();
         }
