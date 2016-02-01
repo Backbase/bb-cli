@@ -38,9 +38,7 @@ module.exports = Command.extend({
     options: {
         target: {type: 'string', alias: 't', default: './'},
         skip: {type: 'boolean', alias: 's'},
-        remove: {type: 'boolean', alias: 'r'}
         remove: {type: 'boolean', alias: 'r'},
-
         host: {type: 'string', alias: 'H'},
         port: {type: 'string', alias: 'P'},
         context: {type: 'string', alias: 'c'},
