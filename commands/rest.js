@@ -19,7 +19,7 @@ module.exports = Command.extend({
         r += '      -P,  --port <number>\t\t' + d('7777') + '\t\tThe port of the server running portal foundation.\n';
         r += '      -c,  --context <string>\t\t' + d('portalserver') + '\tThe application context of the portal foundation.\n';
         r += '      -u,  --username <string>\t\t' + d('admin') + '\t\tUsername.\n';
-        r += '      -w,  --password <string>\t\t' + d('admin') + '\t\tPassword.\n';
+        r += '      -pw,  --password <string>\t\t' + d('admin') + '\t\tPassword.\n';
         r += '      -p,  --portal <string>\t\t\t\tName of the portal on the server to target.\n';
         r += '      -t,  --target <string>\t\t' + d('server') + '\t\tContext target: server, portal, catalog, portalCatalog, page, container, widget, link, template, user, group, audit or cache.\n';
         r += '      -T,  --target-arg <string/json>\t\t\tTarget arguments. When there are more arguments, pass JSON array.\n';
@@ -39,14 +39,8 @@ module.exports = Command.extend({
         return r;
     },
 
-    options: {
+    options: util.buildOpts({
         scheme: {type: 'string', alias: 'S'},
-        host: {type: 'string', alias: 'H'},
-        port: {type: 'string', alias: 'P'},
-        context: {type: 'string', alias: 'c'},
-        username: {type: 'string', alias: 'u'},
-        password: {type: 'string', alias: 'w'},
-        portal: {type: 'string', alias: 'p'},
         target: {type: 'string', alias: 't', default: 'server'},
         'target-arg': {type: 'string', alias: 'T'},
         method: {type: 'string', alias: 'm', default: 'get'},
@@ -58,8 +52,9 @@ module.exports = Command.extend({
         verbose: {type: 'boolean', alias: 'v'},
         json: {type: 'boolean', alias: 'j'},
         save: {type: 'string', alias: 's'},
-        info: {type: 'boolean', alias: 'i'}
-    },
+        info: {type: 'boolean', alias: 'i'},
+        portal: {type: 'string', alias: 'p'}
+    }),
 
     run: function () {
 
