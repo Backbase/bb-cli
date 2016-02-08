@@ -1,12 +1,25 @@
 var url = require('url');
 var _ = require('lodash');
 var temp = require('temp');
+var chalk = require('chalk');
 var opener = require('opener');
 var fs = require('fs-extra-promise');
 var forms = require('../../lib/forms');
 var Command = require('ronin').Command;
 
 module.exports = Command.extend({
+    desc: 'Show runtime shortcuts summary page',
+    help: function(){
+        var title = chalk.bold;
+        var d = chalk.gray;
+        var r = '\n  ' + title('Usage') + ': bb ' + this.name + ' [OPTIONS]';
+        r += '\n\t Exports a form project.';
+        r += '\n\n  ' + title('Options') + ': -short, --name <type> ' + d('default') + ' description\n';
+        r += '      -rH,  --runtime <url>\t' + d('http://admin:admin@localhost:8086/forms-runtime') +'\t\Runtime host.\n';
+        r += '\n  ' + title('Examples') + ':\n\n';
+        r += '      bb forms shortcuts \tShows list of shortcuts and start links configured on the default runtime server.\n';
+        return r;
+    },
     options: forms.options,
     run: function (repository, project, branch, studio, runtime) {
         var opt = {
@@ -71,7 +84,6 @@ module.exports = Command.extend({
                 return fs.writeFileAsync(path, html).then(function(){
                     opener(path);
                 });
-
             });
     }
 });
