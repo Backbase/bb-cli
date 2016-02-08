@@ -1,3 +1,4 @@
+var util = require('../lib/util');
 var restUtils = require('../lib/restUtils');
 var Command = require('ronin').Command;
 var Q = require('q');

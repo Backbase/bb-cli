@@ -1,51 +1,65 @@
 var _ = require('lodash');
-var util = require('../../lib/util');
 var forms = require('../../lib/forms');
 var Command = require('ronin').Command;
 
 module.exports = Command.extend({
     options: forms.options,
-    run: function (repository, project, branch, host, port, context, username, password, item) {
+    run: function (repository, project, branch, studio, runtime, item) {
         var opt = {
             repository: repository,
             project: project,
             branch: branch,
-            host: host,
-            port: port,
-            context: context,
-            username: username,
-            password: password
+            studio: studio,
+            runtime: runtime
         };
 
-        return forms.getConfig(opt).then(function(config){
-            return forms.getClient(config).then(function (mgmtService) {
-                switch (item) {
-                    case 'repositories':
-                        return mgmtService.GetRepositories({}).then(function (result) {
-                                _.forEach(result.GetRepositoriesResult.string, function (result) {
-                                    console.log(result);
-                                });
-                            });
-                    case 'projects':
-                        return mgmtService.GetProjects({
-                            repository: repository,
-                            branch: branch
-                        }).then(function(result){
-                            _.forEach(result.GetProjectsResult.string, function (result) {
-                                console.log(result);
-                            });
+        switch (item) {
+            case 'repositories':
+                return forms.getClient(opt).then(function (mgmtService) {
+                    mgmtService.GetRepositories({}).then(function (result) {
+                        _.forEach(result.GetRepositoriesResult.string, function (result) {
+                            console.log(result);
                         });
-                    case 'branches':
-                        return mgmtService.GetBranches({
-                            repository: repository
-                        }).then(function (result) {
-                            _.forEach(result.GetBranchesResult.string, function (result) {
-                                console.log(result);
-                            });
+                    });
+                });
+            case 'projects':
+                return forms.getClient(opt).then(function (mgmtService) {
+                    mgmtService.GetProjects({
+                        repository: repository,
+                        branch: branch
+                    }).then(function(result){
+                        _.forEach(result.GetProjectsResult.string, function (result) {
+                            console.log(result);
                         });
-                    default:  throw new Error('Please specify item type.');
-                }
-            });
-        });
+                    });
+                });
+            case 'branches':
+                return forms.getClient(opt).then(function (mgmtService) {
+                    mgmtService.GetBranches({
+                        repository: repository
+                    }).then(function (result) {
+                        _.forEach(result.GetBranchesResult.string, function (result) {
+                            console.log(result);
+                        });
+                    });
+                });
+            case 'shortcuts':
+                return forms.getRuntimeClient(opt).then(function(client){
+                    client
+                        .get('/shortcuts')
+                        .then(function(result){
+                            console.log(result);
+                        });
+                });
+            case 'runtime-projects':
+                return forms.getRuntimeClient(opt).then(function(client){
+                    client
+                        .get('/projects')
+                        .then(function(result){
+                            console.log(result);
+                        });
+                });
+            default:  throw new Error('Please specify item type.');
+        }
     }
 });
