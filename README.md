@@ -180,7 +180,7 @@ Backbase CXP v5.6
   -P,  --port <number>		7777		  The port of the server.
   -c,  --context <string>	portalserver  The application context of the portal.
   -u,  --username <string>	admin		  Username.
-  -w,  --password <string>	admin		  Password.
+  -pw,  --password <string>	admin		  Password.
   -p,  --portal <string>                  Name of the portal to target.
 ```
 
@@ -218,7 +218,7 @@ Backbase CXP v5.6
 
 ```
   -t,  --target <string>        Current directory   Dir to import.
-  -W,  --watch <boolean>                             Watch for file changes and autosubmit.
+  -w,  --watch <boolean>                             Watch for file changes and autosubmit.
   -l,  --collection <boolean>                        Watch collection directory tree for changes.
   -i,  --init-import <boolean>                       Import whole collection on init.
   -a,  --auto <boolean>                              Auto create model.xml if doesn't exist.
@@ -230,7 +230,7 @@ Backbase CXP v5.6
   -P,  --port <number>          7777                The port of the server.
   -c,  --context <string>       portalserver        The application context of the portal.
   -u,  --username <string>      admin               Username.
-  -w,  --password <string>      admin               Password.
+  -pw,  --password <string>      admin               Password.
   -p,  --portal <string>                            Name of the portal to target.
 ```
 
@@ -308,7 +308,7 @@ bb rest [OPTIONS]
 -P,  --port <number>		    7777		    The port of the server running portal foundation.
 -c,  --context <string>		    portalserver	The application context of the portal foundation.
 -u,  --username <string>		admin   		Username.
--w,  --password <string>		admin	    	Password.
+-pw,  --password <string>		admin	    	Password.
 -p,  --portal <string>				        Name of the portal on the server to target.
 -t,  --target <string>		    server		    Context target: server, portal, catalog, portalCatalog, page, container, widget, link, template, user, group, audit or cache.
 -T,  --target-arg <string/json>			        Target arguments. When there are more arguments, pass JSON array.
