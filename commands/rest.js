@@ -79,12 +79,12 @@ module.exports = Command.extend({
                 });
             }
 
-            return sendRequest().then(function() {
-            }).fail(function(e) {
-                console.log(chalk.red('bb rest'), e);
-            }).done();
-        });
-
+            return sendRequest();
+        })
+        .fail(function(e) {
+            console.log(chalk.red('bb rest'), e.message  || e);
+        })
+        .done();
     }
 });
 function tryParseJSON (jsonString){
