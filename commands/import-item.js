@@ -220,7 +220,7 @@ function output() {
     if (cfg.verbose) console.log.apply(this, arguments);
 }
 function error(err, model) {
-    util.err(chalk.red((model.getName() || '')) + ' ' + (err.message || err.error));
+    util.err(chalk.red((model && model.getName() || '')) + ' ' + (err.message || err.error));
 }
 function ok(r, name) {
     util.ok(chalk.yellow(name) + ' imported');
