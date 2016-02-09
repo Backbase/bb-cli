@@ -12,8 +12,9 @@ module.exports = Command.extend({
     help: function(){
         var title = chalk.bold;
         var d = chalk.gray;
-        var r = '\n  ' + title('Usage') + ': bb ' + this.name + ' [OPTIONS]';
-        r += '\n\t Exports a form project.';
+        var r = '\n  ' + title('Usage') + ': bb ' + this.name + ' [OPTIONS] [destination]';
+        r += '\n\t Shows a generated summary page for currently defined shortcuts on the specified runtime server.';
+        r += '\n\t If ' + d('destination') +' is not specified, a temporary path will be used and file will be opened automatically.';
         r += '\n\n  ' + title('Options') + ': -short, --name <type> ' + d('default') + ' description\n';
         r += '      -rH,  --runtime <url>\t' + d('http://admin:admin@localhost:8086/forms-runtime') +'\t\Runtime host.\n';
         r += '\n  ' + title('Examples') + ':\n\n';
@@ -21,7 +22,7 @@ module.exports = Command.extend({
         return r;
     },
     options: forms.options,
-    run: function (repository, project, branch, studio, runtime) {
+    run: function (repository, project, branch, studio, runtime, destination) {
         var opt = {
             repository: repository,
             project: project,
@@ -47,7 +48,16 @@ module.exports = Command.extend({
                 return client.get('/shortcuts');
             })
             .then(function(result){
-                var path = temp.path({suffix: '.html'});
+                var path = destination || temp.path({suffix: '.html'});
+
+                try {
+                    fs.accessSync(path, fs.F_OK);
+                    if (fs.lstatSync(path).isDirectory())
+                        path+='/shortcuts.html';
+                } catch (e) {
+                    // It isn't accessible
+                }
+
                 var html = '<html><head><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous"><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous"></head><body class="container">';
 
                 html+='<h3>Shortcuts for: <small>'+runtimeUrl+'</small></h3>';
@@ -66,7 +76,7 @@ module.exports = Command.extend({
                 html+='</tr></thead><tbody style="font-size: 14px;" >';
 
 
-                _.each(result.items, function(shortcut){
+                _.each(_.sortBy(result.items, 'name'), function(shortcut){
                     html+='<tr>';
                     html+='<th>'+ shortcut.name +'</th>';
                     html+='<td>'+ shortcut.project +'</td>';
@@ -82,7 +92,7 @@ module.exports = Command.extend({
                 html +='</tbody></table></body></html>';
 
                 return fs.writeFileAsync(path, html).then(function(){
-                    opener(path);
+                    if (!destination) opener(path);
                 });
             });
     }
