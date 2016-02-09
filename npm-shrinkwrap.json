@@ -7007,11 +7007,6 @@
       "from": "number-is-nan@>=1.0.0 <2.0.0",
       "resolved": "https://registry.npmjs.org/number-is-nan/-/number-is-nan-1.0.0.tgz"
     },
-    "oauth": {
-      "version": "0.9.14",
-      "from": "oauth@>=0.9.0 <0.10.0",
-      "resolved": "https://registry.npmjs.org/oauth/-/oauth-0.9.14.tgz"
-    },
     "oauth-sign": {
       "version": "0.8.0",
       "from": "oauth-sign@>=0.8.0 <0.9.0",
@@ -7103,16 +7098,6 @@
       "version": "2.2.0",
       "from": "parse-json@>=2.2.0 <3.0.0",
       "resolved": "https://registry.npmjs.org/parse-json/-/parse-json-2.2.0.tgz"
-    },
-    "passport-oauth2": {
-      "version": "1.1.2",
-      "from": "passport-oauth2@*",
-      "resolved": "https://registry.npmjs.org/passport-oauth2/-/passport-oauth2-1.1.2.tgz"
-    },
-    "passport-strategy": {
-      "version": "1.0.0",
-      "from": "passport-strategy@>=1.0.0 <2.0.0",
-      "resolved": "https://registry.npmjs.org/passport-strategy/-/passport-strategy-1.0.0.tgz"
     },
     "path-exists": {
       "version": "2.1.0",
@@ -7896,6 +7881,11 @@
         }
       }
     },
+    "stringify-clone": {
+      "version": "1.1.1",
+      "from": "stringify-clone@>=1.0.0 <2.0.0",
+      "resolved": "https://registry.npmjs.org/stringify-clone/-/stringify-clone-1.1.1.tgz"
+    },
     "stringstream": {
       "version": "0.0.5",
       "from": "stringstream@>=0.0.4 <0.1.0",
@@ -8070,11 +8060,6 @@
       "version": "1.0.2",
       "from": "uglify-to-browserify@>=1.0.0 <1.1.0",
       "resolved": "https://registry.npmjs.org/uglify-to-browserify/-/uglify-to-browserify-1.0.2.tgz"
-    },
-    "uid2": {
-      "version": "0.0.3",
-      "from": "uid2@>=0.0.0 <0.1.0",
-      "resolved": "https://registry.npmjs.org/uid2/-/uid2-0.0.3.tgz"
     },
     "underscore": {
       "version": "1.8.3",
