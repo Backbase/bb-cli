@@ -47,7 +47,7 @@ module.exports = Command.extend({
         return r;
     },
 
-    options: {
+    options: util.buildOpts({
         save: {type: 'string', alias: 's'},
         type: {type: 'string', alias: 't', default: 'model'},
         name: {type: 'string', alias: 'n'},
@@ -56,7 +56,7 @@ module.exports = Command.extend({
         sanitize: {type: 'boolean', default: true},
         chunk: {type: 'boolean', alias: 'k', default: false},
         force: {type: 'boolean', alias: 'f', default: false}
-    },
+    }),
 
     run: function () {
 

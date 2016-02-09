@@ -28,7 +28,7 @@ module.exports = Command.extend({
         r += '      -P,  --port <number>\t\t' + d('7777') + '\t\tThe port of the server running portal foundation.\n';
         r += '      -c,  --context <string>\t\t' + d('portalserver') + '\tThe application context of the portal foundation.\n';
         r += '      -u,  --username <string>\t\t' + d('admin') + '\t\tUsername.\n';
-        r += '      -w,  --password <string>\t\t' + d('admin') + '\t\tPassword.\n';
+        r += '      -pw,  --password <string>\t\t' + d('admin') + '\t\tPassword.\n';
         r += '      -p,  --portal <string>\t\t\t\tName of the portal on the server to target.\n';
         r += '\n  ' + title('Examples') + ':\n\n';
         r += '      bb import --target myPortal.xml\t\t\tImports portal from myPortal.xml\n';
@@ -36,11 +36,12 @@ module.exports = Command.extend({
         return r;
     },
 
-    options: {
+    options: util.buildOpts({
         target: {type: 'string', alias: 't'},
         dashboard: {type: 'boolean', alias: 'd'},
-        save: {type: 'string', alias: 's'}
-    },
+        save: {type: 'string', alias: 's'},
+        portal: {type: 'string', alias: 'p'}
+    }),
 
     run: function () {
 
