@@ -23,7 +23,7 @@ module.exports = Command.extend({
         r += '\n\t Zips and imports directory recursively.';
         r += '\n\n  ' + title('Options') + ': -short, --name <type> ' + d('default') + ' description\n';
         r += '      -t,  --target <string>\t\t' + '\t\tDir where bower.json is.\n\n';
-        r += '      -a,  --auto <boolean>\t\t' + '\t\tAuto generate model.xml when it is missing.\n\n';
+        r += '      -s,  --skip <boolean>\t\t' + '\t\tDon`t generate model.xml when it is missing.\n\n';
         // r += '      -r,  --remove <boolean>\t\t' + '\t\tRemoves components in target instead of adding them.\n\n';
 
         r += '      -H,  --host <string>\t\t' + d('localhost') + '\tThe host name of the server running portal foundation.\n';
