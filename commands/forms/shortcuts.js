@@ -83,7 +83,7 @@ module.exports = Command.extend({
 
                 _.each(_.sortBy(result.items, 'name'), function(shortcut){
                     html+='<tr>';
-                    html+='<th>'+ shortcut.name +'</th>';
+                    html+='<td><strong>'+ shortcut.name +'</strong></td>';
                     html+='<td>'+ shortcut.project +'</td>';
                     html+='<td>'+ shortcut.version +'</td>';
                     html+='<td>'+ shortcut.flow +'</td>';
