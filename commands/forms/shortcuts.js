@@ -58,12 +58,17 @@ module.exports = Command.extend({
                     // It isn't accessible
                 }
 
-                var html = '<html><head><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous"><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous"></head><body class="container">';
+                var html = '<html><head>' +
+                    '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">' +
+                    '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">' +
+                    '<link rel="stylesheet" href="https://cdn.rawgit.com/HubSpot/sortable/master/css/sortable-theme-bootstrap.css">' +
+                    '<script type="text/javascript" src="https://cdn.rawgit.com/HubSpot/sortable/master/js/sortable.min.js" ></script>' +
+                    '</head><body class="container">';
 
                 html+='<h3>Shortcuts for: <small>'+runtimeUrl+'</small></h3>';
 
 
-                html+='<table class="table table-hover table-bordered table-condensed">';
+                html+='<table class="table table-hover table-bordered table-condensed sortable-theme-bootstrap" data-sortable>';
                 html+='<thead><tr>';
                 html+='<th>Name</th>';
                 html+='<th>Project</th>';
