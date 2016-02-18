@@ -5,18 +5,28 @@ console.log('This widget could be not compatible with CXP 5.6');
 
 module.exports = function (bbscaff) {
     var generate = function (answers) {
-        bbscaff.generate(answers, answers.widget_name);
+        answers = {
+            widget: answers
+        };
+        bbscaff.generate(
+            answers,
+            {
+                // Sets destination path
+                destination_path: answers.widget.name,
+                // Reset interpolate from bbscaff, so instead of <%=var%> it uses ${var}
+                interpolate: undefined
+            });
     };
 
     bbscaff
         .prompt([
             {
                 type: 'input',
-                name: 'widget_name',
+                name: 'name',
                 message: 'Name',
                 validate: function (input) {
                     var done = this.async();
-                    if(input.length === 0){
+                    if (input.length === 0) {
                         done('Name is mandatory');
                         return;
                     }
@@ -25,11 +35,11 @@ module.exports = function (bbscaff) {
             },
             {
                 type: 'input',
-                name: 'widget_description',
+                name: 'description',
                 message: 'Description',
                 validate: function (input) {
                     var done = this.async();
-                    if(input.length === 0){
+                    if (input.length === 0) {
                         done('Description is mandatory');
                         return;
                     }
@@ -38,13 +48,13 @@ module.exports = function (bbscaff) {
             },
             {
                 type: 'input',
-                name: 'widget_version',
+                name: 'version',
                 message: 'Version',
                 default: '1.0.0'
             },
             {
                 type: 'input',
-                name: 'widget_author',
+                name: 'author',
                 message: 'Author'
             },
             {
