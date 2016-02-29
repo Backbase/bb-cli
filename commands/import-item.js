@@ -56,7 +56,6 @@ module.exports = Command.extend({
     }),
 
     run: function () {
-
         return config.getCommon(this.options)
         .then(function(r) {
             bbrest = r.bbrest;
