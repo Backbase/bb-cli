@@ -25,7 +25,7 @@ module.exports = Command.extend({
         var r = '\n  ' + title('Usage') + ': bb ' + this.name + ' [OPTIONS]';
         r += '\n\t Zips and imports item.';
         r += '\n\n  ' + title('Options') + ': -short, --name <type> ' + d('default') + ' description\n';
-        r += '      -t,  --target <string>\t\t' + '\t\tDir to import.\n';
+        r += '      -t,  --target <string>\t\t' + '\t\tDir/zip to import.\n';
         r += '      -W,  --watch <boolean>\t\t' + '\t\tWatch for file changes in the current dir and autosubmit.\n';
         r += '      -l,  --collection <boolean>\t' + '\t\tWatch collection directory tree for changes.\n';
         r += '      -i,  --init-import <boolean>\t' + '\t\tImport whole collection on init.\n';
@@ -112,31 +112,32 @@ module.exports = Command.extend({
 });
 
 function run(target) {
-    var model = modelXml(jxon);
-    return prepareModel(target, model)
-    .then(function() {
-        var replacements = {
-            'model.xml': model.getXml()
-        };
-        output('Creating zip...');
-        return zipDir(target, exclude, replacements)
-        .then(function(zipPath) {
-            return bbrest.importItem().file(zipPath).post()
-            .then(function(r) {
-                output(r);
-                if (r.error) {
-                    throw new Error('Rest API Error: ' + r.statusInfo);
-                }
-                var body = jxon.stringToJs(_.unescape(r.body)).import;
-                if (body.level === 'ERROR') throw new Error(body.message);
-                name = model.getName() + ' v' + model.getProperty('version');
-                ok(r, name);
-            });
-        });
-    })
-    .catch(function(err) {
-        error(err, model);
-    });
+    return fs.lstatAsync(target)
+        .then(function(stats) {
+            if (stats.isDirectory()) {
+                output('Importing directory...');
+                var model = modelXml(jxon);
+                return prepareModel(target, model)
+                    .then(function() {
+                        var replacements = {
+                            'model.xml': model.getXml()
+                        };
+                        output('Creating zip...');
+                        return zipDir(target, exclude, replacements)
+                            .then(function(zipPath) {
+                                importItem(zipPath, model);
+                            });
+                    })
+                    .catch(function(err) {
+                        error(err, model);
+                    });
+            } else if (path.parse(target).ext == '.zip') {
+                output('Importing zip archive...');
+                importItem(target);
+            } else {
+                error('Unsupported format. Nothing to do here.');
+            }
+        })
 }
 
 function prepareModel(target, model) {
@@ -220,6 +221,22 @@ function getBowerJson(target) {
 function addZeroVersion(model) {
     model.addProperty('version', '0.0.0-alpha.0');
     output('Version can not be resolved. Setting version to ' + model.getProperty('version'));
+}
+
+function importItem(zipPath, model) {
+    return bbrest.importItem().file(zipPath).post()
+    .then(function(r) {
+        output(r);
+        if (r.error) {
+            throw new Error('Rest API Error: ' + r.statusInfo);
+        }
+        var body = jxon.stringToJs(_.unescape(r.body)).import;
+        if (body.level === 'ERROR') throw new Error(body.message);
+        var name = !!model
+            ? model.getName() + ' v' + model.getProperty('version')
+            : path.parse(zipPath).name;
+        ok(r, name);
+    });
 }
 
 function output() {

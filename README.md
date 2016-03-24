@@ -201,9 +201,11 @@ bb import-item [OPTIONS]
 ```
 
 Imports item to the portal.
-This tool zips the targeted directory, then uploads it to the server via REST API(import package).
+ - If target is a zip archive, this tool uploads it to the server via REST API (import package).
+ - If target is a directory, this tool zips it and uploads archive to the server via REST API (import package).
+ - Otherwise tool does nothing.
 
-Target directory should contain `model.xml` file.
+If target is a directory it should contain `model.xml` file.
 If `--watch` option is set, component will be installed to the portal as feature.
 Directories `.git`, `.gitignore`, `bower_components` and `node_modules` are ignored by watch process.
 
@@ -217,7 +219,7 @@ Backbase CXP v5.6
 ##### Options
 
 ```
-  -t,  --target <string>        Current directory   Dir to import.
+  -t,  --target <string>        Current directory    Dir/zip to import.
   -W,  --watch <boolean>                             Watch for file changes and autosubmit.
   -l,  --collection <boolean>                        Watch collection directory tree for changes.
   -i,  --init-import <boolean>                       Import whole collection on init.
