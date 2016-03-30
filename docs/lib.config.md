@@ -76,7 +76,15 @@ config.absolutizePath()
   "username": "john",
   "password": "HU&69wev*!$8",
   "portal": "myportal",
-  "path": "/path/to/the/portalserver"
+  "path": "/path/to/the/portalserver",
+  "profiles": {
+    "dev": {
+      "host": "my-host.backbase.dev",
+      "port": "80",
+      "username": "username",
+      "password": "password"
+    }
+  }
 }
 ```
 
