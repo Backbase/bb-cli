@@ -30,7 +30,7 @@ module.exports = Command.extend({
         r += '      -P,  --port <number>\t\t' + d('7777') + '\t\tThe port of the server running portal foundation.\n';
         r += '      -c,  --context <string>\t\t' + d('portalserver') + '\tThe application context of the portal foundation.\n';
         r += '      -u,  --username <string>\t\t' + d('admin') + '\t\tUsername.\n';
-        r += '      -pw,  --password <string>\t\t' + d('admin') + '\t\tPassword.\n';
+        r += '      -w,  --password <string>\t\t' + d('admin') + '\t\tPassword.\n';
         r += '      -p,  --portal <string>\t\t\t\tName of the portal on the server to target.\n';
         return r;
     },

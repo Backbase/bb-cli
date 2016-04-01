@@ -180,7 +180,7 @@ Backbase CXP v5.6
   -P,  --port <number>		7777		  The port of the server.
   -c,  --context <string>	portalserver  The application context of the portal.
   -u,  --username <string>	admin		  Username.
-  -pw,  --password <string>	admin		  Password.
+  -w,  --password <string>	admin		  Password.
   -p,  --portal <string>                  Name of the portal to target.
 ```
 
@@ -218,7 +218,7 @@ Backbase CXP v5.6
 
 ```
   -t,  --target <string>        Current directory   Dir to import.
-  -w,  --watch <boolean>                             Watch for file changes and autosubmit.
+  -W,  --watch <boolean>                             Watch for file changes and autosubmit.
   -l,  --collection <boolean>                        Watch collection directory tree for changes.
   -i,  --init-import <boolean>                       Import whole collection on init.
   -a,  --auto <boolean>                              Auto create model.xml if doesn't exist.
@@ -230,7 +230,7 @@ Backbase CXP v5.6
   -P,  --port <number>          7777                The port of the server.
   -c,  --context <string>       portalserver        The application context of the portal.
   -u,  --username <string>      admin               Username.
-  -pw,  --password <string>      admin               Password.
+  -w,  --password <string>      admin               Password.
   -p,  --portal <string>                            Name of the portal to target.
 ```
 
@@ -260,7 +260,7 @@ bb theme-build
 -e,  --edition <string>                             Pass edition var to less.
 -b,  --base-path <string>                           Pass base-path var to less.
 -s   --sourcemaps                                   Whether to generate source maps.
--w   --watch                                        Watch less files and rebuild on change.
+-W   --watch                                        Watch less files and rebuild on change.
      --disable-compress                             Don't compress CSS into .min files.
      --disable-ie                                   Don't create reworked .ie files for IE8.
      --disable-assets                               Don't collect font/image assets.
@@ -308,7 +308,7 @@ bb rest [OPTIONS]
 -P,  --port <number>		    7777		    The port of the server running portal foundation.
 -c,  --context <string>		    portalserver	The application context of the portal foundation.
 -u,  --username <string>		admin   		Username.
--pw,  --password <string>		admin	    	Password.
+-w,  --password <string>		admin	    	Password.
 -p,  --portal <string>				        Name of the portal on the server to target.
 -t,  --target <string>		    server		    Context target: server, portal, catalog, portalCatalog, page, container, widget, link, template, user, group, audit or cache.
 -T,  --target-arg <string/json>			        Target arguments. When there are more arguments, pass JSON array.
