@@ -169,7 +169,6 @@ function compile(entry, opts) {
         .on('error', deferred.reject)
         .pipe(rename(function(path) {
             path.dirname = distDirname(path.dirname, opts.dist);
-            path.basename = 'base';
         }))
         .on('error', deferred.reject)
         .pipe(gulpif(function() { return !!opts.sourcemaps; }, sourcemaps.write('.')))
@@ -244,7 +243,10 @@ function compress(entry, target, opts) {
     gulp.src(entry, {base: target})
         .pipe(debug({title: 'compressing'}))
         .pipe(gulpif(function() { return !!opts.sourcemaps; }, sourcemaps.init({loadMaps: true})))
-        .pipe(minifyCss({keepBreaks: true}))
+        .pipe(minifyCss({
+            processImport: false,
+            keepBreaks: true
+        }))
         .pipe(rename({
             suffix: '.min',
             extname: '.css'
