@@ -45,7 +45,7 @@ module.exports = Command.extend({
 
     options: util.buildOpts({
         target: {type: 'string', alias: 't', default: './'},
-        watch: {type: 'boolean', alias: 'w'},
+        watch: {type: 'boolean', alias: 'W'},
         collection: {type: 'boolean', alias: 'l'},
         'init-import': {type: 'boolean', alias: 'i'},
         auto: {type: 'boolean', alias: 'a'},

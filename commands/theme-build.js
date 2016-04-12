@@ -44,7 +44,7 @@ module.exports = Command.extend({
         edition: {type: 'string', alias: 'e'},
         'base-path': {type: 'string', alias: 'b'},
         sourcemaps: {type: 'flag', alias: 's'},
-        watch: {type: 'flag', alias: 'w'},
+        watch: {type: 'flag', alias: 'W'},
         dist: {type: 'string', alias: 'd'},
         'disable-compress': {type: 'flag'},
         'disable-ie': {type: 'flag'},

@@ -31,7 +31,6 @@ module.exports = Command.extend({
         save: {type: 'string', alias: 's'},
         yes: {type: 'boolean', alias: 'y'},
         edge: {type: 'boolean', alias: 'e'},
-        //watch: {type: 'boolean', alias: 'w'},
         verbose: {type: 'boolean', alias: 'v'}
     },
 
