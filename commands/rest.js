@@ -58,7 +58,6 @@ module.exports = Command.extend({
     }),
 
     run: function () {
-
         return config.getCommon(this.options)
         .then(function(r) {
             bbrest = r.bbrest;
@@ -95,7 +94,7 @@ function tryParseJSON (jsonString){
         // Neither JSON.parse(false) or JSON.parse(1234) throw errors, hence the type-checking,
         // but... JSON.parse(null) returns 'null', and typeof null === "object",
         // so we must check for that, too.
-        if (o && typeof o === "object" && o !== null) {
+        if (o && typeof o === 'object' && o !== null) {
             return o;
         }
     }

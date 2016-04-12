@@ -245,7 +245,7 @@ bb import-item --watch
 ### <a name="theme-build"></a>Theme Build
 
 Builds a theme.
-Requires a bower.json file in the directory with a "main" pointing to the base less file
+Requires a bower.json file in the directory with a "main" array pointing to the base and core less files
 
 ```
 bb theme-build
