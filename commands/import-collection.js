@@ -35,17 +35,12 @@ module.exports = Command.extend({
         return r;
     },
 
-    options: {
+    options: util.buildOpts({
         target: {type: 'string', alias: 't', default: './'},
-        skip: {type: 'boolean', alias: 's'},
+        auto: {type: 'boolean', alias: 'a'},
         remove: {type: 'boolean', alias: 'r'},
-        host: {type: 'string', alias: 'H'},
-        port: {type: 'string', alias: 'P'},
-        context: {type: 'string', alias: 'c'},
-        username: {type: 'string', alias: 'u'},
-        password: {type: 'string', alias: 'w'},
         portal: {type: 'string', alias: 'p'}
-    },
+    }),
 
     run: function () {
 
@@ -56,7 +51,7 @@ module.exports = Command.extend({
             cfg = r.config.cli;
 
             console.log('Parsing collection...');
-            return parseCollection(cfg.target, exclude, !cfg.skip, r.jxon)
+            return parseCollection(cfg.target, exclude, cfg.auto, r.jxon)
             .then(createAllZips)
             .then(importAll)
             .then(ok);

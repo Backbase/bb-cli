@@ -31,7 +31,7 @@ module.exports = Command.extend({
         r += '      -e,  --edition <string>\t\t\t\t Pass edition var to less.\n';
         r += '      -b,  --base-path <string>\t\t\t\t Pass base-path var to less.\n';
         r += '      -s   --sourcemaps\t\t\t\t\t Whether to generate source maps.\n';
-        r += '      -w   --watch\t\t\t\t\t Watch less files and rebuild on change.\n';
+        r += '      -W   --watch\t\t\t\t\t Watch less files and rebuild on change.\n';
         r += '           --disable-compress\t\t\t\t Don\'t compress CSS into .min files.\n';
         r += '           --disable-ie\t\t\t\t\t Don\'t create reworked .ie files for IE8.\n';
         r += '           --disable-assets\t\t\t\t Don\'t collect font/image assets.\n';
@@ -44,7 +44,7 @@ module.exports = Command.extend({
         edition: {type: 'string', alias: 'e'},
         'base-path': {type: 'string', alias: 'b'},
         sourcemaps: {type: 'flag', alias: 's'},
-        watch: {type: 'flag', alias: 'w'},
+        watch: {type: 'flag', alias: 'W'},
         dist: {type: 'string', alias: 'd'},
         'disable-compress': {type: 'flag'},
         'disable-ie': {type: 'flag'},

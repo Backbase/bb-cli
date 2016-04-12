@@ -260,7 +260,7 @@ bb theme-build
 -e,  --edition <string>                             Pass edition var to less.
 -b,  --base-path <string>                           Pass base-path var to less.
 -s   --sourcemaps                                   Whether to generate source maps.
--w   --watch                                        Watch less files and rebuild on change.
+-W   --watch                                        Watch less files and rebuild on change.
      --disable-compress                             Don't compress CSS into .min files.
      --disable-ie                                   Don't create reworked .ie files for IE8.
      --disable-assets                               Don't collect font/image assets.

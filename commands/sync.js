@@ -21,7 +21,6 @@ module.exports = Command.extend({
         r += '      -s,  --save <string>\t' + d('') + '\t\t\t Name of the item which model should be exported to a file.\n';
         r += '      -y,  --yes <boolean>\t' + d('false') + '\t\t\t Disable interactive mode, answer all questions with yes.\n';
         r += '      -e,  --edge <boolean>\t' + d('false') + '\t\t\t Convert model.xml to 5.6 format.\n';
-        //r += '      -w,  --watch <boolean>\t' + d('false') + '\t\t\t Enables watching for file change.\n';
         r += '      -v,  --verbose <boolean>\t' + d('false') + '\t\t\t Prints detailed output.\n';
         return r;
     },
@@ -32,7 +31,6 @@ module.exports = Command.extend({
         save: {type: 'string', alias: 's'},
         yes: {type: 'boolean', alias: 'y'},
         edge: {type: 'boolean', alias: 'e'},
-        //watch: {type: 'boolean', alias: 'w'},
         verbose: {type: 'boolean', alias: 'v'}
     },
 

@@ -36,11 +36,12 @@ module.exports = Command.extend({
         return r;
     },
 
-    options: {
+    options: util.buildOpts({
         target: {type: 'string', alias: 't'},
         dashboard: {type: 'boolean', alias: 'd'},
-        save: {type: 'string', alias: 's'}
-    },
+        save: {type: 'string', alias: 's'},
+        portal: {type: 'string', alias: 'p'}
+    }),
 
     run: function () {
 

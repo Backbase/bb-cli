@@ -19,7 +19,7 @@ var exclude = ['.git', '.gitignore', 'bower_components', 'node_modules', 'node',
 var bbrest, jxon, cfg, name;
 
 module.exports = Command.extend({
-    help: function() {
+    help: function () {
         var title = chalk.bold;
         var d = chalk.gray;
         var r = '\n  ' + title('Usage') + ': bb ' + this.name + ' [OPTIONS]';
@@ -43,7 +43,7 @@ module.exports = Command.extend({
         return r;
     },
 
-    options: {
+    options: util.buildOpts({
         target: {type: 'string', alias: 't', default: './'},
         watch: {type: 'boolean', alias: 'W'},
         collection: {type: 'boolean', alias: 'l'},
@@ -52,57 +52,50 @@ module.exports = Command.extend({
         name: {type: 'string', alias: 'n'},
         version: {type: 'string', alias: 'v'},
         verbose: {type: 'boolean'},
-
-        host: {type: 'string', alias: 'H'},
-        port: {type: 'string', alias: 'P'},
-        context: {type: 'string', alias: 'c'},
-        username: {type: 'string', alias: 'u'},
-        password: {type: 'string', alias: 'w'},
         portal: {type: 'string', alias: 'p'}
-    },
+    }),
 
     run: function () {
-
         return config.getCommon(this.options)
-        .then(function(r) {
-            bbrest = r.bbrest;
-            jxon = r.jxon;
-            cfg = r.config.cli;
+            .then(function (r) {
+                bbrest = r.bbrest;
+                jxon = r.jxon;
+                cfg = r.config.cli;
 
-            if (cfg.collection) {
-                watch.watchTree(cfg.target, {
-                    ignoreDotFiles: true,
-                    ignoreUnreadableDir: true,
-                    ignoreNotPermitted: true,
-                    filter: function(fileName) {
-                        var v = exclude.indexOf(fileName);
-                        return (v === -1);
-                    }
-                }, onWatchCollection);
-            } else {
-
-                if (cfg.watch) {
+                if (cfg.collection) {
                     watch.watchTree(cfg.target, {
                         ignoreDotFiles: true,
                         ignoreUnreadableDir: true,
                         ignoreNotPermitted: true,
-                        filter: function(fileName) {
+                        filter: function (fileName) {
                             var v = exclude.indexOf(fileName);
                             return (v === -1);
                         }
-                    }, onWatch);
-                }
+                    }, onWatchCollection);
+                } else {
 
-                return run(cfg.target);
-            }
-        })
-        .catch(error);
+                    if (cfg.watch) {
+                        watch.watchTree(cfg.target, {
+                            ignoreDotFiles: true,
+                            ignoreUnreadableDir: true,
+                            ignoreNotPermitted: true,
+                            filter: function (fileName) {
+                                var v = exclude.indexOf(fileName);
+                                return (v === -1);
+                            }
+                        }, onWatch);
+                    }
+
+                    return run(cfg.target);
+                }
+            })
+            .catch(error);
 
     },
 
-    runImport: function(target) {
+    runImport: function (target) {
         return config.getCommon()
-            .then(function(r) {
+            .then(function (r) {
                 bbrest = r.bbrest;
                 jxon = r.jxon;
                 cfg = {};
@@ -114,107 +107,107 @@ module.exports = Command.extend({
 function run(target) {
     var model = modelXml(jxon);
     return prepareModel(target, model)
-    .then(function() {
-        var replacements = {
-            'model.xml': model.getXml()
-        };
-        output('Creating zip...');
-        return zipDir(target, exclude, replacements)
-        .then(function(zipPath) {
-            return bbrest.importItem().file(zipPath).post()
-            .then(function(r) {
-                output(r);
-                if (r.error) {
-                    throw new Error('Rest API Error: ' + r.statusInfo);
-                }
-                var body = jxon.stringToJs(_.unescape(r.body)).import;
-                if (body.level === 'ERROR') throw new Error(body.message);
-                name = model.getName() + ' v' + model.getProperty('version');
-                ok(r, name);
-            });
+        .then(function () {
+            var replacements = {
+                'model.xml': model.getXml()
+            };
+            output('Creating zip...');
+            return zipDir(target, exclude, replacements)
+                .then(function (zipPath) {
+                    return bbrest.importItem().file(zipPath).post()
+                        .then(function (r) {
+                            output(r);
+                            if (r.error) {
+                                throw new Error('Rest API Error: ' + r.statusInfo);
+                            }
+                            var body = jxon.stringToJs(_.unescape(r.body)).import;
+                            if (body.level === 'ERROR') throw new Error(body.message);
+                            name = model.getName() + ' v' + model.getProperty('version');
+                            ok(r, name);
+                        });
+                });
+        })
+        .catch(function (err) {
+            error(err, model);
         });
-    })
-    .catch(function(err) {
-        error(err, model);
-    });
 }
 
 function prepareModel(target, model) {
     output('Reading model.xml...');
     return model.read(path.resolve(target, 'model.xml'))
-    .then(function() {
-        if (!model.getProperty('version')) {
-            if (cfg.version && semver.valid(cfg.version)) {
-                model.addProperty('version', cfg.version);
-            } else {
-                return getBowerJson(target)
-                .then(function(bjson) {
-                    if (bjson.version) model.addProperty('version', bjson.version);
-                    else return addZeroVersion(model);
-                })
-                .catch(function() {
-                    return addZeroVersion(model);
-                });
+        .then(function () {
+            if (!model.getProperty('version')) {
+                if (cfg.version && semver.valid(cfg.version)) {
+                    model.addProperty('version', cfg.version);
+                } else {
+                    return getBowerJson(target)
+                        .then(function (bjson) {
+                            if (bjson.version) model.addProperty('version', bjson.version);
+                            else return addZeroVersion(model);
+                        })
+                        .catch(function () {
+                            return addZeroVersion(model);
+                        });
+                }
             }
-        }
-    })
-    .catch(function(err) {
-        if (err.code === 'ENOENT') {
-            var defer = Q.defer();
-            //console.log(chalk.gray('model.xml') + ' is not found.');
+        })
+        .catch(function (err) {
+            if (err.code === 'ENOENT') {
+                var defer = Q.defer();
+                //console.log(chalk.gray('model.xml') + ' is not found.');
 
-            if (cfg.auto || cfg['init-import']) {
-                defer.resolve();
-            } else {
-                inquirer.prompt([{
-                    message: 'model.xml is not found. Auto submit one?',
-                    name: 'saveModel',
-                    type: 'confirm'
-                }], function(prm) {
-                    if (prm.saveModel) defer.resolve();
-                    else defer.reject(new Error('Can not import item without model.xml'));
-                });
-            }
-
-            return defer.promise
-            .then(function() { // --auto options is on
-                output('Creating model.xml for feature...');
-                if (cfg.name) {
-                    model.createFeature(cfg.name);
-                    if (cfg.version) {
-                        model.addProperty('version', cfg.version);
-                        return;
-                    }
+                if (cfg.auto || cfg['init-import']) {
+                    defer.resolve();
+                } else {
+                    inquirer.prompt([{
+                        message: 'model.xml is not found. Auto submit one?',
+                        name: 'saveModel',
+                        type: 'confirm'
+                    }], function (prm) {
+                        if (prm.saveModel) defer.resolve();
+                        else defer.reject(new Error('Can not import item without model.xml'));
+                    });
                 }
 
-                return getBowerJson(target)
-                .then(function(bjson) {
-                    if (!cfg.name) model.createFeature(bjson.name);
-                    if (cfg.version) model.addProperty('version', cfg.version);
-                    else if (bjson.version) model.addProperty('version', bjson.version);
-                    else return addZeroVersion(model);
-                });
-            })
-            .catch(function(err) {
-                console.log('Can not auto create model.xml');
-                throw err;
-            });
-        }
-        throw err;
-    });
+                return defer.promise
+                    .then(function () { // --auto options is on
+                        output('Creating model.xml for feature...');
+                        if (cfg.name) {
+                            model.createFeature(cfg.name);
+                            if (cfg.version) {
+                                model.addProperty('version', cfg.version);
+                                return;
+                            }
+                        }
+
+                        return getBowerJson(target)
+                            .then(function (bjson) {
+                                if (!cfg.name) model.createFeature(bjson.name);
+                                if (cfg.version) model.addProperty('version', cfg.version);
+                                else if (bjson.version) model.addProperty('version', bjson.version);
+                                else return addZeroVersion(model);
+                            });
+                    })
+                    .catch(function (err) {
+                        console.log('Can not auto create model.xml');
+                        throw err;
+                    });
+            }
+            throw err;
+        });
 }
 
 function getBowerJson(target) {
     output('Reading bower.json...');
     return fs.readFileAsync(path.resolve(target, 'bower.json'))
-    .then(function(bjson) {
-        try {
-            bjson = JSON.parse(bjson.toString());
-        } catch (err) {
-            throw new Error('Error while parsing bower.json');
-        }
-        return bjson;
-    });
+        .then(function (bjson) {
+            try {
+                bjson = JSON.parse(bjson.toString());
+            } catch (err) {
+                throw new Error('Error while parsing bower.json');
+            }
+            return bjson;
+        });
 }
 
 function addZeroVersion(model) {
@@ -269,7 +262,7 @@ function onWatchCollection(f, curStat, prevStat) {
     if (typeof f === 'object' && prevStat === null && curStat === null) {
         console.log(chalk.green('Scanning underlying directories for items...'));
 
-        _.each(f, function(v, k) {
+        _.each(f, function (v, k) {
             p = path.dirname(k).split(path.sep)[0];
             if (p === '.') return;
             dirs[p] = path.resolve(p);
@@ -277,7 +270,7 @@ function onWatchCollection(f, curStat, prevStat) {
 
         var numberOfDirectories = 0;
         var remoteHost = bbrest.config;
-        _.each(dirs, function(value, key) {
+        _.each(dirs, function (value, key) {
             console.log(chalk.cyan('Adding watch for ') + chalk.yellow(key));
             numberOfDirectories++;
             if (cfg['init-import']) run(value);

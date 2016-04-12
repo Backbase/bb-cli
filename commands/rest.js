@@ -1,3 +1,4 @@
+var util = require('../lib/util');
 var restUtils = require('../lib/restUtils');
 var Command = require('ronin').Command;
 var Q = require('q');
@@ -39,14 +40,8 @@ module.exports = Command.extend({
         return r;
     },
 
-    options: {
+    options: util.buildOpts({
         scheme: {type: 'string', alias: 'S'},
-        host: {type: 'string', alias: 'H'},
-        port: {type: 'string', alias: 'P'},
-        context: {type: 'string', alias: 'c'},
-        username: {type: 'string', alias: 'u'},
-        password: {type: 'string', alias: 'w'},
-        portal: {type: 'string', alias: 'p'},
         target: {type: 'string', alias: 't', default: 'server'},
         'target-arg': {type: 'string', alias: 'T'},
         method: {type: 'string', alias: 'm', default: 'get'},
@@ -58,8 +53,9 @@ module.exports = Command.extend({
         verbose: {type: 'boolean', alias: 'v'},
         json: {type: 'boolean', alias: 'j'},
         save: {type: 'string', alias: 's'},
-        info: {type: 'boolean', alias: 'i'}
-    },
+        info: {type: 'boolean', alias: 'i'},
+        portal: {type: 'string', alias: 'p'}
+    }),
 
     run: function () {
         return config.getCommon(this.options)
@@ -82,12 +78,12 @@ module.exports = Command.extend({
                 });
             }
 
-            return sendRequest().then(function() {
-            }).fail(function(e) {
-                console.log(chalk.red('bb rest'), e);
-            }).done();
-        });
-
+            return sendRequest();
+        })
+        .fail(function(e) {
+            console.log(chalk.red('bb rest'), e.message  || e);
+        })
+        .done();
     }
 });
 function tryParseJSON (jsonString){
