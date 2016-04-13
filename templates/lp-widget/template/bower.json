@@ -1,0 +1,30 @@
+{
+  "name": "${widget.name}",
+  "version": "${widget.version}",
+  "description": "${widget.description}",
+  "main": "./scripts/main.js",
+  "authors": [
+    "${widget.author}"
+  ],
+  "moduleType": [
+    "umd"
+  ],
+  "ignore": [
+    "**/.*",
+    "bower_components",
+    "node_modules"
+  ],
+  "private": true,
+  "dependencies": {
+    "base": "^2.x",
+    "core": "^2.x",
+    "ui": "^2.x"
+  },
+  "devDependencies": {
+    "mock": "^1.x",
+    "config": "^3.x",
+    "theme-default": "^1.x",
+    "angular-mocks": "~1.2.28",
+    "requirejs": "~2.1.20"
+  }
+}
