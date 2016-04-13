@@ -1,0 +1,29 @@
+<catalog>
+    <widget>
+        <name>${widget.name}</name>
+        <contextItemName>[BBHOST]</contextItemName>
+        <properties>
+            <property label="Title" name="title" viewHint="text-input,admin">
+                <value type="string">${widget.description}</value>
+            </property>
+            <property name="TemplateName">
+                <value type="string">Standard_Widget</value>
+            </property>
+            <property name="src">
+                <value type="string">$(itemRoot)/index.html</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(itemRoot)/icon.png</value>
+            </property>
+            <property name="order">
+                <value type="double">0</value>
+            </property>
+            <property name="area">
+                <value type="string">0</value>
+            </property>
+            <property label="Widget Chrome" name="widgetChrome" viewHint="select-one,admin,designModeOnly">
+                <value type="string">$(contextRoot)/static/features/[BBHOST]/chromes/blank/chrome-blank.html</value>
+            </property>
+        </properties>
+    </widget>
+</catalog>
