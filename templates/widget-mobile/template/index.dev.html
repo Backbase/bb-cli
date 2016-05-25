@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:g="http://www.backbase.com/2008/gadget" xml:lang="en">
+
+<head>
+    <title>${widget.name}</title>
+    <meta http-equiv="Content-Type" content="text/xml; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="MobileOptimized" content="320" />
+    <!-- externals -->
+    <link rel="stylesheet" href="bower_components/ionic/release/css/ionic.min.css" />
+    <!-- widget -->
+    <link rel="stylesheet" href="src/styles/index.css" type="text/css" />
+    <!-- dependencies -->
+    <script src="bower_components/angular/angular.min.js"></script>
+    <!-- development -->
+    <script src="bower_components/mock/dist/scripts/main.js"></script>
+    <script>
+        window.b$ = { portal: mock.Portal() };
+        window.gadgets = mock.gadgets;
+        mock.Widget().then(function(widget) {
+            window.${widget.transforms.name.camelCase}(widget,[/* angular dependencies */]).bootstrap();
+        });
+    </script>
+    <!-- main widget -->
+    <script src="src/scripts/index.js" charset="utf-8"></script>
+
+</head>
+<body ng-controller="MainCtrl as mainCtrl" class="${widget.name}">
+
+    <div ng-controller="ErrorCtrl as errorCtrl"></div>
+    <h2 ng-bind="mainCtrl.hello"></h2>
+
+</body>
+</html>

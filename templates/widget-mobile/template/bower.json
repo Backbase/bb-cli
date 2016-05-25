@@ -1,0 +1,37 @@
+{
+  "name": "${widget.name}",
+  "version": "${widget.version}",
+  "description": "${widget.description}",
+  "main": "./src/scripts/index.js",
+  "authors": [
+    "${widget.author}"
+  ],
+  "moduleType": [
+    "umd"
+  ],
+  "ignore": [
+    "**/.*",
+    "bower_components",
+    "node_modules"
+  ],
+  "private": true,
+  "dependencies": {
+    "angular": "~1.4.8",
+    "ionic": "~1.1.0"
+  },
+  "devDependencies": {
+    "mock": "^1.0.8",
+    "angular-mocks": "~1.4.8"
+  },
+  "resolutions": {
+    "angular": "1.4.8"
+  },
+  "config": {
+    "paths": {
+      "scripts": "./src/scripts",
+      "media": "./src/media",
+      "templates": "./src/templates",
+      "styles": "./src/styles"
+    }
+  }
+}

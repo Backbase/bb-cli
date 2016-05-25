@@ -1,0 +1,22 @@
+<catalog>
+    <widget>
+        <name>${widget.name}</name>
+        <contextItemName>[BBHOST]</contextItemName>
+        <properties>
+            <property label="Title" name="title" viewHint="text-input,admin">
+                <value type="string">${widget.description}</value>
+            </property>
+            <property label="Icon" name="icon" viewHint="text-input,admin,designModeOnly">
+                <value type="string">$(itemRoot)/icon.png</value>
+            </property>
+            <property name="src">
+                <value type="string">$(itemRoot)/index.html</value>
+            </property>
+            <property name="thumbnailUrl">
+                <value type="string">$(itemRoot)/icon.png</value>
+            </property>
+        </properties>
+        <tags>
+        </tags>
+    </widget>
+</catalog>
