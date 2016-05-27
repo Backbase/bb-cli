@@ -267,16 +267,19 @@ function copyAssets(entry, opts) {
     var imageGlob = path.join('**', '*.{jpg,jpeg,png,svg,gif}');
     var noDistGlob = path.join('!**', opts.dist, '**'); // don't copy from `dist` directories
     var noBowerGlob = path.join('!bower_components', '**'); // don't copy from `bower_components` directories
+    var noNpmGlob = path.join('!node_modules', '**'); // don't copy from `node_modules` directories
 
     gulp.task('copyThemeAssets', [], function () {
         var basePath = path.join('bower_components', 'theme');
         var universalAssets = gulp.src([
             path.join(basePath, 'universal', fontGlob),
-            path.join(basePath, 'universal', imageGlob)
+            path.join(basePath, 'universal', imageGlob),
+            noDistGlob
         ], {follow: true});
         var retailAssets = gulp.src([
             path.join(basePath, 'retail', fontGlob),
-            path.join(basePath, 'retail', imageGlob)
+            path.join(basePath, 'retail', imageGlob),
+            noDistGlob
         ], {follow: true});
         return merge(universalAssets, retailAssets)
             .pipe(debug({title: 'copying'}))
@@ -287,7 +290,8 @@ function copyAssets(entry, opts) {
         var assets = gulp.src([
             path.join('bower_components', fontGlob),
             path.join('bower_components', imageGlob),
-            path.join('!bower_components', 'theme', '**')
+            path.join('!bower_components', 'theme', '**'),
+            noDistGlob
         ], {follow: true});
         return assets
             .pipe(debug({title: 'copying'}))
@@ -303,6 +307,7 @@ function copyAssets(entry, opts) {
             fontGlob,
             imageGlob,
             noBowerGlob,
+            noNpmGlob,
             noDistGlob
         ];
         return gulp.src(assetPaths, {follow: true})
