@@ -16,7 +16,5 @@
                 <value type="string">$(itemRoot)/icon.png</value>
             </property>
         </properties>
-        <tags>
-        </tags>
     </widget>
 </catalog>

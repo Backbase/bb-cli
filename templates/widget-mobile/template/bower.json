@@ -4,7 +4,7 @@
   "description": "${widget.description}",
   "main": "./src/scripts/index.js",
   "authors": [
-    "${widget.author}"
+    ""
   ],
   "moduleType": [
     "umd"

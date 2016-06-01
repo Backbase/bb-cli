@@ -20,7 +20,7 @@ ${widget.description}
 
 ```bash
 cd <widget-path>
-bower install
+bower install && bblp start
 ```
 
 ## Requirements

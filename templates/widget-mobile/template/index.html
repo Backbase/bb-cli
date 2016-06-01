@@ -16,7 +16,8 @@
 </head>
 
 <body g:onload="window.${widget.transforms.name.camelCase}(__WIDGET__, [/* angular dependencies */]).bootstrap()"
-    ng-controller="MainCtrl as mainCtrl" class="${widget.name}">
+    ng-controller="MainCtrl as mainCtrl"
+    class="${widget.name}">
 
     <div ng-controller="ErrorCtrl as errorCtrl"></div>
     <h2 ng-bind="mainCtrl.hello"></h2>
