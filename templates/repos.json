@@ -3,5 +3,6 @@
     "lp-widget": "https://bitbucket.org/backbase/lpg-generator-widget-ng",
     "ng-widget": "https://bitbucket.org/backbase/lpg-generator-widget-ng-lite.git",
     "widget": "https://bitbucket.org/backbase/lpg-generator-widget-ng-lite.git",
-    "agnosthic-widget": "https://github.com/tcorral/generator-widget-agnostic.git"
+    "agnosthic-widget": "https://github.com/tcorral/generator-widget-agnostic.git",
+    "widget-mobile": "https://stash.backbase.com/scm/lpg/generator-widget-ng-lite.git"
 }
