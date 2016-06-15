@@ -41,12 +41,14 @@ module.exports = Command.extend({
         dashboard: {type: 'boolean', alias: 'd'},
         save: {type: 'string', alias: 's'},
         portal: {type: 'string', alias: 'p'}
+        //,verbose: {type: 'string', alias: 'v'}
     }),
 
     run: function () {
-
+        this.options.verbose = true;
         util.spin.message('Loading...');
         util.spin.start();
+        // check for portal-is-running is done here
         return config.getCommon(this.options)
         .then(function(r) {
             bbrest = r.bbrest;
