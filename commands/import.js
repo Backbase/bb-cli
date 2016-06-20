@@ -13,6 +13,7 @@ var JSZip = require('jszip');
 var Command = require('ronin').Command;
 
 var bbrest, jxon, cfg;
+var unknownImportError = 'Unknown import message.';
 
 module.exports = Command.extend({
     help: function () {
@@ -30,6 +31,7 @@ module.exports = Command.extend({
         r += '      -u,  --username <string>\t\t' + d('admin') + '\t\tUsername.\n';
         r += '      -w,  --password <string>\t\t' + d('admin') + '\t\tPassword.\n';
         r += '      -p,  --portal <string>\t\t\t\tName of the portal on the server to target.\n';
+        r += '      -v,  --verbose <string>\t\t\t\tPrints out raw error.\n';
         r += '\n  ' + title('Examples') + ':\n\n';
         r += '      bb import --target myPortal.xml\t\t\tImports portal from myPortal.xml\n';
         r += '      bb import --target chunked\t\t\tImports bb export chunked portal from chunked dir\n';
@@ -40,15 +42,13 @@ module.exports = Command.extend({
         target: {type: 'string', alias: 't'},
         dashboard: {type: 'boolean', alias: 'd'},
         save: {type: 'string', alias: 's'},
-        portal: {type: 'string', alias: 'p'}
-        //,verbose: {type: 'string', alias: 'v'}
+        portal: {type: 'string', alias: 'p'},
+        verbose: {type: 'boolean', alias: 'v'}
     }),
 
     run: function () {
-        this.options.verbose = true;
         util.spin.message('Loading...');
         util.spin.start();
-        // check for portal-is-running is done here
         return config.getCommon(this.options)
         .then(function(r) {
             bbrest = r.bbrest;
@@ -72,10 +72,13 @@ module.exports = Command.extend({
                 throw new Error('Target is not directory or file.');
             })
             .then(function(bbr) {
-                if (bbr.error) {
+                if (bbr.error === true) {
                     var emsg = jxon.stringToJs(bbr.body);
-                    emsg = emsg.errorMessage || emsg.importErrorMessage || {message: 'Unknown import message.'};
+                    emsg = emsg.errorMessage || emsg.importErrorMessage || {message: unknownImportError};
                     throw new Error(emsg.message);
+                } else if (bbr.error === undefined) {
+                    // handles errorous responses which don't have .error property
+                    throw new Error(cfg.verbose === true ? bbr : unknownImportError);
                 } else ok(bbr);
             })
             .catch(function(err) {
