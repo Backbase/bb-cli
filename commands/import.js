@@ -14,6 +14,7 @@ var Command = require('ronin').Command;
 
 var bbrest, jxon, cfg;
 var unknownImportError = 'Unknown import message.';
+var defaultTimeout = 10000;
 
 module.exports = Command.extend({
     help: function () {
@@ -32,6 +33,7 @@ module.exports = Command.extend({
         r += '      -w,  --password <string>\t\t' + d('admin') + '\t\tPassword.\n';
         r += '      -p,  --portal <string>\t\t\t\tName of the portal on the server to target.\n';
         r += '      -v,  --verbose <string>\t\t\t\tPrints out raw error.\n';
+        r += '      -o,  --timeout <string>\t\t\t\tMax number of seconds that process can take.\n';
         r += '\n  ' + title('Examples') + ':\n\n';
         r += '      bb import --target myPortal.xml\t\t\tImports portal from myPortal.xml\n';
         r += '      bb import --target chunked\t\t\tImports bb export chunked portal from chunked dir\n';
@@ -43,10 +45,16 @@ module.exports = Command.extend({
         dashboard: {type: 'boolean', alias: 'd'},
         save: {type: 'string', alias: 's'},
         portal: {type: 'string', alias: 'p'},
-        verbose: {type: 'boolean', alias: 'v'}
+        verbose: {type: 'boolean', alias: 'v'},
+        timeout: {type: 'string', alias: 'o'}
     }),
 
     run: function () {
+
+        // if timeout < 100 ? multiply by 1000 : use as is.
+        var timeout = +this.options.timeout > 0 && +this.options.timeout || defaultTimeout;
+        this.options.timeout = timeout > 100 && timeout || timeout * 1000;
+
         util.spin.message('Loading...');
         util.spin.start();
         return config.getCommon(this.options)
@@ -197,6 +205,7 @@ function importDashboard() {
             username: bbrc.username,
             password: bbrc.password
         },
+        timeout: bbrc.timeout,
         headers: {
             Pragma: 'no-cache',
             'Accept-Encoding': 'gzip, deflate',
