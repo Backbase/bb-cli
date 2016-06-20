@@ -21,7 +21,6 @@ Scaffold new components, navigate through archetypes and work with REST API help
 - [Ln](#ln)
 - [Install](#install)
 - [Configuration](#configuration)
-- [Setup .bbscaff directory](/docs/bbscaff-setups.md)
 
 ## Install
 
@@ -48,6 +47,15 @@ Scaffold new widgets, containers and other Backbase CXP components.
 
 The tool generates the starting template for the chosen item in the directory where you run the command.
 
+In order to start generating you must first install the generators you wish to use.
+
+```
+npm install bb-generator-widget bb-generator-container bb-generator-template
+```
+
+The command will search for installed packages starting with `bb-generator-<name>` and make them
+available. Once installed you can generate using `bb generate <name>` command.
+
 ```
 bb generate widget
 ```
@@ -57,14 +65,14 @@ bb generate container
 ```
 
 ```
-bb generate project
-```
-
-```
 bb generate template
 ```
 
-Read more about generate API [here](/docs/generate.md).
+To see the list of available templates, simply run:
+
+```
+bb generate
+```
 
 ### <a name="export"></a>Export
 

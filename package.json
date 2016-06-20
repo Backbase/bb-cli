@@ -1,18 +1,18 @@
 {
   "name": "bb-cli",
-  "version": "0.2.5-beta.1",
+  "version": "0.3.0-beta.0",
   "description": "Command line tools for working with Backbase CXP.",
   "author": "Backbase",
   "license": "Apache-2.0",
   "preferGlobal": "true",
   "scripts": {
-    "test": "gulp",
-    "postinstall": "node ./lib/downloadLatestTemplates.js"
+   "test": "gulp"
   },
   "bin": {
     "bb": "bin/bb"
   },
   "dependencies": {
+    "@bb-cli/generate": "^0.1.0-alpha.0",
     "acorn": "^0.11.0",
     "bower": "^1.7.9",
     "bower-config": "^1.2.0",

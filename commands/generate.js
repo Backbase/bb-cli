@@ -1,20 +1,9 @@
-var fs = require('fs');
-var path = require('path');
+
 var chalk = require('chalk');
-var _ = require('lodash');
-var Table = require('cli-table');
-var map = require('map-stream');
-var gulp = require('gulp');
-var osenv = require('osenv');
 var Command = require('ronin').Command;
-
-var bbscaff = require('../lib/bbscaff');
-
-var homeDir = osenv.home();
-var templatesDir = [
-    path.join(homeDir, '.bbscaff'),
-    path.join(__dirname, '..', 'templates')
-];
+var bbGenerate = require('@bb-cli/generate');
+var _ = require('lodash');
+var partialRight = _.partialRight;
 
 module.exports = Command.extend({
     help: function () {
@@ -27,50 +16,63 @@ module.exports = Command.extend({
         return r;
     },
 
-    run: function(template_name){
-        if (!template_name) {
-            return listTemplates();
+    run: function(name){
+        if (!name) {
+            return list()
+                .catch(handleError);
         }
-
-        var tmpl_path = _.find(templatesDir, function(tmpl_path){
-            return fs.existsSync(path.join(tmpl_path, template_name, 'bbscaff.js'));
-        });
-
-        if (tmpl_path){
-            console.log(chalk.gray('Generating ' + template_name + ' on path: ' + process.cwd()));
-            var templateModule = require(path.join(tmpl_path, template_name, 'bbscaff'));
-            templateModule(_.extend({}, bbscaff, {
-                template_dir: path.join(tmpl_path, template_name, 'template')
-            }));
-        } else {
-            listTemplates();
+        else {
+            console.log(chalk.gray('Generating ' + name + ' on path: ' + process.cwd()));
+            return generate(name)
+                .then(function(generator) {
+                    console.log('Generated succesfully in directory: ' + generator.target);
+                })
+                .catch(handleError);
         }
     }
 });
 
-function listTemplates(){
-    console.log(chalk.green('Available templates:'));
-    console.log(chalk.gray('Note: templates defined in your home folder overrides default templates.'));
-
-    var foundTemplates = [];
-    var table = new Table({
-        head: ['Template name', 'Path']
-    });
-
-    gulp.src(templatesDir.map(function(tmpl){
-        return path.join(tmpl, '**', 'bbscaff.js');
-    })).pipe(map(function(file, cb){
-        var templatePath = path.dirname(file.path);
-        var templateName = _.last(templatePath.split(path.sep));
-
-        if (_.indexOf(foundTemplates, templateName) === -1) {
-            table.push([templateName, chalk.gray(templatePath)]);
-        }
-
-        foundTemplates.push(templateName);
-        cb();
-    }))
-    .on('end', function(){
-        console.log(table.toString());
-    });
+function list(asJson) {
+    return bbGenerate.listGenerators()
+        .then(output);
 }
+
+function output(generators) {
+    console.log(chalk.green('Available templates:'));
+    console.log(chalk.gray('Note: templates defined in your home folder overrides default ' + 
+            'templates.'));
+
+    console.log(bbGenerate.cliTable(generators));
+}
+
+function handleError(err) {
+    console.log(err);
+    if (err.stack) {
+        console.log(err.stack);
+    }
+    process.exit(1);
+}
+
+function generate(name, target, processImages, standalone) {
+    var options = {
+        processImages: processImages,
+        standalone: standalone,
+        target: target
+    };
+
+    // pass options (creates new fn to accept just the generator).
+    var generate = partialRight(bbGenerate.generate, options);
+    var prompt = partialRight(bbGenerate.promptGeneratorQuestions, options);
+
+    return bbGenerate.findGeneratorByName(name)
+        .then(handleNotFound)
+        .then(prompt)
+        .then(generate);
+}
+
+function handleNotFound(generator) {
+    if (!generator || !generator.name) {
+        throw 'Generator not found: ' + name;
+    }
+    return generator;
+};
