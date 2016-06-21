@@ -6,13 +6,13 @@
   "license": "Apache-2.0",
   "preferGlobal": "true",
   "scripts": {
-   "test": "gulp"
+    "test": "gulp"
   },
   "bin": {
     "bb": "bin/bb"
   },
   "dependencies": {
-    "@bb-cli/generate": "^0.1.1",
+    "@bb-cli/generate": "^0.1.2",
     "acorn": "^0.11.0",
     "bower": "^1.7.9",
     "bower-config": "^1.2.0",
