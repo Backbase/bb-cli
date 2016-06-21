@@ -80,14 +80,17 @@ module.exports = Command.extend({
                 throw new Error('Target is not directory or file.');
             })
             .then(function(bbr) {
-                if (bbr.error === true) {
-                    var emsg = jxon.stringToJs(bbr.body);
-                    emsg = emsg.errorMessage || emsg.importErrorMessage || {message: unknownImportError};
-                    throw new Error(emsg.message);
-                } else if (bbr.error === undefined) {
-                    // handles errorous responses which don't have .error property
-                    throw new Error(cfg.verbose === true ? bbr : unknownImportError);
-                } else ok(bbr);
+                if (bbr.error === false) {
+                    ok(bbr);
+                } else {
+                    if (cfg.verbose === true) {
+                        throw new Error(formattor(bbr, {method: 'json'}));
+                    } else {
+                        var emsg = jxon.stringToJs(bbr.body);
+                        emsg = emsg.errorMessage || emsg.importErrorMessage || {message: unknownImportError};
+                        throw new Error(emsg.message);
+                    }
+                }
             })
             .catch(function(err) {
                 if (err.code === 'ENOENT') return error(new Error('Target does not exist.'));
