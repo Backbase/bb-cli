@@ -12,7 +12,7 @@
     "bb": "bin/bb"
   },
   "dependencies": {
-    "@bb-cli/generate": "^0.1.0-alpha.0",
+    "@bb-cli/generate": "^0.1.1",
     "acorn": "^0.11.0",
     "bower": "^1.7.9",
     "bower-config": "^1.2.0",
