@@ -20,8 +20,7 @@ module.exports = Command.extend({
         if (!name) {
             return list()
                 .catch(handleError);
-        }
-        else {
+        } else {
             console.log(chalk.gray('Generating ' + name + ' on path: ' + process.cwd()));
             return generate(name)
                 .then(function(generator) {
@@ -39,7 +38,7 @@ function list(asJson) {
 
 function output(generators) {
     console.log(chalk.green('Available templates:'));
-    console.log(chalk.gray('Note: templates defined in your home folder overrides default ' + 
+    console.log(chalk.gray('Note: templates defined in your home folder overrides default ' +
             'templates.'));
 
     console.log(bbGenerate.cliTable(generators));
