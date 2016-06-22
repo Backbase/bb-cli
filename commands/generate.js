@@ -1,7 +1,7 @@
 
 var chalk = require('chalk');
 var Command = require('ronin').Command;
-var bbGenerate = require('@bb-cli/generate');
+var bbGenerate = require('@bb-cli/bb-generate');
 var _ = require('lodash');
 var partialRight = _.partialRight;
 
