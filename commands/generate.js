@@ -38,9 +38,6 @@ function list(asJson) {
 
 function output(generators) {
     console.log(chalk.green('Available templates:'));
-    console.log(chalk.gray('Note: templates defined in your home folder overrides default ' +
-            'templates.'));
-
     console.log(bbGenerate.cliTable(generators));
 }
 
