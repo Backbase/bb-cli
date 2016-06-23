@@ -3,9 +3,9 @@
   "version": "0.3.0-beta.0",
   "dependencies": {
     "@bb-cli/bb-generate": {
-      "version": "0.1.3",
-      "from": "@bb-cli/bb-generate@>=0.1.3 <0.2.0",
-      "resolved": "https://registry.npmjs.org/@bb-cli/bb-generate/-/bb-generate-0.1.3.tgz",
+      "version": "0.2.0",
+      "from": "@bb-cli/bb-generate@>=0.2.0 <0.3.0",
+      "resolved": "https://registry.npmjs.org/@bb-cli/bb-generate/-/bb-generate-0.2.0.tgz",
       "dependencies": {
         "glob": {
           "version": "7.0.5",
