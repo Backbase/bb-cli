@@ -62,7 +62,7 @@ module.exports = Command.extend({
                 jxon = r.jxon;
                 cfg = r.config.cli;
 
-                if (cfg.collection) {
+                if (cfg.watch) {
                     watch.watchTree(cfg.target, {
                         ignoreDotFiles: true,
                         ignoreUnreadableDir: true,
@@ -71,21 +71,22 @@ module.exports = Command.extend({
                             var v = exclude.indexOf(fileName);
                             return (v === -1);
                         }
-                    }, onWatchCollection);
+                    }, cfg.collection ? onWatchCollection : onWatch);
+                } else if (cfg.collection) {
+                    fs.readdir(cfg.target, function (err, files) {
+                        if (err) {
+                            throw err;
+                        }
+
+                        files.map(function (file) {
+                            return path.join(cfg.target, file);
+                        }).filter(function (file) {
+                            return fs.statSync(file).isDirectory();
+                        }).forEach(function (file) {
+                            run(file);
+                        });
+                    });
                 } else {
-
-                    if (cfg.watch) {
-                        watch.watchTree(cfg.target, {
-                            ignoreDotFiles: true,
-                            ignoreUnreadableDir: true,
-                            ignoreNotPermitted: true,
-                            filter: function (fileName) {
-                                var v = exclude.indexOf(fileName);
-                                return (v === -1);
-                            }
-                        }, onWatch);
-                    }
-
                     return run(cfg.target);
                 }
             })
