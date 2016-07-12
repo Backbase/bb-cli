@@ -72,6 +72,8 @@ module.exports = Command.extend({
                             return (v === -1);
                         }
                     }, cfg.collection ? onWatchCollection : onWatch);
+
+                    if (!cfg.collection && cfg['init-import']) run(cfg.target);
                 } else if (cfg.collection) {
                     fs.readdir(cfg.target, function (err, files) {
                         if (err) {
