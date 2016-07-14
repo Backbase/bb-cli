@@ -49,6 +49,14 @@ function handleError(err) {
     process.exit(1);
 }
 
+var handleNotFound = _.curry(function(name, generator) {
+    if (!generator || !generator.name) {
+        throw 'Generator not found: ' + name + '.\nMake sure you instal it with ' +
+                '"npm install -g bb-generator-' + name + '"';
+    }
+    return generator;
+});
+
 function generate(name, target, processImages, standalone) {
     var options = {
         processImages: processImages,
@@ -59,16 +67,8 @@ function generate(name, target, processImages, standalone) {
     // pass options (creates new fn to accept just the generator).
     var generate = partialRight(bbGenerate.generate, options);
     var prompt = partialRight(bbGenerate.promptGeneratorQuestions, options);
-
     return bbGenerate.findGeneratorByName(name)
-        .then(handleNotFound)
+        .then(handleNotFound(name))
         .then(prompt)
         .then(generate);
 }
-
-function handleNotFound(generator) {
-    if (!generator || !generator.name) {
-        throw 'Generator not found: ' + name;
-    }
-    return generator;
-};
