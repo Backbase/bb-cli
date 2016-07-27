@@ -441,20 +441,12 @@ function cleanProps(item) {
 
 function cleanTags(item) {
 
-    // DO NOT DELETE square brackets from extended
-
     if (item.tags && item.tags.tag) {
-        if (item.tags.tag.length > 0) {
-            _.forEach(item.tags.tag, function (tag) {
-                //Remote items in 5.6 have blacklist set to false by default
-                //if (!tag.$blacklist) {
-                //tag['$blacklist'] = 'false';
-                //}
-                delete tag.$manageable;
-            });
-        } else {
-            delete item.tags;
-        }
+        // wrap with array if it is not
+        var tags = _.isArray(item.tags.tag) && item.tags.tag || [item.tags.tag];
+        _.forEach(tags, function(tag) {
+            delete tag.$manageable;
+        });
     } else if (item.tags) {
         delete item.tags;
     }

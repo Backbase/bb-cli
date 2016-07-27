@@ -76,6 +76,7 @@ module.exports = Command.extend({
                 if (bbr.error) {
                     var emsg = jxon.stringToJs(bbr.body);
                     emsg = emsg.errorMessage || emsg.importErrorMessage || {message: 'Unknown import message.'};
+                    console.log(bbr);
                     throw new Error(emsg.message);
                 } else ok(bbr);
             })
