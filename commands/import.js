@@ -81,7 +81,7 @@ module.exports = Command.extend({
                 } else ok(bbr);
             })
             .catch(function(err) {
-              console.log(err);
+                console.log(err);
                 if (err.code === 'ENOENT') return error(new Error('Target does not exist.'));
                 return error(new Error(err.statusInfo || err));
             });
@@ -186,15 +186,15 @@ function packAll(metadata, xml, other) {
 }
 
 function getSession(opts) {
-  return request(opts)
-    .then(function(res) {
-        var sessionHeaders = {
-          Cookie: res.headers['set-cookie']
-        }
-        const csrf = res.headers['x-bbxsrf'];
-        if (csrf) sessionHeaders['X-BBXSRF'] = csrf;
-        return sessionHeaders;
-    });
+    return request(opts)
+        .then(function(res) {
+            var sessionHeaders = {
+                Cookie: res.headers['set-cookie']
+            }
+            const csrf = res.headers['x-bbxsrf'];
+            if (csrf) sessionHeaders['X-BBXSRF'] = csrf;
+            return sessionHeaders;
+        });
 }
 
 // dirty dashboard import
@@ -215,29 +215,29 @@ function importDashboard() {
             'Cache-Control': 'no-cache',
             Connection: 'keep-alive'
         },
-        body: (cfg['portal-version'] && cfg['portal-version'] === '5.6.2')? body2 : body
+        body: (cfg['portal-version'] && cfg['portal-version'] === '5.6.2') ? body2 : body
     };
     return getSession({
-        method: 'GET',
-        uri: uri + '/groups',
-        auth: {
-            username: bbrc.username,
-            password: bbrc.password
-        },
-        resolveWithFullResponse: true
+          method: 'GET',
+          uri: uri + '/groups',
+          auth: {
+              username: bbrc.username,
+              password: bbrc.password
+          },
+          resolveWithFullResponse: true
       })
       .then(function(sessionHeaders) {
-        Object.assign(options.headers, sessionHeaders);
-        return request(options)
+          Object.assign(options.headers, sessionHeaders);
+          return request(options)
           .then(dashok);
       })
       .catch(function(err) {
           var qs = url.parse(err.response.headers.location).query;
           var msg = querystring.parse(qs).errorMessage;
           if (msg) {
-            error({message: msg});
+              error({message: msg});
           } else {
-            dashok();
+              dashok();
           }
       });
 }

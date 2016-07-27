@@ -129,15 +129,15 @@ function sendRequest(creq) {
         d.reject(e);
     } finally {
         return d.promise
-          .then(function() {
+        .then(function() {
             return r[cfg.method](cfg.file)
             .then(function(r){
-              util.ok();
+                util.ok();
             });
-          })
-          .catch(function(r) {
+        })
+        .catch(function(r) {
             util.err(r);
-          });
+        });
     }
 }
 

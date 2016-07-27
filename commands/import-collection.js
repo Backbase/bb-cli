@@ -93,10 +93,10 @@ function createAllZips(result) {
         }
     });
     return Q.all(all)
-      .then(function(dirs) {
-        console.log('Start Importing...');
-        return(dirs);
-      });
+        .then(function(dirs) {
+            console.log('Start Importing...');
+            return(dirs);
+        });
 }
 
 function importAll(dirs) {
