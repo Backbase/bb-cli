@@ -92,7 +92,11 @@ function createAllZips(result) {
             }));
         }
     });
-    return Q.all(all);
+    return Q.all(all)
+      .then(function(dirs) {
+        console.log('Start Importing...');
+        return(dirs);
+      });
 }
 
 function importAll(dirs) {
@@ -102,12 +106,7 @@ function importAll(dirs) {
 
     return bbrest.importItem().file(comp.zipPath).post()
     .then(function(r) {
-        var body = jxon.stringToJs(_.unescape(r.body)).import;
-        if (body && body.level === 'ERROR') {
-            console.log(chalk.yellow(comp.name) + ' ' + body.message);
-        } else {
-            console.log(chalk.green(comp.name) + ' ' + body.message);
-        }
+        console.log(chalk.green(comp.name) + ' ' + r.import.message);
         if (dirs.length) return importAll(dirs);
     });
 }

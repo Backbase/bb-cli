@@ -116,12 +116,6 @@ function run(target) {
                 .then(function (zipPath) {
                     return bbrest.importItem().file(zipPath).post()
                         .then(function (r) {
-                            output(r);
-                            if (r.error) {
-                                throw new Error('Rest API Error: ' + r.statusInfo);
-                            }
-                            var body = jxon.stringToJs(_.unescape(r.body)).import;
-                            if (body.level === 'ERROR') throw new Error(body.message);
                             name = model.getName() + ' v' + model.getProperty('version');
                             ok(r, name);
                         });
