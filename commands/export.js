@@ -163,10 +163,9 @@ function runOrchestratorExport(jx) {
     return bbrest.export().post(toPost)
     .then(function(r) {
         if (r.error) {
-            console.log(r);
             return error(new Error('Error while exporting from Orchestrator'));
         }
-        var id = jxon.stringToJs(_.unescape(r.body)).exportResponse.identifier;
+        var id = r.exportResponse.identifier;
         var savePath = cfg.chunk ? path.resolve(os.tmpdir(), 'bb_export_tmp') : cfg.save;
         return bbrest.export(id).file(savePath).get()
         .then(function(r) {

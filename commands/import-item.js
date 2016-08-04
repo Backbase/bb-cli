@@ -62,7 +62,7 @@ module.exports = Command.extend({
                 jxon = r.jxon;
                 cfg = r.config.cli;
 
-                if (cfg.collection) {
+                if (cfg.watch) {
                     watch.watchTree(cfg.target, {
                         ignoreDotFiles: true,
                         ignoreUnreadableDir: true,
@@ -71,21 +71,24 @@ module.exports = Command.extend({
                             var v = exclude.indexOf(fileName);
                             return (v === -1);
                         }
-                    }, onWatchCollection);
+                    }, cfg.collection ? onWatchCollection : onWatch);
+
+                    if (!cfg.collection && cfg['init-import']) run(cfg.target);
+                } else if (cfg.collection) {
+                    fs.readdir(cfg.target, function (err, files) {
+                        if (err) {
+                            throw err;
+                        }
+
+                        files.map(function (file) {
+                            return path.join(cfg.target, file);
+                        }).filter(function (file) {
+                            return fs.statSync(file).isDirectory();
+                        }).forEach(function (file) {
+                            run(file);
+                        });
+                    });
                 } else {
-
-                    if (cfg.watch) {
-                        watch.watchTree(cfg.target, {
-                            ignoreDotFiles: true,
-                            ignoreUnreadableDir: true,
-                            ignoreNotPermitted: true,
-                            filter: function (fileName) {
-                                var v = exclude.indexOf(fileName);
-                                return (v === -1);
-                            }
-                        }, onWatch);
-                    }
-
                     return run(cfg.target);
                 }
             })
@@ -116,12 +119,6 @@ function run(target) {
                 .then(function (zipPath) {
                     return bbrest.importItem().file(zipPath).post()
                         .then(function (r) {
-                            output(r);
-                            if (r.error) {
-                                throw new Error('Rest API Error: ' + r.statusInfo);
-                            }
-                            var body = jxon.stringToJs(_.unescape(r.body)).import;
-                            if (body.level === 'ERROR') throw new Error(body.message);
                             name = model.getName() + ' v' + model.getProperty('version');
                             ok(r, name);
                         });

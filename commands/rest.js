@@ -128,11 +128,15 @@ function sendRequest(creq) {
     } catch(e) {
         d.reject(e);
     } finally {
-        return d.promise.then(function() {
+        return d.promise
+        .then(function() {
             return r[cfg.method](cfg.file)
             .then(function(r){
-                restUtils.onResponse(r, bbrest, cfg);
+                util.ok();
             });
+        })
+        .catch(function(r) {
+            util.err(r);
         });
     }
 }
