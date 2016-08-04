@@ -45,16 +45,17 @@ bb -h
 
 Scaffold new widgets, containers and other Backbase CXP components.
 
-The tool generates the starting template for the chosen item in the directory where you run the command.
+The tool generates the starting template for the chosen item in the directory where you run the
+command.
 
-In order to start generating you must first install the generators you wish to use.
+**In order to start generating you must first install the generators you wish to use**.
 
 ```
-npm install bb-generator-widget bb-generator-container bb-generator-template
+npm install @bb-cli/generator-widget @bb-cli/generator-container @bb-cli/generator-template
 ```
 
-The command will search for installed packages starting with `bb-generator-<name>` and make them
-available. Once installed you can generate using `bb generate <name>` command.
+The command will search for installed packages starting with `@bb-cli/generator-<name>` and make
+them available. Once installed you can generate using `bb generate <name>` command.
 
 ```
 bb generate widget

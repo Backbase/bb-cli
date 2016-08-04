@@ -10,7 +10,14 @@ module.exports = Command.extend({
         var title = chalk.bold;
         var r = '\n  ' + title('Usage') + ': bb ' + this.name + ' <template-name>';
         r += '\n\t Scaffold widgets and containers.\n';
-        r += '\n  ' + title('Examples') + ':\n';
+        r += '\n\t Generators must be installed first from separate packages.\n';
+        r += '\t For a list of possible generators see https://www.npmjs.com/~bb-cli.\n';
+        r += '\n  ' + title('Install a generator') + ':\n';
+        r += '      npm install @bb-cli/generator-widget\n';
+        r += '      npm install @bb-cli/generator-container\n';
+        r += '\n  ' + title('List installed generators') + ':\n';
+        r += '      bb generate\n';
+        r += '\n  ' + title('Run a generator') + ':\n';
         r += '      bb generate widget\n';
         r += '      bb generate container';
         return r;
