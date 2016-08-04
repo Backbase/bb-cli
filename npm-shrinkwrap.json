@@ -3,9 +3,9 @@
   "version": "0.3.0",
   "dependencies": {
     "@bb-cli/bb-generate": {
-      "version": "0.2.1",
-      "from": "@bb-cli/bb-generate@>=0.2.1 <0.3.0",
-      "resolved": "https://registry.npmjs.org/@bb-cli/bb-generate/-/bb-generate-0.2.1.tgz",
+      "version": "0.3.2",
+      "from": "@bb-cli/bb-generate@latest",
+      "resolved": "https://registry.npmjs.org/@bb-cli/bb-generate/-/bb-generate-0.3.2.tgz",
       "dependencies": {
         "cli-width": {
           "version": "2.1.0",
@@ -30,7 +30,7 @@
         "lodash": {
           "version": "4.14.1",
           "from": "lodash@>=4.13.1 <5.0.0",
-          "resolved": "https://artifacts.backbase.com/api/npm/npm-backbase/lodash/-/lodash-4.14.1.tgz"
+          "resolved": "https://registry.npmjs.org/lodash/-/lodash-4.14.1.tgz"
         },
         "mute-stream": {
           "version": "0.0.6",
@@ -45,7 +45,7 @@
         "shelljs": {
           "version": "0.7.3",
           "from": "shelljs@>=0.7.0 <0.8.0",
-          "resolved": "https://artifacts.backbase.com/api/npm/npm-backbase/shelljs/-/shelljs-0.7.3.tgz"
+          "resolved": "https://registry.npmjs.org/shelljs/-/shelljs-0.7.3.tgz"
         }
       }
     },
