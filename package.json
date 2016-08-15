@@ -6,13 +6,13 @@
   "license": "Apache-2.0",
   "preferGlobal": "true",
   "scripts": {
-    "test": "gulp",
-    "postinstall": "node ./lib/downloadLatestTemplates.js"
+    "test": "gulp"
   },
   "bin": {
     "bb": "bin/bb"
   },
   "dependencies": {
+    "@bb-cli/bb-generate": "^0.3.3",
     "acorn": "^0.11.0",
     "bower": "^1.7.9",
     "bower-config": "^1.2.0",

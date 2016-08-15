@@ -1,7 +1,0 @@
-{
-  "title": "${widget.name}",
-  "specFile": "index.dev.html",
-  "tag": [
-    "launchpad-widget"
-  ]
-}

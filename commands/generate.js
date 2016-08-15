@@ -1,76 +1,81 @@
-var fs = require('fs');
-var path = require('path');
+
 var chalk = require('chalk');
-var _ = require('lodash');
-var Table = require('cli-table');
-var map = require('map-stream');
-var gulp = require('gulp');
-var osenv = require('osenv');
 var Command = require('ronin').Command;
-
-var bbscaff = require('../lib/bbscaff');
-
-var homeDir = osenv.home();
-var templatesDir = [
-    path.join(homeDir, '.bbscaff'),
-    path.join(__dirname, '..', 'templates')
-];
+var bbGenerate = require('@bb-cli/bb-generate');
+var _ = require('lodash');
+var partialRight = _.partialRight;
 
 module.exports = Command.extend({
     help: function () {
         var title = chalk.bold;
         var r = '\n  ' + title('Usage') + ': bb ' + this.name + ' <template-name>';
         r += '\n\t Scaffold widgets and containers.\n';
-        r += '\n  ' + title('Examples') + ':\n';
+        r += '\n\t Generators must be installed first from separate packages.\n';
+        r += '\t For a list of possible generators see https://www.npmjs.com/~bb-cli.\n';
+        r += '\n  ' + title('Install a generator') + ':\n';
+        r += '      npm install @bb-cli/generator-widget\n';
+        r += '      npm install @bb-cli/generator-container\n';
+        r += '\n  ' + title('List installed generators') + ':\n';
+        r += '      bb generate\n';
+        r += '\n  ' + title('Run a generator') + ':\n';
         r += '      bb generate widget\n';
         r += '      bb generate container';
         return r;
     },
 
-    run: function(template_name){
-        if (!template_name) {
-            return listTemplates();
-        }
-
-        var tmpl_path = _.find(templatesDir, function(tmpl_path){
-            return fs.existsSync(path.join(tmpl_path, template_name, 'bbscaff.js'));
-        });
-
-        if (tmpl_path){
-            console.log(chalk.gray('Generating ' + template_name + ' on path: ' + process.cwd()));
-            var templateModule = require(path.join(tmpl_path, template_name, 'bbscaff'));
-            templateModule(_.extend({}, bbscaff, {
-                template_dir: path.join(tmpl_path, template_name, 'template')
-            }));
+    run: function(name){
+        if (!name) {
+            return list()
+                .catch(handleError);
         } else {
-            listTemplates();
+            console.log(chalk.gray('Generating ' + name + ' on path: ' + process.cwd()));
+            return generate(name)
+                .then(function(generator) {
+                    console.log('Generated succesfully in directory: ' + generator.target);
+                })
+                .catch(handleError);
         }
     }
 });
 
-function listTemplates(){
+function list(asJson) {
+    return bbGenerate.listGenerators()
+        .then(output);
+}
+
+function output(generators) {
     console.log(chalk.green('Available templates:'));
-    console.log(chalk.gray('Note: templates defined in your home folder overrides default templates.'));
+    console.log(bbGenerate.cliTable(generators));
+}
 
-    var foundTemplates = [];
-    var table = new Table({
-        head: ['Template name', 'Path']
-    });
+function handleError(err) {
+    console.log(err);
+    if (err.stack) {
+        console.log(err.stack);
+    }
+    process.exit(1);
+}
 
-    gulp.src(templatesDir.map(function(tmpl){
-        return path.join(tmpl, '**', 'bbscaff.js');
-    })).pipe(map(function(file, cb){
-        var templatePath = path.dirname(file.path);
-        var templateName = _.last(templatePath.split(path.sep));
+var handleNotFound = _.curry(function(name, generator) {
+    if (!generator || !generator.name) {
+        throw 'Generator not found: ' + name + '.\nMake sure you instal it with ' +
+                '"npm install -g bb-generator-' + name + '"';
+    }
+    return generator;
+});
 
-        if (_.indexOf(foundTemplates, templateName) === -1) {
-            table.push([templateName, chalk.gray(templatePath)]);
-        }
+function generate(name, target, processImages, standalone) {
+    var options = {
+        processImages: processImages,
+        standalone: standalone,
+        target: target
+    };
 
-        foundTemplates.push(templateName);
-        cb();
-    }))
-    .on('end', function(){
-        console.log(table.toString());
-    });
+    // pass options (creates new fn to accept just the generator).
+    var generate = partialRight(bbGenerate.generate, options);
+    var prompt = partialRight(bbGenerate.promptGeneratorQuestions, options);
+    return bbGenerate.findGeneratorByName(name)
+        .then(handleNotFound(name))
+        .then(prompt)
+        .then(generate);
 }
