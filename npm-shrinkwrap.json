@@ -1,6 +1,6 @@
 {
   "name": "bb-cli",
-  "version": "0.3.0",
+  "version": "0.3.1-beta.0",
   "dependencies": {
     "@bb-cli/bb-generate": {
       "version": "0.3.3",
