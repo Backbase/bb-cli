@@ -1954,9 +1954,8 @@
       "resolved": "https://registry.npmjs.org/levn/-/levn-0.3.0.tgz"
     },
     "lib-bb-portal-rest": {
-      "version": "0.1.1",
-      "from": "lib-bb-portal-rest@>=0.1.1 <0.2.0",
-      "resolved": "https://registry.npmjs.org/lib-bb-portal-rest/-/lib-bb-portal-rest-0.1.1.tgz"
+      "version": "0.1.5",
+      "from": "lib-bb-portal-rest@0.1.5"
     },
     "liftoff": {
       "version": "2.2.5",
