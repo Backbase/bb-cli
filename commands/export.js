@@ -119,7 +119,7 @@ module.exports = Command.extend({
                         return bbrest.export().get()
                         .then(function(r) {
                             if (r.error) return error(r);
-                            return handlePortalXml(_.unescape(r.body))
+                            return handlePortalXml(r)
                             .then(ok);
                         }).catch(error);
                     }
@@ -216,7 +216,7 @@ function ok(r) {
 }
 
 function handlePortalXml(x, metaFile) {
-    var jx = sort(jxon.stringToJs(x));
+    var jx = sort(x);
     if (cfg.chunk) {
         var props = _.get(jx, 'exportBundle.portalContentRepositories.contentRepository.properties.property');
         var id = props ? _.find(props, {$name: 'repositoryId'}).value._ : '';
