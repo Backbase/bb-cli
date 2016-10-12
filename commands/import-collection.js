@@ -117,6 +117,7 @@ function error(err) {
         err.message = 'Check if CXP portal is running';
     }
     util.err(chalk.red((currentlyImporting || 'bb import-collection') + ': ') + (err.message || err.error));
+    process.exit(1);
 }
 function ok(r) {
     util.ok('Importing ' + chalk.green(cfg.target) + '. Done.');

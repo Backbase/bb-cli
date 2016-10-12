@@ -223,6 +223,7 @@ function error(err, model) {
     }
 
     util.err(errMessage);
+    process.exit(1);
 }
 
 function ok(r, name) {
