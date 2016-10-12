@@ -208,6 +208,7 @@ function runOrchestratorExport(jx) {
 function error(err) {
     util.spin.stop();
     util.err(chalk.red('bb export: ') + (err.message || err.error));
+    process.exit(1);
 }
 function ok(r) {
     util.spin.stop();

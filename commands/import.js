@@ -95,6 +95,7 @@ module.exports = Command.extend({
 function error(err) {
     util.spin.stop();
     util.err(chalk.red('bb import: ') + (err.message || err.error));
+    process.exit(1);
 }
 function ok(r) {
     util.spin.stop();
