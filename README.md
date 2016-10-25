@@ -51,7 +51,7 @@ command.
 **In order to start generating you must first install the generators you wish to use**.
 
 ```
-npm install @bb-cli/generator-widget @bb-cli/generator-container @bb-cli/generator-template
+npm install @bb-cli/generator-widget @bb-cli/generator-container @bb-cli/generator-container-template -g
 ```
 
 The command will search for installed packages starting with `@bb-cli/generator-<name>` and make
