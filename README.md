@@ -51,7 +51,7 @@ command.
 **In order to start generating you must first install the generators you wish to use**.
 
 ```
-npm install @bb-cli/generator-widget @bb-cli/generator-container @bb-cli/generator-container-template -g
+npm install @backbase/generator-widget @backbase/generator-container -g
 ```
 
 The command will search for installed packages starting with `@bb-cli/generator-<name>` and make
@@ -66,13 +66,20 @@ bb generate container
 ```
 
 ```
-bb generate template
+bb generate container templates
 ```
 
 To see the list of available templates, simply run:
 
 ```
 bb generate
+```
+
+Some generators (like the widget and continaer generator) may have mutliple template. You can specify the template
+to use as the 2nd paramter. Eg:
+
+```
+bb generate widget ng
 ```
 
 ### <a name="export"></a>Export
