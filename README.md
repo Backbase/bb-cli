@@ -51,7 +51,7 @@ command.
 **In order to start generating you must first install the generators you wish to use**.
 
 ```
-npm install @backbase/generator-widget @backbase/generator-container
+npm install @backbase/generator-widget @backbase/generator-container -g
 ```
 
 The command will search for installed packages starting with `@bb-cli/generator-<name>` and make
