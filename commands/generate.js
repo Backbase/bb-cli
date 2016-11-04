@@ -55,7 +55,7 @@ function list(asJson) {
      * @todo 1. move to formater.js
      */
     var formatOutput = function(res) {
-        let output = '';
+        var output = '';
         var tableHeader = ['Name', 'Description', 'Version', 'Templates', 'Scope'];
         if (res.length) {
             output = '\nGenerate using ' + ui.colors.info('bb generate <name> [template]') + '\n';
