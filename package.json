@@ -1,6 +1,6 @@
 {
   "name": "bb-cli",
-  "version": "0.3.5",
+  "version": "0.4.0",
   "description": "Command line tools for working with Backbase CXP.",
   "author": "Backbase",
   "license": "Apache-2.0",
@@ -9,11 +9,12 @@
     "test": "gulp"
   },
   "bin": {
-    "bb": "bin/bb"
+    "xbb": "bin/bb"
   },
   "dependencies": {
     "@bb-cli/base": "^2.1.10",
     "@bb-cli/bb-generate": "^2.0.0",
+    "@bb-cli/lib-bb-portal-rest-nodejs-plugin": "^1.0.1",
     "acorn": "^0.11.0",
     "bower": "^1.7.9",
     "bower-config": "^1.2.0",
@@ -45,11 +46,11 @@
     "inquirer": "^0.10.1",
     "jszip": "^2.5.0",
     "jxon": "^2.0.0-beta.2",
+    "lib-bb-portal-rest": "^0.2.1",
     "lodash": "^3.2.0",
     "map-stream": "0.0.5",
     "mocha": "^2.5.1",
     "moment": "^2.10.6",
-    "mosaic-rest-js": "^1.0.2",
     "node-fs-extra": "^0.8.1",
     "object-assign": "^3.0.0",
     "opener": "^1.4.1",
