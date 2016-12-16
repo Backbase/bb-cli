@@ -15,6 +15,7 @@ Scaffold new components, navigate through archetypes and work with REST API help
 - [Import](#import)
 - [Import Collection](#import-collection)
 - [Import Item](#import-item)
+- [Export Item](#export-item)
 - [Theme Build](#theme-build)
 - [Sync](#sync)
 - [Rest](#rest)
@@ -258,6 +259,45 @@ Imports current directory as item to the portal. Then it watches for file change
 
 ```
 xbb import-item --watch
+```
+
+### <a name="export-item"></a>Export Item
+
+```
+xbb export-item [OPTIONS]
+```
+
+Exports item from the portal.
+
+`xbb rest` options for defining host, port, contaxt, username and password also work.
+Or you can define those properties inside `.bbrc` file.
+
+#### Requirements
+
+Backbase CXP v5.6
+
+##### Options
+
+```
+  -t,  --target <string>                            Item to export.
+  -s,  --save <string>                              File to save.
+       --verbose <boolean>                           Enables detailed output.
+
+  -H,  --host <string>          localhost           The host name of the server.
+  -P,  --port <number>          7777                The port of the server.
+  -c,  --context <string>       portalserver        The application context of the portal.
+  -u,  --username <string>      admin               Username.
+  -w,  --password <string>      admin               Password.
+  -p,  --portal <string>                            Name of the portal to target.
+  -A,  --auth-path <string>                         Authorization path.
+```
+
+##### Examples
+
+Exports item page-my-page from the portal and saves it as page-my-page.zip
+
+```
+xbb export-item --target page-my-page
 ```
 
 ### <a name="theme-build"></a>Theme Build
