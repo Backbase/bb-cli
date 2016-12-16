@@ -328,6 +328,7 @@ xbb rest [OPTIONS]
 -u,  --username <string>		admin   		Username.
 -w,  --password <string>		admin	    	Password.
 -p,  --portal <string>				        Name of the portal on the server to target.
+-A,  --auth-path <string>               Authorization path.
 -t,  --target <string>		    server		    Context target: server, portal, catalog, portalCatalog, page, container, widget, link, template, user, group, audit or cache.
 -T,  --target-arg <string/json>			        Target arguments. When there are more arguments, pass JSON array.
 -m,  --method <string>		    get		        HTTP method to use: get, post, put or delete.

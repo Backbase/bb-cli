@@ -37,6 +37,7 @@ module.exports = Command.extend({
         r += '           --username <string>\t\t\t' + d('admin') + '\t\tUsername.\n';
         r += '           --password <string>\t\t\t' + d('admin') + '\t\tPassword.\n';
         r += '           --portal <string>\t\t\t\t\tName of the portal on the server to target.\n';
+        r += '      -A,  --auth-path <string>\t\t\t\tAuthorization path.\n';
         r += '\n  ' + title('Examples') + ':\n\n';
         r += '      bb export \t\t\t\t\t\t\t\tOutputs prettified, sorted xml file.\n';
         r += '      bb export --save myPortal.xml\t\t\t\t\t\tSaves export to myPortal.xml\n';
