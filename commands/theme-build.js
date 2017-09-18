@@ -263,7 +263,7 @@ function compress(entry, target, opts) {
 function copyAssets(entry, opts) {
     var deferred = Q.defer();
 
-    var fontGlob = path.join('**', '*.{ttf,woff,woff2,eof,svg}');
+    var fontGlob = path.join('**', '*.{ttf,woff,woff2,eof,eot,svg}');
     var imageGlob = path.join('**', '*.{jpg,jpeg,png,svg,gif}');
     var noDistGlob = path.join('!**', opts.dist, '**'); // don't copy from `dist` directories
     var noBowerGlob = path.join('!bower_components', '**'); // don't copy from `bower_components` directories
