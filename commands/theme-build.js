@@ -5,6 +5,7 @@ var rename = require('gulp-rename');
 var less = require('gulp-less');
 var path = require('path');
 var glob = Q.denodeify(require('glob'));
+var escapeGlob = require('glob-escape');
 var fs = require('fs-extra-promise');
 var _ = require('lodash');
 var util = require('../lib/util');
@@ -58,10 +59,10 @@ module.exports = Command.extend({
         opts.target = (opts.target) ? path.resolve(opts.target) : process.cwd();
         opts.dist = opts.dist || 'dist';
 
-        var bowerFiles = opts.target + '/**/bower.json';
+        var bowerFiles = escapeGlob(opts.target) + '/**/bower.json';
         var ignore = [
-            opts.target + '/**/bower_components/**',
-            opts.target + '/**/node_modules/**'
+            escapeGlob(opts.target) + '/**/bower_components/**',
+            escapeGlob(opts.target) + '/**/node_modules/**'
         ];
 
         var _run = function() {
@@ -74,7 +75,7 @@ module.exports = Command.extend({
         };
 
         if (opts.watch) {
-            var watchFiles = opts.target + '/**/*.less';
+            var watchFiles = path.join(escapeGlob(opts.target), '/**/*.less');
             gulp.watch(watchFiles, []).on('change', function(event) {
                 console.log('File ' + event.path + ' was ' + event.type + ', running build...');
                 _run();
@@ -105,7 +106,7 @@ function buildTheme(bowerJson, opts) {
 
     // Prefix with target.
     entry = entry.map(function(f) {
-        return path.join(opts.target, f);
+        return escapeGlob(path.join(opts.target, f));
     });
 
     // Css files to rework are the less files, but with .css extension,
@@ -157,7 +158,7 @@ function compile(entry, opts) {
     var deferred = Q.defer();
     var files = [];
 
-    gulp.src(entry, {base: opts.target})
+    gulp.src(entry, {base: escapeGlob(opts.target)})
         .pipe(gulpif(function() { return !!opts.sourcemaps; }, sourcemaps.init()))
         .pipe(debug({title: 'compiling'}))
         .pipe(less({
