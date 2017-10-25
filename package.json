@@ -30,6 +30,7 @@
     "fs-finder": "^1.8.0",
     "gift": "^0.6.1",
     "glob": "~5.0.3",
+    "glob-escape": "^0.0.2",
     "gulp": "^3.9.1",
     "gulp-conflict": "^0.2.0",
     "gulp-debug": "^2.1.0",
