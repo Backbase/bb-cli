@@ -40,6 +40,7 @@ module.exports = Command.extend({
         r += '      -u,  --username <string>\t\t' + d('admin') + '\t\tUsername.\n';
         r += '      -w,  --password <string>\t\t' + d('admin') + '\t\tPassword.\n';
         r += '      -p,  --portal <string>\t\t\t\tName of the portal on the server to target.\n';
+        r += '      -A,  --auth-path <string>\t\t\t\tAuthorization path.\n';
         return r;
     },
 
@@ -51,8 +52,7 @@ module.exports = Command.extend({
         auto: {type: 'boolean', alias: 'a'},
         name: {type: 'string', alias: 'n'},
         version: {type: 'string', alias: 'v'},
-        verbose: {type: 'boolean'},
-        portal: {type: 'string', alias: 'p'}
+        verbose: {type: 'boolean'}
     }),
 
     run: function () {
