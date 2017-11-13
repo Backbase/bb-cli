@@ -56,10 +56,10 @@ module.exports = Command.extend({
     run: function () {
         var opts = this.options;
 
-        opts.target = (opts.target) ? path.resolve(opts.target) : process.cwd();
+        opts.target = opts.target ? path.resolve(escapeGlob(opts.target)) : escapeGlob(process.cwd());
         opts.dist = opts.dist || 'dist';
 
-        var bowerFiles = escapeGlob(opts.target) + '/**/bower.json';
+        var bowerFiles = opts.target + '/**/bower.json';
         var ignore = [
             escapeGlob(opts.target) + '/**/bower_components/**',
             escapeGlob(opts.target) + '/**/node_modules/**'
@@ -75,7 +75,7 @@ module.exports = Command.extend({
         };
 
         if (opts.watch) {
-            var watchFiles = path.join(escapeGlob(opts.target), '/**/*.less');
+            var watchFiles = path.join(opts.target, '/**/*.less');
             gulp.watch(watchFiles, []).on('change', function(event) {
                 console.log('File ' + event.path + ' was ' + event.type + ', running build...');
                 _run();
@@ -106,7 +106,7 @@ function buildTheme(bowerJson, opts) {
 
     // Prefix with target.
     entry = entry.map(function(f) {
-        return escapeGlob(path.join(opts.target, f));
+        return path.join(opts.target, f);
     });
 
     // Css files to rework are the less files, but with .css extension,
@@ -131,7 +131,8 @@ function buildTheme(bowerJson, opts) {
         if (opts['disable-assets']) {
             return entry;
         }
-        return copyAssets(entry, opts);
+
+        return copyAssets(entry, opts.target, opts);
     };
 
     // Import on completing.
@@ -158,7 +159,7 @@ function compile(entry, opts) {
     var deferred = Q.defer();
     var files = [];
 
-    gulp.src(entry, {base: escapeGlob(opts.target)})
+    gulp.src(entry, {base: opts.target})
         .pipe(gulpif(function() { return !!opts.sourcemaps; }, sourcemaps.init()))
         .pipe(debug({title: 'compiling'}))
         .pipe(less({
@@ -177,7 +178,7 @@ function compile(entry, opts) {
         // Save files for promise resolve.
         .pipe(through.obj(function (file, enc, cb) {
             if (file.path.substring(file.path.length - 4) !== '.map') {
-                files.push(file.path);
+                files.push(escapeGlob(file.path));
             }
             cb(null, file);
         }))
@@ -226,7 +227,7 @@ function reworkIe(files, target) {
         .pipe(debug({title: 'writing'}))
         // Save files for promise resolve.
         .pipe(through.obj(function (file, enc, cb) {
-            files.push(file.path);
+            files.push(escapeGlob(file.path));
             cb(null, file);
         }))
         .pipe(gulp.dest(target))
@@ -261,7 +262,7 @@ function compress(entry, target, opts) {
     return deferred.promise;
 }
 
-function copyAssets(entry, opts) {
+function copyAssets(entry, target, opts) {
     var deferred = Q.defer();
 
     var fontGlob = path.join('**', '*.{ttf,woff,woff2,eof,eot,svg}');
@@ -303,14 +304,18 @@ function copyAssets(entry, opts) {
             .pipe(gulp.dest(opts.dist));
     });
 
-    gulp.task('copyAssets', ['copyThemeAssets', 'copyBowerAssets'], function () {
+    gulp.task('copyAssets', ['copyBowerAssets'], function () {
         var assetPaths = [
-            fontGlob,
-            imageGlob,
-            noBowerGlob,
-            noNpmGlob,
-            noDistGlob
+            
+            path.join(target, '**', '*.{ttf,woff,woff2,eof,eot,svg}'),
+            path.join(target, '**', '*.{jpg,jpeg,png,svg,gif}'),
+            path.join('!' + target, '**', opts.dist, '**'), // don't copy from `dist` directories
+            path.join('!' + target, 'bower_components', '**'), // don't copy from `bower_components` directories
+            path.join('!' + target, 'node_modules', '**') // don't copy from `node_modules` directories
         ];
+
+        console.log(assetPaths);
+
         return gulp.src(assetPaths, {follow: true})
             .pipe(debug({title: 'copying'}))
             .pipe(gulp.dest(opts.dist));
