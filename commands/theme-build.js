@@ -306,15 +306,12 @@ function copyAssets(entry, target, opts) {
 
     gulp.task('copyAssets', ['copyBowerAssets'], function () {
         var assetPaths = [
-            
             path.join(target, '**', '*.{ttf,woff,woff2,eof,eot,svg}'),
             path.join(target, '**', '*.{jpg,jpeg,png,svg,gif}'),
             path.join('!' + target, '**', opts.dist, '**'), // don't copy from `dist` directories
             path.join('!' + target, 'bower_components', '**'), // don't copy from `bower_components` directories
             path.join('!' + target, 'node_modules', '**') // don't copy from `node_modules` directories
         ];
-
-        console.log(assetPaths);
 
         return gulp.src(assetPaths, {follow: true})
             .pipe(debug({title: 'copying'}))
